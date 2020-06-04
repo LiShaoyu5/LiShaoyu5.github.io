@@ -4,11 +4,36 @@
   
   
   <entry>
-    <title>1.TF2-Installation</title>
+    <title>pip-tips</title>
+    <link href="/2020/pip-tips/"/>
+    <url>/2020/pip-tips/</url>
+    
+    <content type="html"><![CDATA[<h3 id="1-指定源"><a href="#1-指定源" class="headerlink" title="1. 指定源"></a>1. 指定源</h3><p>使用如下方法指定源：</p><div class="hljs"><pre><code class="hljs sql">pip <span class="hljs-keyword">install</span> &lt;<span class="hljs-keyword">package</span>&gt; -i &lt;<span class="hljs-keyword">source</span>&gt;</code></pre></div><p>最常用的国内源是 <a href="https://pypi.tuna.tsinghua.edu.cn/simple/" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple/</a> 清华源。</p><h3 id="2-设置超时时间"><a href="#2-设置超时时间" class="headerlink" title="2. 设置超时时间"></a>2. 设置超时时间</h3><p>使用如下方法设置超时时间（单位为秒）：</p><div class="hljs"><pre><code class="hljs verilog">pip install --<span class="hljs-keyword">default</span>-<span class="hljs-keyword">time</span>=&lt;<span class="hljs-keyword">time</span>&gt; &lt;<span class="hljs-keyword">package</span>&gt;</code></pre></div><h3 id="3-本地安装方法"><a href="#3-本地安装方法" class="headerlink" title="3. 本地安装方法"></a>3. 本地安装方法</h3><p>首先在对应的环境中执行以下代码，可以查看这个环境的pip支持的安装包类型：</p><div class="hljs"><pre><code class="hljs css"><span class="hljs-selector-tag">import</span> <span class="hljs-selector-tag">pip</span><span class="hljs-selector-class">._internal</span><span class="hljs-selector-class">.pep425tags</span><span class="hljs-selector-tag">print</span>(<span class="hljs-selector-tag">pip</span><span class="hljs-selector-class">._internal</span><span class="hljs-selector-class">.pep425tags</span><span class="hljs-selector-class">.get_supported</span>())</code></pre></div><p>然后到 <a href="https://pypi.org/https://pypi.org/" target="_blank" rel="noopener">https://pypi.org/https://pypi.org/</a> 或其他源网站，搜索需要的包。</p><ul><li>在 Release history 中可以选择自己需要的版本。</li><li>在 Download files 中可以找到安装包，选择自己的pip支持的类型下载到本地。</li></ul><p>下载完成后，使用pip安装即可。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Python</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python pip</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>1. TF2-Installation</title>
     <link href="/2020/1-TF2-Installation/"/>
     <url>/2020/1-TF2-Installation/</url>
     
-    <content type="html"><![CDATA[<p>在 <a href="https://tensorflow.google.cn/install/gpu" target="_blank" rel="noopener">https://tensorflow.google.cn/install/gpu</a> 中查看各个依赖软件的版本要求。</p><h4 id="1-安装Nvidia驱动"><a href="#1-安装Nvidia驱动" class="headerlink" title="1. 安装Nvidia驱动"></a><strong>1. 安装Nvidia驱动</strong></h4><p>可以直接在GeForce Experience中更新驱动程序，或在 <a href="https://www.geforce.cn/drivers" target="_blank" rel="noopener">https://www.geforce.cn/drivers</a> 查找与自己显卡相符的驱动程序下载安装。</p><h4 id="2-安装CUDA"><a href="#2-安装CUDA" class="headerlink" title="2. 安装CUDA"></a><strong>2. 安装CUDA</strong></h4><p>进入<a href="https://developer.nvidia.com/cuda-toolkit" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-toolkit</a> ，选择下载，进入选择页面。</p><p>点击Legacy Releases，选择需要的CUDA版本。自己安装的是TensorFlow2.1.0，需要的CUDA版本为10.1。</p><p>进入系统选择页面，选择Windows-x86_64-10，安装方式建议exe(local)，方式因网络问题造成安装失败。</p><p>选择Base Installer中的Download，下载CUDA的本地安装包，安装。默认安装路径为C:\ProgramData\NVIDIA GPU Computing Toolkit。</p><p>安装完成后，在命令行运行<code>nvcc -V</code>查看CUDA版本以验证安装是否成功。</p><h4 id="3-安装CUDNN"><a href="#3-安装CUDNN" class="headerlink" title="3. 安装CUDNN"></a><strong>3. 安装CUDNN</strong></h4><p>进入<a href="https://developer.nvidia.com/rdp/cudnn-download" target="_blank" rel="noopener">https://developer.nvidia.com/rdp/cudnn-download</a> ，登录并填写问卷，进入下载页面。选择与CUDA版本相符的CUDNN，这里选择cuDNN v7.6.5 (November 5th, 2019) for CUDA 10.1，<br>cuDNN Library for Windows 10下载。</p><p>下载完成后，解压压缩包，将三个文件夹中的文件分别移动至CUDA安装路径中的对应文件夹里。</p><h4 id="4-安装TensorFlow"><a href="#4-安装TensorFlow" class="headerlink" title="4. 安装TensorFlow"></a><strong>4. 安装TensorFlow</strong></h4><ul><li>网络环境好：<br>直接使用<code>pip install tensorflow-gpu==2.1.0</code>即可安装所有依赖库。</li><li><p>网络环境不好，直接使用pip容易失败：</p><p>在 <a href="https://pypi.org/" target="_blank" rel="noopener">https://pypi.org/</a> 直接搜索需要的库，在release history中选择合适版本，下载后进行本地安装<code>pip install [本地路径]</code>。</p><p>查看pip支持的安装包类型，可以在需要安装TensorFlow的python环境中执行：</p><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pip._internal.pep425tagsprint(pip._internal.pep425tags.get_supported())</code></pre></div></li></ul>]]></content>
+    <content type="html"><![CDATA[<p>在 <a href="https://tensorflow.google.cn/install/gpu" target="_blank" rel="noopener">https://tensorflow.google.cn/install/gpu</a> 中查看各个依赖软件的版本要求。</p><h4 id="1-安装Nvidia驱动"><a href="#1-安装Nvidia驱动" class="headerlink" title="1. 安装Nvidia驱动"></a><strong>1. 安装Nvidia驱动</strong></h4><p>可以直接在GeForce Experience中更新驱动程序，或在 <a href="https://www.geforce.cn/drivers" target="_blank" rel="noopener">https://www.geforce.cn/drivers</a> 查找与自己显卡相符的驱动程序下载安装。</p><h4 id="2-安装CUDA"><a href="#2-安装CUDA" class="headerlink" title="2. 安装CUDA"></a><strong>2. 安装CUDA</strong></h4><p>进入<a href="https://developer.nvidia.com/cuda-toolkit" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-toolkit</a> ，选择下载，进入选择页面。</p><p>点击Legacy Releases，选择需要的CUDA版本。自己安装的是TensorFlow2.1.0，需要的CUDA版本为10.1。</p><p>进入系统选择页面，选择Windows-x86_64-10，安装方式建议exe(local)，方式因网络问题造成安装失败。</p><p>选择Base Installer中的Download，下载CUDA的本地安装包，安装。默认安装路径为C:\ProgramData\NVIDIA GPU Computing Toolkit。</p><p>安装完成后，在命令行运行<code>nvcc -V</code>查看CUDA版本以验证安装是否成功。</p><h4 id="3-安装CUDNN"><a href="#3-安装CUDNN" class="headerlink" title="3. 安装CUDNN"></a><strong>3. 安装CUDNN</strong></h4><p>进入<a href="https://developer.nvidia.com/rdp/cudnn-download" target="_blank" rel="noopener">https://developer.nvidia.com/rdp/cudnn-download</a> ，登录并填写问卷，进入下载页面。选择与CUDA版本相符的CUDNN，这里选择cuDNN v7.6.5 (November 5th, 2019) for CUDA 10.1，<br>cuDNN Library for Windows 10下载。</p><p>下载完成后，解压压缩包，将三个文件夹中的文件分别移动至CUDA安装路径中的对应文件夹里。</p><h4 id="4-安装TensorFlow"><a href="#4-安装TensorFlow" class="headerlink" title="4. 安装TensorFlow"></a><strong>4. 安装TensorFlow</strong></h4><ul><li>网络环境好：</li></ul><p>直接使用<code>pip install tensorflow-gpu==2.1.0</code>即可安装所有依赖库。</p><ul><li><p>网络环境不好，直接使用pip容易失败：</p><p>在 <a href="https://pypi.org/" target="_blank" rel="noopener">https://pypi.org/</a> 直接搜索需要的库，在release history中选择合适版本，下载后进行本地安装<code>pip install [本地路径]</code>。</p><p>查看pip支持的安装包类型，可以在需要安装TensorFlow的python环境中执行：</p><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> pip._internal.pep425tagsprint(pip._internal.pep425tags.get_supported())</code></pre></div></li></ul>]]></content>
     
     
     <categories>
