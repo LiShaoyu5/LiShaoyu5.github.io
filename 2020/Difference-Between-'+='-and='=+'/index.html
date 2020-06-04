@@ -210,58 +210,58 @@
             <article class="markdown-body">
               <p>+=运算会在对象原地址之上进行修改，而=…+会新生成一个对象，似乎只继承了值，而没有保留其他属性。</p>
 <p>起因：学习PyTorch时，在一个回归问题的训练过程中更新参数：</p>
-<div class="hljs"><pre><code class="hljs nix"><span class="hljs-comment"># 初始化权重参数</span>
-<span class="hljs-attr">w</span> = torch.randn(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-attr">dtype=torch.float,</span> <span class="hljs-attr">requires_grad=True)</span>
-<span class="hljs-attr">b</span> = torch.randn(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-attr">dtype=torch.float,</span> <span class="hljs-attr">requires_grad=True)</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 初始化权重参数</span>
+w = torch.randn(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, dtype=torch.float, requires_grad=<span class="hljs-literal">True</span>)
+b = torch.randn(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, dtype=torch.float, requires_grad=<span class="hljs-literal">True</span>)
 
 <span class="hljs-comment"># 学习率</span>
-<span class="hljs-attr">lr</span> = <span class="hljs-number">0.001</span>
-<span class="hljs-attr">loss</span> = <span class="hljs-number">0</span>
+lr = <span class="hljs-number">0.001</span>
+loss = <span class="hljs-number">0</span>
 <span class="hljs-comment"># 训练模型</span>
-for i <span class="hljs-keyword">in</span> range(<span class="hljs-number">500</span>):
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">500</span>):
     <span class="hljs-comment"># 前向传播</span>
-    <span class="hljs-attr">y_pred</span> = torch.mm(torch.pow(x, <span class="hljs-number">2</span>), w) + b
+    y_pred = torch.mm(torch.pow(x, <span class="hljs-number">2</span>), w) + b
     <span class="hljs-comment"># 损失函数</span>
-    <span class="hljs-attr">loss</span> = torch.pow(y_pred - y, <span class="hljs-number">2</span>) / <span class="hljs-number">2</span>
-    <span class="hljs-attr">loss</span> = loss.sum()
+    loss = torch.pow(y_pred - y, <span class="hljs-number">2</span>) / <span class="hljs-number">2</span>
+    loss = loss.sum()
     <span class="hljs-comment"># 计算梯度</span>
     loss.backward()  <span class="hljs-comment"># 梯度存储在grad属性中</span>
     <span class="hljs-comment"># 手动更新参数</span>
     <span class="hljs-keyword">with</span> torch.no_grad():
-        <span class="hljs-attr">w</span> = w - lr * w.grad
-        <span class="hljs-attr">b</span> = b - lr * b.grad
+        w = w - lr * w.grad
+        b = b - lr * b.grad
         <span class="hljs-comment"># 梯度清零</span>
         w.grad.zero_()
         b.grad.zero_()</code></pre></div>
 <p>报了如下错误：</p>
-<div class="hljs"><pre><code class="hljs pgsql">AttributeError: <span class="hljs-string">'NoneType'</span> <span class="hljs-keyword">object</span> has <span class="hljs-keyword">no</span> <span class="hljs-keyword">attribute</span> <span class="hljs-string">'zero_'</span></code></pre></div>
+<div class="hljs"><pre><code class="hljs Python">AttributeError: <span class="hljs-string">'NoneType'</span> object has no attribute <span class="hljs-string">'zero_'</span></code></pre></div>
 <p>替换为如下后正确了：</p>
-<div class="hljs"><pre><code class="hljs armasm">w -= <span class="hljs-built_in">lr</span> * w.grad
-<span class="hljs-keyword">b </span>-= <span class="hljs-built_in">lr</span> * <span class="hljs-keyword">b.grad</span></code></pre></div>
+<div class="hljs"><pre><code class="hljs Python">w -= lr * w.grad
+b -= lr * b.grad</code></pre></div>
 <p>进行测试：</p>
-<div class="hljs"><pre><code class="hljs routeros"><span class="hljs-comment"># 初始化权重参数</span>
-w = torch.randn(1, 1, <span class="hljs-attribute">dtype</span>=torch.float, <span class="hljs-attribute">requires_grad</span>=<span class="hljs-literal">True</span>)
-b = torch.randn(1, 1, <span class="hljs-attribute">dtype</span>=torch.float, <span class="hljs-attribute">requires_grad</span>=<span class="hljs-literal">True</span>)
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 初始化权重参数</span>
+w = torch.randn(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, dtype=torch.float, requires_grad=<span class="hljs-literal">True</span>)
+b = torch.randn(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, dtype=torch.float, requires_grad=<span class="hljs-literal">True</span>)
 
-<span class="hljs-builtin-name">print</span>(<span class="hljs-string">'更新前：\nw&#123;&#125;, 梯度&#123;&#125;, 地址&#123;&#125;;  b&#123;&#125;, 梯度&#123;&#125;, 地址&#123;&#125;'</span>.format(w, w.grad, id(w), b, b.grad, id(b)))
+print(<span class="hljs-string">'更新前：\nw&#123;&#125;, 梯度&#123;&#125;, 地址&#123;&#125;;  b&#123;&#125;, 梯度&#123;&#125;, 地址&#123;&#125;'</span>.format(w, w.grad, id(w), b, b.grad, id(b)))
 
-lr = 0.001
-y_pred = torch.mm(torch.pow(x, 2), w) + b
-loss = torch.pow(y_pred - y, 2) / 2
+lr = <span class="hljs-number">0.001</span>
+y_pred = torch.mm(torch.pow(x, <span class="hljs-number">2</span>), w) + b
+loss = torch.pow(y_pred - y, <span class="hljs-number">2</span>) / <span class="hljs-number">2</span>
 loss = loss.sum()
 loss.backward()
 
 <span class="hljs-comment"># 不同方式更新参数</span>
-with torch.no_grad():
+<span class="hljs-keyword">with</span> torch.no_grad():
     w = w - lr * w.grad
     b -= lr * b.grad
 
-<span class="hljs-builtin-name">print</span>(<span class="hljs-string">'更新后：\nw&#123;&#125;, 梯度&#123;&#125;, 地址&#123;&#125;;  b&#123;&#125;, 梯度&#123;&#125;, 地址&#123;&#125;'</span>.format(w, w.grad, id(w), b, b.grad, id(b)))</code></pre></div>
+print(<span class="hljs-string">'更新后：\nw&#123;&#125;, 梯度&#123;&#125;, 地址&#123;&#125;;  b&#123;&#125;, 梯度&#123;&#125;, 地址&#123;&#125;'</span>.format(w, w.grad, id(w), b, b.grad, id(b)))</code></pre></div>
 <p>运行结果：</p>
-<div class="hljs"><pre><code class="hljs lua">更新前：
-wtensor(<span class="hljs-string">[[0.1969]]</span>, requires_grad=True), 梯度None, 地址<span class="hljs-number">1166287893352</span>;  btensor(<span class="hljs-string">[[-0.9487]]</span>, requires_grad=True), 梯度None, 地址<span class="hljs-number">1166290443064</span>
+<div class="hljs"><pre><code class="hljs Python">更新前：
+wtensor([[<span class="hljs-number">0.1969</span>]], requires_grad=<span class="hljs-literal">True</span>), 梯度<span class="hljs-literal">None</span>, 地址<span class="hljs-number">1166287893352</span>;  btensor([[<span class="hljs-number">-0.9487</span>]], requires_grad=<span class="hljs-literal">True</span>), 梯度<span class="hljs-literal">None</span>, 地址<span class="hljs-number">1166290443064</span>
 更新后：
-wtensor(<span class="hljs-string">[[0.3587]]</span>), 梯度None, 地址<span class="hljs-number">1166290440344</span>;  btensor(<span class="hljs-string">[[-0.5492]]</span>, requires_grad=True), 梯度tensor(<span class="hljs-string">[[-399.5237]]</span>), 地址<span class="hljs-number">1166290443064</span></code></pre></div>
+wtensor([[<span class="hljs-number">0.3587</span>]]), 梯度<span class="hljs-literal">None</span>, 地址<span class="hljs-number">1166290440344</span>;  btensor([[<span class="hljs-number">-0.5492</span>]], requires_grad=<span class="hljs-literal">True</span>), 梯度tensor([[<span class="hljs-number">-399.5237</span>]]), 地址<span class="hljs-number">1166290443064</span></code></pre></div>
 <p>w的地址发生了改变且没有继承原来的梯度。</p>
 
             </article>
