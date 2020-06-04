@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>Change-Font-of-CMD</title>
+    <link href="/2020/Change-Font-of-CMD/"/>
+    <url>/2020/Change-Font-of-CMD/</url>
+    
+    <content type="html"><![CDATA[<div class="hljs"><pre><code>1. 安装字体，自己用的是Microsoft Yahei Mono，下载地址 https://pan.baidu.com/s/1hFn2oYs1lmbDmrZhjJ3QBA&amp;shfl=shareset ，提取码: tfgr。2. 打开注册表：win+r输入regedit。3. 定位到计算机 \HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Console\TrueTypeFont ，将936的数值数据修改为&quot;*Microsoft Yahei Mono&quot;。4. 打开CMD，右键点击打开属性，设置字号等。</code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>Others</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>环境设置</tag>
+      
+      <tag>系统设置</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Difference Between &#39;+=&#39; and &#39;=+&#39;</title>
     <link href="/2020/Difference-Between-&#39;+=&#39;-and=&#39;=+&#39;/"/>
     <url>/2020/Difference-Between-&#39;+=&#39;-and=&#39;=+&#39;/</url>
