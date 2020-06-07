@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tabicon.png">
+  <link rel="icon" type="image/png" href="/img/tabicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Li Shaoyu">
+  <meta name="keywords" content="">
+  <title>‘[TF2]3. Keras Model Training’ - AiArt</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/atom-one-dark.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>AiArt</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-06-04 20:39">
+      June 4, 2020 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.7k 字
+    </span>
+  
+
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-post-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-post-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：June 7, 2020 pm
+                
+              </p>
+            
+            <article class="markdown-body">
+              <p>这部分包括了使用 <code>tf.keras</code> 构建、训练模型的基本方法。</p>
+<div class="hljs"><pre><code class="hljs vim">import tensorflow <span class="hljs-keyword">as</span> <span class="hljs-keyword">tf</span>
+<span class="hljs-keyword">print</span>(<span class="hljs-keyword">tf</span>.__version__)</code></pre></div>
+<h1 id="1-基本模型训练流程"><a href="#1-基本模型训练流程" class="headerlink" title="1. 基本模型训练流程"></a>1. 基本模型训练流程</h1><p>模型训练的一般步骤包括：</p>
+<ul>
+<li>构建模型（三种方式）</li>
+<li>训练模型：model.fit()</li>
+<li>验证模型：model.evaluate()</li>
+<li>使用模型进行预测：model.predict()</li>
+</ul>
+<h2 id="1-1-构建模型"><a href="#1-1-构建模型" class="headerlink" title="1.1 构建模型"></a>1.1 构建模型</h2><div class="hljs"><pre><code class="hljs reasonml">from tensorflow.keras import layers
+
+<span class="hljs-keyword">class</span> <span class="hljs-constructor">MyModel(<span class="hljs-params">tf</span>.<span class="hljs-params">keras</span>.Model)</span>:
+
+    def <span class="hljs-constructor">__init__(<span class="hljs-params">self</span>, <span class="hljs-params">num_classes</span>=10)</span>:
+
+        super(MyModel, self).<span class="hljs-constructor">__init__()</span>
+        self.num_classes = num_classes
+
+        self.Dense1 = layers.<span class="hljs-constructor">Dense(64, <span class="hljs-params">activation</span>='<span class="hljs-params">relu</span>', <span class="hljs-params">input_shape</span>=(32,)</span>)  # 输入维度<span class="hljs-number">32</span>
+        self.Dense2 = layers.<span class="hljs-constructor">Dense(64, <span class="hljs-params">activation</span>='<span class="hljs-params">relu</span>')</span>
+        self.Dense3 = layers.<span class="hljs-constructor">Dense(10)</span>  # 输出为<span class="hljs-number">10</span>类
+
+    def call(self, x):
+
+        x = self.<span class="hljs-constructor">Dense1(<span class="hljs-params">x</span>)</span>
+        x = self.<span class="hljs-constructor">Dense2(<span class="hljs-params">x</span>)</span>
+        x = self.<span class="hljs-constructor">Dense3(<span class="hljs-params">x</span>)</span>
+
+        return x
+
+
+model = <span class="hljs-constructor">MyModel(<span class="hljs-params">num_classes</span>=10)</span>
+model.compile(
+    optimizer=tf.keras.optimizers.<span class="hljs-constructor">Adam(0.001)</span>,
+    loss=tf.keras.losses.<span class="hljs-constructor">SparseCategoricalCrossentropy(<span class="hljs-params">from_logits</span>=True)</span>,
+    metrics=<span class="hljs-literal">['<span class="hljs-identifier">accuracy</span>']</span>
+)</code></pre></div>
+<div class="hljs"><pre><code class="hljs angelscript"># 构建数据集
+
+<span class="hljs-keyword">import</span> numpy as np
+x_train = np.random.random((<span class="hljs-number">1000</span>, <span class="hljs-number">32</span>))  # <span class="hljs-number">32</span>个特征，<span class="hljs-number">1000</span>个样本
+y_train = np.random.randint(<span class="hljs-number">10</span>, size=(<span class="hljs-number">1000</span>, ))  # <span class="hljs-number">10</span>个分类
+
+x_val = np.random.random((<span class="hljs-number">200</span>, <span class="hljs-number">32</span>))
+y_val = np.random.randint(<span class="hljs-number">10</span>, size=(<span class="hljs-number">200</span>, ))
+
+x_test = np.random.random((<span class="hljs-number">200</span>, <span class="hljs-number">32</span>))
+y_test = np.random.randint(<span class="hljs-number">10</span>, size=(<span class="hljs-number">200</span>, ))</code></pre></div>
+<h2 id="1-2-训练模型"><a href="#1-2-训练模型" class="headerlink" title="1.2 训练模型"></a>1.2 训练模型</h2><p>model.fit()中的基本参数：</p>
+<ul>
+<li>x、y：输入数据和目标数据。</li>
+<li>batch_size：样本分组的大小，即每训练batch_size个样本，模型更新一次权重参数。</li>
+<li>epochs：训练的轮数。</li>
+</ul>
+<p>这里还使用了验证集：<br><div class="hljs"><pre><code class="hljs routeros">model.fit(x_train, y_train, <span class="hljs-attribute">batch_size</span>=100, <span class="hljs-attribute">epochs</span>=5, validation_data=(x_val, y_val))</code></pre></div></p>
+<h2 id="1-3-模型验证和预测"><a href="#1-3-模型验证和预测" class="headerlink" title="1.3 模型验证和预测"></a>1.3 模型验证和预测</h2><div class="hljs"><pre><code class="hljs ini"><span class="hljs-comment"># 在测试集上验证模型</span>
+<span class="hljs-attr">results</span> = model.evaluate(x_test, y_test, batch_size=<span class="hljs-number">128</span>)</code></pre></div>
+<div class="hljs"><pre><code class="hljs routeros"><span class="hljs-comment"># 对x_test的前三个样本进行预测</span>
+predictions = model.predict(x_test[:3])
+<span class="hljs-builtin-name">print</span>(y_test[:3], predictions.argmax(<span class="hljs-attribute">axis</span>=1))  # 分类的预测输出为10个分类的概率，这里取每行最大值的索引（即对应分类）</code></pre></div>
+<h1 id="2-使用类别加权和样本加权"><a href="#2-使用类别加权和样本加权" class="headerlink" title="2. 使用类别加权和样本加权"></a>2. 使用类别加权和样本加权</h1><h2 id="2-1-类别加权"><a href="#2-1-类别加权" class="headerlink" title="2.1 类别加权"></a>2.1 类别加权</h2><p>model.fit()函数中包含参数<strong>class_weight</strong>，可以通过字典形式指定每个<strong>特征</strong>的权重。注意，该字典必须包含输入的<strong>全部特征</strong>，即字典长度等于输入的列数。</p>
+<div class="hljs"><pre><code class="hljs routeros"><span class="hljs-comment"># 权重字典，使模型更重视5</span>
+class_weight = &#123;&#125;
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(10):
+    class_weight[i] = 1
+class_weight[5] = 2
+
+<span class="hljs-comment"># 传入权重参数进行训练</span>
+model.fit(x_train, y_train, <span class="hljs-attribute">batch_size</span>=100, <span class="hljs-attribute">epochs</span>=5, validation_data=(x_val, y_val), <span class="hljs-attribute">class_weight</span>=class_weight)</code></pre></div>
+<h2 id="2-2-样本加权"><a href="#2-2-样本加权" class="headerlink" title="2.2 样本加权"></a>2.2 样本加权</h2><p>model.fit()函数中包含参数<strong>sample_weight</strong>，可以通过数组形式指定每个<strong>样本</strong>的权重。数组长度应等于输入的行数。</p>
+<div class="hljs"><pre><code class="hljs nix"><span class="hljs-comment"># 权重列表，使模型更重视5</span>
+<span class="hljs-attr">sample_weight</span> = np.ones(<span class="hljs-attr">shape=(len(y_train),))</span>  <span class="hljs-comment"># 所有样本权重为1</span>
+sample_weight[<span class="hljs-attr">y_train</span> == <span class="hljs-number">5</span>] = <span class="hljs-number">2</span>  <span class="hljs-comment"># 5的权重为2</span>
+
+<span class="hljs-comment"># 传入权重参数进行训练</span>
+model.fit(x_train, y_train, <span class="hljs-attr">batch_size=100,</span> <span class="hljs-attr">epochs=5,</span> <span class="hljs-attr">validation_data=(x_val,</span> y_val), <span class="hljs-attr">sample_weight=sample_weight)</span></code></pre></div>
+<h1 id="3-使用回调函数"><a href="#3-使用回调函数" class="headerlink" title="3. 使用回调函数"></a>3. 使用回调函数</h1><p>回调函数（Callback Function）是模型在训练中的特定时刻被调用的对象。</p>
+<p>可以以列表的方式将需要使用的回调函数实例化后传入<code>model.fit()</code>的callbacks参数。</p>
+<p>这里主要介绍三个回调函数。</p>
+<h2 id="3-1-EarlyStopping-早停"><a href="#3-1-EarlyStopping-早停" class="headerlink" title="3.1 EarlyStopping(早停)"></a>3.1 EarlyStopping(早停)</h2><p>当被监视的指标不再改善时自动停止训练。一般需要指定的参数：</p>
+<ul>
+<li>monitor：监视的指标。</li>
+<li>min_delta：变化量小于它即认为“不再改善”。</li>
+<li>patience：容忍“不再改善”的次数。</li>
+<li>mode：在’auto’、’min’、’max’中选择。’min’意为当指标不再下降时停止训练，’max’反之。</li>
+</ul>
+<div class="hljs"><pre><code class="hljs routeros"><span class="hljs-comment"># 设置回调函数</span>
+callbacks = [
+    tf.keras.callbacks.EarlyStopping(
+        <span class="hljs-attribute">monitor</span>=<span class="hljs-string">'val_loss'</span>,  # 监视val_loss
+        <span class="hljs-attribute">min_delta</span>=0.005,  # 变化小于0.005即认为没有改善
+        <span class="hljs-attribute">patience</span>=3,  # 没有改善的情况连续出现3次则停止训练
+        <span class="hljs-attribute">verbose</span>=2
+    )
+]
+
+<span class="hljs-comment">#　使用回调函数进行训练</span>
+model.fit(x_train, y_train, <span class="hljs-attribute">batch_size</span>=100, <span class="hljs-attribute">epochs</span>=100, validation_data=(x_val, y_val), <span class="hljs-attribute">callbacks</span>=callbacks)</code></pre></div>
+<p>可以看到，虽然设置了100个epoch，但是由于连续3次val_loss变化小于0.005，训练自动停止。<br><img src="https://wx1.sbimg.cn/2020/06/07/3-1.png" srcset="/img/loading.gif" alt="EarlyStopping"></p>
+<h2 id="3-2-ModelCheckpoint-定期自动保存模型"><a href="#3-2-ModelCheckpoint-定期自动保存模型" class="headerlink" title="3.2 ModelCheckpoint(定期自动保存模型)"></a>3.2 ModelCheckpoint(定期自动保存模型)</h2><p>在指定的时间点保存模型。一般需要指定的参数：</p>
+<ul>
+<li>filepath：保存路径，可以使用’{epoch}’等使每次保存的文件名不同。</li>
+<li>monitor：监视的指标。</li>
+<li>save_best_only：设置为True时，保存时若当前次的指标更好，会覆盖之前保存的模型。</li>
+<li>save_weights_only：设置为True是仅保存模型的权重参数，而非整个模型。</li>
+<li>save_freq：保存频率。一般设置为’epoch’，即每个epoch后保存；也可设置为整数，表示每训练一定数量的样本，就会在当前batch结束后保存。官方文档指出后者可能更不可靠。</li>
+</ul>
+<div class="hljs"><pre><code class="hljs routeros"><span class="hljs-comment"># 设置回调函数</span>
+callbacks = [
+    tf.keras.callbacks.ModelCheckpoint(
+        <span class="hljs-attribute">filepath</span>=<span class="hljs-string">'./checkpoints/MyModel_Checkpoint_&#123;epoch&#125;'</span>,  # 每个epoch对应的独立的文件
+        <span class="hljs-attribute">monitor</span>=<span class="hljs-string">'val_loss'</span>,
+        <span class="hljs-attribute">save_best_only</span>=<span class="hljs-literal">True</span>,  # 只有当评价指标改进时保存
+        <span class="hljs-attribute">save_weights_only</span>=<span class="hljs-literal">False</span>,  # 保存整个模型
+        <span class="hljs-attribute">verbose</span>=1
+    )
+]
+
+<span class="hljs-comment">#　使用回调函数进行训练</span>
+model.fit(x_train, y_train, <span class="hljs-attribute">batch_size</span>=100, <span class="hljs-attribute">epochs</span>=3, validation_data=(x_val, y_val), <span class="hljs-attribute">callbacks</span>=callbacks)</code></pre></div>
+<p>由于设置了<code>verbose=1</code>，每次保存的信息都在训练过程中输出：<br><img src="https://wx2.sbimg.cn/2020/06/07/3-2.png" srcset="/img/loading.gif" alt="ModelCheckpoint"></p>
+<h2 id="3-3-ReduceLROnPlateau-动态调整学习率"><a href="#3-3-ReduceLROnPlateau-动态调整学习率" class="headerlink" title="3.3 ReduceLROnPlateau(动态调整学习率)"></a>3.3 ReduceLROnPlateau(动态调整学习率)</h2><p>当模型不再改善时自动减小学习率。一般需要指定的参数：</p>
+<ul>
+<li>monitor: 监视的指标。</li>
+<li>factor: new_lr = lr * factor。</li>
+<li>patience: 容忍“不再改善”的次数。</li>
+<li>mode: 在’auto’、’min’、’max’中选择。’min’意为当指标不再下降时修改学习率，’max’反之。</li>
+<li>min_delta: 变化量小于它即认为“不再改善”。</li>
+<li>cooldown：每次执行调整后，到下一次开始计算patience的间隔。</li>
+<li>min_lr: 学习率的最小值。</li>
+</ul>
+<div class="hljs"><pre><code class="hljs routeros"><span class="hljs-comment"># 设置回调函数</span>
+callbacks = [
+    tf.keras.callbacks.ReduceLROnPlateau(
+        <span class="hljs-attribute">monitor</span>=<span class="hljs-string">'val_loss'</span>,
+        <span class="hljs-attribute">factor</span>=0.5,
+        <span class="hljs-attribute">patience</span>=3,
+        <span class="hljs-attribute">mode</span>=<span class="hljs-string">'max'</span>,
+        <span class="hljs-attribute">verbose</span>=1
+    )
+]
+
+<span class="hljs-comment">#　使用回调函数进行训练</span>
+model.fit(x_train, y_train, <span class="hljs-attribute">batch_size</span>=100, <span class="hljs-attribute">epochs</span>=20, validation_data=(x_val, y_val), <span class="hljs-attribute">callbacks</span>=callbacks)</code></pre></div>
+<p>当未改善次数达到3次时将学习率调整为原来的0.5倍：<br><img src="https://wx1.sbimg.cn/2020/06/07/3-3.png" srcset="/img/loading.gif" alt="ReduceLROnPlateau"></p>
+<h1 id="4-构建多输入、多输出模型"><a href="#4-构建多输入、多输出模型" class="headerlink" title="4. 构建多输入、多输出模型"></a>4. 构建多输入、多输出模型</h1><p>尝试构建一个具有2个输入、2个输出的模型。</p>
+<p>输入：</p>
+<ul>
+<li>(32, 32, 3)：32×32的三通道图像。</li>
+<li>(20, 10)：20个时间戳，10个特征。</li>
+</ul>
+<p>输出：</p>
+<ul>
+<li>(1,)：得分。</li>
+<li>(5,)：分类。</li>
+</ul>
+<p>构建模型中损失函数和评价指标均可以以列表形式传入。</p>
+<div class="hljs"><pre><code class="hljs ruby"><span class="hljs-comment"># 构建模型</span>
+
+from tensorflow.keras import layers
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span>(<span class="hljs-title">tf</span>.<span class="hljs-title">keras</span>.<span class="hljs-title">Model</span>):</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(<span class="hljs-keyword">self</span>)</span></span><span class="hljs-symbol">:</span>
+
+        <span class="hljs-keyword">super</span>(MyModel, <span class="hljs-keyword">self</span>).__init_<span class="hljs-number">_</span>()
+
+        <span class="hljs-comment"># 处理图像</span>
+        <span class="hljs-keyword">self</span>.conv1 = layers.Conv2D(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)
+        <span class="hljs-keyword">self</span>.pool1 = layers.GlobalMaxPooling2D()   
+
+        <span class="hljs-comment"># 处理时间序列</span>
+        <span class="hljs-keyword">self</span>.conv2 = layers.Conv1D(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)
+        <span class="hljs-keyword">self</span>.pool2 = layers.GlobalMaxPooling1D()
+
+        <span class="hljs-comment"># 全连接层</span>
+        <span class="hljs-keyword">self</span>.dense1 = layers.Dense(<span class="hljs-number">1</span>, name=<span class="hljs-string">'score_output'</span>)
+        <span class="hljs-keyword">self</span>.dense2 = layers.Dense(<span class="hljs-number">5</span>, name=<span class="hljs-string">'class_output'</span>)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">call</span><span class="hljs-params">(<span class="hljs-keyword">self</span>, inputs)</span></span><span class="hljs-symbol">:</span>
+
+        x1 = <span class="hljs-keyword">self</span>.conv1(inputs[<span class="hljs-number">0</span>])
+        x1 = <span class="hljs-keyword">self</span>.pool1(x1)
+
+        x2 = <span class="hljs-keyword">self</span>.conv2(inputs[<span class="hljs-number">1</span>])
+        x2 = <span class="hljs-keyword">self</span>.pool2(x2)
+
+        x = layers.concatenate([x1, x2])
+
+        score_output = <span class="hljs-keyword">self</span>.dense1(x)
+        class_output = <span class="hljs-keyword">self</span>.dense2(x)
+
+        <span class="hljs-keyword">return</span> score_output, class_output
+
+model = MyModel()
+model.compile(
+    optimizer=tf.keras.optimizers.RMSprop(<span class="hljs-number">1</span>e-<span class="hljs-number">3</span>),
+    <span class="hljs-comment"># 使用多个损失函数并命名</span>
+    loss=[
+        tf.keras.losses.MeanSquaredError(),
+        tf.keras.losses.CategoricalCrossentropy(from_logits=True)
+    ],
+    <span class="hljs-comment"># 指定损失函数的权重</span>
+    loss_weights=[<span class="hljs-number">2</span>., <span class="hljs-number">1</span>.],
+    <span class="hljs-comment"># 使用多个评价指标并命名</span>
+    metrics=[
+        [
+            tf.keras.metrics.MeanAbsolutePercentageError(),
+            tf.keras.metrics.MeanAbsoluteError()
+        ],
+        [
+            tf.keras.metrics.CategoricalAccuracy()
+        ]
+    ]
+)</code></pre></div>
+<p>这个模型的可视化参考如下，注意<code>tf.keras.utils.plot_model()</code>方法无法对子类化模型使用。<br><img src="https://wx1.sbimg.cn/2020/06/07/3-4.png" srcset="/img/loading.gif" alt="Plot"></p>
+<div class="hljs"><pre><code class="hljs angelscript"># 生成数据
+
+<span class="hljs-keyword">import</span> numpy as np
+
+img_data = np.random.random_sample(size=(<span class="hljs-number">500</span>, <span class="hljs-number">32</span>, <span class="hljs-number">32</span>, <span class="hljs-number">3</span>))
+ts_data = np.random.random_sample(size=(<span class="hljs-number">500</span>, <span class="hljs-number">20</span>, <span class="hljs-number">10</span>))
+score_targets = np.random.random_sample(size=(<span class="hljs-number">500</span>, <span class="hljs-number">1</span>))
+class_targets = np.random.random_sample(size=(<span class="hljs-number">500</span>, <span class="hljs-number">5</span>))</code></pre></div>
+<div class="hljs"><pre><code class="hljs cs"><span class="hljs-meta"># 训练</span>
+
+model.fit(
+    [<span class="hljs-meta">img_data, ts_data</span>],  <span class="hljs-meta"># 多输入</span>
+    [<span class="hljs-meta">score_targets, class_targets</span>],  <span class="hljs-meta"># 多输出</span>
+    batch_size=<span class="hljs-number">50</span>,
+    epochs=<span class="hljs-number">5</span>
+)</code></pre></div>
+<p>训练结果：<br><img src="https://wx1.sbimg.cn/2020/06/07/3-5.png" srcset="/img/loading.gif" alt="Training"></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/TensorFlow2%E5%AD%A6%E4%B9%A0/">TensorFlow2学习</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/TensorFlow/">TensorFlow</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/2-TF2-Tensor-and-Basic-Modeling/">
+                        <span class="hidden-mobile">[TF2]2. Tensor and Basic Modeling</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "‘[TF2]3. Keras Model Training’&nbsp;",
+      ],
+      cursorChar: "〆",
+      typeSpeed: 50,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.staticfile.org/mathjax/3.0.5/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

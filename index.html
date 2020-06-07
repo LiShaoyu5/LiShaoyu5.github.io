@@ -167,6 +167,60 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2020/3-TF3-Keras-Model-Training/">‘[TF2]3. Keras Model Training’</a>
+
+      <a href="/2020/3-TF3-Keras-Model-Training/" class="index-excerpt">
+        
+        
+          
+        
+        <div>这部分包括了使用 tf.keras 构建、训练模型的基本方法。
+import tensorflow as tf
+print(tf.__version__)
+1. 基本模型训练流程模型训练的一般步骤包括：
+
+构建模型（三种方式）
+训练模型：model.fit()
+验证模型：model.evaluate()
+使用模型进行预测：model.predict()
+
+1.1 构建模型from tensorfl</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-06-04
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/TensorFlow2%E5%AD%A6%E4%B9%A0/">TensorFlow2学习</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/TensorFlow/">TensorFlow</a>
+            
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/2020/2-TF2-Tensor-and-Basic-Modeling/">[TF2]2. Tensor and Basic Modeling</a>
 
       <a href="/2020/2-TF2-Tensor-and-Basic-Modeling/" class="index-excerpt">
@@ -174,12 +228,12 @@
         
           
         
-        <div>import tensorflow as tf
+        <div>首先导入tensorflow，查看版本和设备信息：
+import tensorflow as tf
 print(tf.__version__)
-2.1.0
-# print(tf.test.is_gpu_available())  # True, but not recommended, use following instead
+# print(tf.test.is_gpu_available())  # Not recommended, use following instead
 print(tf.config.list_physical_devices('GPU'))
-[PhysicalDevic</div>
+1. 张</div>
       </a>
 
       <div class="index-btm post-metas">
@@ -295,9 +349,9 @@ b = torch.randn(1, 1, dtype=torch.float, requi</div>
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Pytorch/">Pytorch</a>
-            
               <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/Pytorch/">Pytorch</a>
             
           </div>
         

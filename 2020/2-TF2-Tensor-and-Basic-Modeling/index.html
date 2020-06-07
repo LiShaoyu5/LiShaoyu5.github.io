@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.3k 字
+      1.2k 字
     </span>
   
 
@@ -203,63 +203,35 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：June 4, 2020 pm
+                  本文最后更新于：June 7, 2020 am
                 
               </p>
             
             <article class="markdown-body">
-              <div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+              <p>首先导入tensorflow，查看版本和设备信息：</p>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
 print(tf.__version__)</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript"><span class="hljs-number">2.1</span><span class="hljs-number">.0</span></code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># print(tf.test.is_gpu_available())  # True, but not recommended, use following instead</span>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># print(tf.test.is_gpu_available())  # Not recommended, use following instead</span>
 print(tf.config.list_physical_devices(<span class="hljs-string">'GPU'</span>))</code></pre></div>
-<div class="hljs"><pre><code class="hljs scheme">[<span class="hljs-name">PhysicalDevice</span>(<span class="hljs-name">name=</span><span class="hljs-symbol">'/physical_device:GPU:0</span>', device_type=<span class="hljs-symbol">'GPU</span>')]</code></pre></div>
-<h1 id="1-张量与操作"><a href="#1-张量与操作" class="headerlink" title="1. 张量与操作"></a>1. 张量与操作</h1><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># different shape and rank of tensor</span>
+<h1 id="1-张量与操作"><a href="#1-张量与操作" class="headerlink" title="1. 张量与操作"></a>1. 张量与操作</h1><p>tensorflow中有两种表示变量的方式：tf.Variable和tf.Tensor。Variale在Tensor基础上有一些额外的功能，通常用于单独的数据操作；Tensor则通常用于保存计算的中间结果。</p>
+<p>使用Python自带的数据格式创建Variable：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># rank意为变量的维度</span>
 
-<span class="hljs-comment"># rank 0</span>
 r0 = tf.Variable(<span class="hljs-string">'rank0'</span>, tf.string)
-print(r0, <span class="hljs-string">'\nrank: '</span>, tf.rank(r0), <span class="hljs-string">'  shape: '</span>, tf.shape(r0), <span class="hljs-string">'\n'</span>)
+print(r0, <span class="hljs-string">'\nrank: '</span>, tf.rank(r0), <span class="hljs-string">'  shape: '</span>, tf.shape(r0), <span class="hljs-string">'\n'</span>)  <span class="hljs-comment"># rank=1, shape=(1,)</span>
 
-<span class="hljs-comment"># rank 1</span>
-r1 = tf.Variable([<span class="hljs-string">'rank1'</span>], tf.string)
-print(r1, <span class="hljs-string">'\nrank: '</span>, tf.rank(r1), <span class="hljs-string">'  shape: '</span>, tf.shape(r1), <span class="hljs-string">'\n'</span>)
+r2 = tf.Variable([[<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>]], tf.int16)  <span class="hljs-comment"># rank=2, shape=(2,)</span>
+print(r2, <span class="hljs-string">'\nrank: '</span>, tf.rank(r2), <span class="hljs-string">'  shape: '</span>, tf.shape(r2), <span class="hljs-string">'\n'</span>)</code></pre></div></p>
+<p>创建特殊矩阵、变型等方法类似于numpy：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># create tensor</span>
 
-<span class="hljs-comment"># rank 2</span>
-r2 = tf.Variable([[<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>]], tf.int16)
-print(r2, <span class="hljs-string">'\nrank: '</span>, tf.rank(r2), <span class="hljs-string">'  shape: '</span>, tf.shape(r2), <span class="hljs-string">'\n'</span>)</code></pre></div>
-<div class="hljs"><pre><code class="hljs routeros">&lt;tf.Variable <span class="hljs-string">'Variable:0'</span> shape=() <span class="hljs-attribute">dtype</span>=string, <span class="hljs-attribute">numpy</span>=b'rank0'&gt;
-rank:  tf.Tensor(0, shape=(), <span class="hljs-attribute">dtype</span>=int32)   shape:  tf.Tensor([], shape=(0,), <span class="hljs-attribute">dtype</span>=int32)
+tf.constant([[<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>], [<span class="hljs-number">3</span>]], tf.int16)
 
-&lt;tf.Variable <span class="hljs-string">'Variable:0'</span> shape=(1,) <span class="hljs-attribute">dtype</span>=string, <span class="hljs-attribute">numpy</span>=array([b<span class="hljs-string">'rank1'</span>], <span class="hljs-attribute">dtype</span>=object)&gt;
-rank:  tf.Tensor(1, shape=(), <span class="hljs-attribute">dtype</span>=int32)   shape:  tf.Tensor([1], shape=(1,), <span class="hljs-attribute">dtype</span>=int32)
+tf.zeros((<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), tf.float16)
 
-&lt;tf.Variable <span class="hljs-string">'Variable:0'</span> shape=(2, 1) <span class="hljs-attribute">dtype</span>=int32, numpy=
-array([[1],
-       [2]])&gt;
-rank:  tf.Tensor(2, shape=(), <span class="hljs-attribute">dtype</span>=int32)   shape:  tf.Tensor([2 1], shape=(2,), <span class="hljs-attribute">dtype</span>=int32)</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># create tensor</span>
-
-print(tf.constant([[<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>], [<span class="hljs-number">3</span>]], tf.int16))
-
-print(tf.zeros((<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), tf.float16))
-
-<span class="hljs-comment"># print(tf.dtypes.cast(x, tf.int16))</span></code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">tf.Tensor(
-[[<span class="hljs-number">1</span>]
- [<span class="hljs-number">2</span>]
- [<span class="hljs-number">3</span>]], shape=(<span class="hljs-number">3</span>, <span class="hljs-number">1</span>), dtype=<span class="hljs-built_in">int</span>16)
-tf.Tensor(
-[[<span class="hljs-number">0.</span> <span class="hljs-number">0.</span> <span class="hljs-number">0.</span>]
- [<span class="hljs-number">0.</span> <span class="hljs-number">0.</span> <span class="hljs-number">0.</span>]
- [<span class="hljs-number">0.</span> <span class="hljs-number">0.</span> <span class="hljs-number">0.</span>]], shape=(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), dtype=<span class="hljs-built_in">float</span>16)</code></pre></div>
+<span class="hljs-comment"># print(tf.dtypes.cast(x, tf.int16))  # 改变格式</span></code></pre></div></p>
 <div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># reshape</span>
 
 t = tf.ones((<span class="hljs-number">2</span>, <span class="hljs-number">3</span>), tf.int16)
 print(tf.reshape(t, (<span class="hljs-number">3</span>, <span class="hljs-number">2</span>)))</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">tf.Tensor(
-[[<span class="hljs-number">1</span> <span class="hljs-number">1</span>]
- [<span class="hljs-number">1</span> <span class="hljs-number">1</span>]
- [<span class="hljs-number">1</span> <span class="hljs-number">1</span>]], shape=(<span class="hljs-number">3</span>, <span class="hljs-number">2</span>), dtype=<span class="hljs-built_in">int</span>16)</code></pre></div>
 <p>Numpy与TensorFlow的一些函数对比:</p>
 <div class="table-container">
 <table>
@@ -311,13 +283,14 @@ print(tf.reshape(t, (<span class="hljs-number">3</span>, <span class="hljs-numbe
 <li>tf.feature_column</li>
 </ul>
 <h1 id="2-常用层"><a href="#2-常用层" class="headerlink" title="2. 常用层"></a>2. 常用层</h1><ul>
-<li>tf.keras.layers： 基于tf.nn高度封装的各种层</li>
+<li>tf.keras.layers：基于tf.nn高度封装的各种层</li>
 <li>tf.nn：底层的函数库</li>
 </ul>
+<p>一些建立、配置层的基本操作：</p>
 <div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 数据</span>
 a = tf.random.uniform((<span class="hljs-number">10</span>, <span class="hljs-number">100</span>, <span class="hljs-number">50</span>), minval=<span class="hljs-number">-0.5</span>, maxval=<span class="hljs-number">0.5</span>)
 
-<span class="hljs-comment"># 常用层有Dense，Conv2D，LSTM，BatchNormalization，Dropout等</span>
+<span class="hljs-comment"># 实例化层对象</span>
 x = tf.keras.layers.LSTM(<span class="hljs-number">100</span>)(a)
 
 <span class="hljs-comment"># 在层中添加激活函数</span>
@@ -333,15 +306,16 @@ tf.keras.layers.Dense(<span class="hljs-number">64</span>, bias_regularizer=tf.k
 tf.keras.layers.Dense(<span class="hljs-number">64</span>, kernel_initializer=<span class="hljs-string">'orthogonal'</span>)
 <span class="hljs-comment"># 偏差向量初始化为2.0</span>
 tf.keras.layers.Dense(<span class="hljs-number">64</span>, bias_initializer=tf.keras.initializers.Constant(<span class="hljs-number">2.0</span>))</code></pre></div>
-<h1 id="3-三种建模方式"><a href="#3-三种建模方式" class="headerlink" title="3. 三种建模方式"></a>3. 三种建模方式</h1><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> layers</code></pre></div>
-<h2 id="1-Sequential-Model-顺序模型"><a href="#1-Sequential-Model-顺序模型" class="headerlink" title="(1) Sequential Model (顺序模型)"></a>(1) Sequential Model (顺序模型)</h2><p>tf.keras.Sequential</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 第一种Sequential Modeling</span>
+<h1 id="3-三种建模方式"><a href="#3-三种建模方式" class="headerlink" title="3. 三种建模方式"></a>3. 三种建模方式</h1><p>tensorflow中有三种主要的建模方式，分别为顺序式、函数式和子类式。</p>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> layers</code></pre></div>
+<h2 id="1-Sequential-Model-顺序模型"><a href="#1-Sequential-Model-顺序模型" class="headerlink" title="(1) Sequential Model (顺序模型)"></a>(1) Sequential Model (顺序模型)</h2><p>顺序模型使用 tf.keras.Sequential ，适用于建立较为简单的、数据流向单一的模型。</p>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 第一种方式：逐层添加</span>
 
 model = tf.keras.Sequential()
 model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">'relu'</span>))
 model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">'relu'</span>))
 model.add(layers.Dense(<span class="hljs-number">10</span>))</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 第二种Sequential Modeling</span>
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 第二种方式：使用list传入</span>
 
 model = tf.keras.Sequential([
     layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">'relu'</span>, input_shape=(<span class="hljs-number">32</span>,)),
@@ -354,41 +328,15 @@ model.compile(
     optimizer=tf.keras.optimizers.Adam(<span class="hljs-number">0.01</span>),
     loss=tf.keras.losses.CategoricalCrossentropy(from_logits=<span class="hljs-literal">True</span>),
     metrics=[<span class="hljs-string">'accuracy'</span>]
-)</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 训练</span>
+)
+
+<span class="hljs-comment"># 训练</span>
 
 <span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
 
 data = np.random.random((<span class="hljs-number">1000</span>, <span class="hljs-number">32</span>))
 labels = np.random.random((<span class="hljs-number">1000</span>, <span class="hljs-number">10</span>))
 model.fit(data, labels, epochs=<span class="hljs-number">10</span>, batch_size=<span class="hljs-number">10</span>)</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">Train on <span class="hljs-number">1000</span> samples
-Epoch <span class="hljs-number">1</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">470</span>us/sample - loss: <span class="hljs-number">502.7293</span> - accuracy: <span class="hljs-number">0.1010</span>
-Epoch <span class="hljs-number">2</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">102</span>us/sample - loss: <span class="hljs-number">5018.7255</span> - accuracy: <span class="hljs-number">0.0930</span>
-Epoch <span class="hljs-number">3</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">104</span>us/sample - loss: <span class="hljs-number">18110.6599</span> - accuracy: <span class="hljs-number">0.0970</span>
-Epoch <span class="hljs-number">4</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">107</span>us/sample - loss: <span class="hljs-number">38622.3230</span> - accuracy: <span class="hljs-number">0.1150</span>
-Epoch <span class="hljs-number">5</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">107</span>us/sample - loss: <span class="hljs-number">63793.2827</span> - accuracy: <span class="hljs-number">0.1200</span>
-Epoch <span class="hljs-number">6</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">107</span>us/sample - loss: <span class="hljs-number">101561.8852</span> - accuracy: <span class="hljs-number">0.0880</span>
-Epoch <span class="hljs-number">7</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">107</span>us/sample - loss: <span class="hljs-number">131743.5854</span> - accuracy: <span class="hljs-number">0.1150</span>
-Epoch <span class="hljs-number">8</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">109</span>us/sample - loss: <span class="hljs-number">179892.5998</span> - accuracy: <span class="hljs-number">0.1010</span>
-Epoch <span class="hljs-number">9</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">107</span>us/sample - loss: <span class="hljs-number">224190.1923</span> - accuracy: <span class="hljs-number">0.1040</span>
-Epoch <span class="hljs-number">10</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">108</span>us/sample - loss: <span class="hljs-number">258435.1619</span> - accuracy: <span class="hljs-number">0.0920</span>
-
-
-
-
-
-&lt;tensorflow.python.keras.callbacks.History at <span class="hljs-number">0x264cefda748</span>&gt;</code></pre></div>
 <h2 id="2-Functional-Model-函数模型"><a href="#2-Functional-Model-函数模型" class="headerlink" title="(2) Functional Model (函数模型)"></a>(2) Functional Model (函数模型)</h2><ul>
 <li>多输入/多输出模型</li>
 <li>具有共享图层的模型</li>
@@ -414,40 +362,13 @@ model.compile(
     metrics=[<span class="hljs-string">'accuracy'</span>]
 )
 
-<span class="hljs-comment"># 生成数据</span>
+<span class="hljs-comment"># 生成数据，这里有两个输入</span>
 data1 = np.random.random((<span class="hljs-number">1000</span>, <span class="hljs-number">32</span>))
 data2 = np.random.random((<span class="hljs-number">1000</span>, <span class="hljs-number">32</span>))
 labels = np.random.random((<span class="hljs-number">1000</span>, <span class="hljs-number">10</span>))
 
 <span class="hljs-comment"># 训练</span>
 model.fit((data1, data2), labels, epochs=<span class="hljs-number">10</span>, batch_size=<span class="hljs-number">10</span>)</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">Train on <span class="hljs-number">1000</span> samples
-Epoch <span class="hljs-number">1</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">424</span>us/sample - loss: <span class="hljs-number">30.9891</span> - accuracy: <span class="hljs-number">0.1120</span>
-Epoch <span class="hljs-number">2</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">140</span>us/sample - loss: <span class="hljs-number">97.7702</span> - accuracy: <span class="hljs-number">0.1050</span>
-Epoch <span class="hljs-number">3</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">142</span>us/sample - loss: <span class="hljs-number">156.0789</span> - accuracy: <span class="hljs-number">0.0850</span>
-Epoch <span class="hljs-number">4</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">141</span>us/sample - loss: <span class="hljs-number">88.6646</span> - accuracy: <span class="hljs-number">0.0860</span>
-Epoch <span class="hljs-number">5</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">143</span>us/sample - loss: <span class="hljs-number">62.6547</span> - accuracy: <span class="hljs-number">0.0960</span>
-Epoch <span class="hljs-number">6</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">142</span>us/sample - loss: <span class="hljs-number">101.7365</span> - accuracy: <span class="hljs-number">0.0880</span>
-Epoch <span class="hljs-number">7</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">142</span>us/sample - loss: <span class="hljs-number">145.1425</span> - accuracy: <span class="hljs-number">0.1050</span>
-Epoch <span class="hljs-number">8</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">143</span>us/sample - loss: <span class="hljs-number">192.7763</span> - accuracy: <span class="hljs-number">0.0840</span>
-Epoch <span class="hljs-number">9</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">142</span>us/sample - loss: <span class="hljs-number">237.8299</span> - accuracy: <span class="hljs-number">0.1130</span>
-Epoch <span class="hljs-number">10</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">141</span>us/sample - loss: <span class="hljs-number">310.9853</span> - accuracy: <span class="hljs-number">0.0960</span>
-
-
-
-
-
-&lt;tensorflow.python.keras.callbacks.History at <span class="hljs-number">0x264e2bac248</span>&gt;</code></pre></div>
 <h2 id="3-Subclassing-Model-子类化模型"><a href="#3-Subclassing-Model-子类化模型" class="headerlink" title="(3) Subclassing Model (子类化模型)"></a>(3) Subclassing Model (子类化模型)</h2><p>继承tf.keras.Model，高度可定制化。</p>
 <div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 定义模型</span>
 
@@ -489,33 +410,6 @@ labels = np.random.random((<span class="hljs-number">1000</span>, <span class="h
 
 <span class="hljs-comment"># 训练</span>
 model.fit((data1, data2), labels, epochs=<span class="hljs-number">10</span>, batch_size=<span class="hljs-number">10</span>)</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">Train on <span class="hljs-number">1000</span> samples
-Epoch <span class="hljs-number">1</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">381</span>us/sample - loss: <span class="hljs-number">32.4554</span> - accuracy: <span class="hljs-number">0.1120</span>
-Epoch <span class="hljs-number">2</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">143</span>us/sample - loss: <span class="hljs-number">111.5987</span> - accuracy: <span class="hljs-number">0.1100</span>
-Epoch <span class="hljs-number">3</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">138</span>us/sample - loss: <span class="hljs-number">137.5670</span> - accuracy: <span class="hljs-number">0.1070</span>
-Epoch <span class="hljs-number">4</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">138</span>us/sample - loss: <span class="hljs-number">78.4946</span> - accuracy: <span class="hljs-number">0.1010</span>
-Epoch <span class="hljs-number">5</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">140</span>us/sample - loss: <span class="hljs-number">54.7856</span> - accuracy: <span class="hljs-number">0.0950</span>
-Epoch <span class="hljs-number">6</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">151</span>us/sample - loss: <span class="hljs-number">88.2867</span> - accuracy: <span class="hljs-number">0.0980</span>
-Epoch <span class="hljs-number">7</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">143</span>us/sample - loss: <span class="hljs-number">124.9134</span> - accuracy: <span class="hljs-number">0.0920</span>
-Epoch <span class="hljs-number">8</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">139</span>us/sample - loss: <span class="hljs-number">168.2450</span> - accuracy: <span class="hljs-number">0.1100</span>
-Epoch <span class="hljs-number">9</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">138</span>us/sample - loss: <span class="hljs-number">229.4246</span> - accuracy: <span class="hljs-number">0.1130</span>
-Epoch <span class="hljs-number">10</span>/<span class="hljs-number">10</span>
-<span class="hljs-number">1000</span>/<span class="hljs-number">1000</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">139</span>us/sample - loss: <span class="hljs-number">273.8532</span> - accuracy: <span class="hljs-number">0.1020</span>
-
-
-
-
-
-&lt;tensorflow.python.keras.callbacks.History at <span class="hljs-number">0x264eba423c8</span>&gt;</code></pre></div>
 <h1 id="4-练习"><a href="#4-练习" class="headerlink" title="4. 练习"></a>4. 练习</h1><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn <span class="hljs-keyword">import</span> datasets
 <span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
 
@@ -525,17 +419,15 @@ labels = iris.target
 data = np.concatenate((data,labels.reshape(<span class="hljs-number">150</span>,<span class="hljs-number">1</span>)),axis=<span class="hljs-number">-1</span>)
 np.random.shuffle(data)</code></pre></div>
 <div class="hljs"><pre><code class="hljs python">data.shape</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">(<span class="hljs-number">150</span>, <span class="hljs-number">5</span>)</code></pre></div>
 <div class="hljs"><pre><code class="hljs python">X = data[:,:<span class="hljs-number">4</span>]
 Y = data[:,<span class="hljs-number">-1</span>]
 
 print(X.shape, Y.shape)</code></pre></div>
-<div class="hljs"><pre><code class="hljs scheme">(<span class="hljs-name">150</span>, <span class="hljs-number">4</span>) (<span class="hljs-name">150</span>,)</code></pre></div>
 <div class="hljs"><pre><code class="hljs python">print(np.unique(Y))</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">[<span class="hljs-number">0.</span> <span class="hljs-number">1.</span> <span class="hljs-number">2.</span>]</code></pre></div>
 <div class="hljs"><pre><code class="hljs python">print(X[<span class="hljs-number">0</span>])</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">[<span class="hljs-number">6.3</span> <span class="hljs-number">2.7</span> <span class="hljs-number">4.9</span> <span class="hljs-number">1.8</span>]</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 自己完成的部分</span>
+
+<span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
 <span class="hljs-keyword">import</span> tensorflow.keras.layers <span class="hljs-keyword">as</span> layers
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span><span class="hljs-params">(tf.keras.Model)</span>:</span>
@@ -561,113 +453,6 @@ model = MyModel(num_classes=<span class="hljs-number">3</span>)</code></pre></di
 
 <span class="hljs-comment">#keras</span>
 model.fit(X, Y, batch_size=<span class="hljs-number">30</span>, epochs=<span class="hljs-number">50</span>, shuffle=<span class="hljs-literal">True</span>)</code></pre></div>
-<div class="hljs"><pre><code class="hljs angelscript">Train on <span class="hljs-number">150</span> samples
-Epoch <span class="hljs-number">1</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">951</span>us/sample - loss: <span class="hljs-number">1.1474</span> - sparse_categorical_accuracy: <span class="hljs-number">0.3333</span>
-Epoch <span class="hljs-number">2</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">1.0366</span> - sparse_categorical_accuracy: <span class="hljs-number">0.3333</span>
-Epoch <span class="hljs-number">3</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.9883</span> - sparse_categorical_accuracy: <span class="hljs-number">0.5667</span>
-Epoch <span class="hljs-number">4</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.9546</span> - sparse_categorical_accuracy: <span class="hljs-number">0.5267</span>
-Epoch <span class="hljs-number">5</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.9236</span> - sparse_categorical_accuracy: <span class="hljs-number">0.3467</span>
-Epoch <span class="hljs-number">6</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.9083</span> - sparse_categorical_accuracy: <span class="hljs-number">0.5333</span>
-Epoch <span class="hljs-number">7</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.8965</span> - sparse_categorical_accuracy: <span class="hljs-number">0.3600</span>
-Epoch <span class="hljs-number">8</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.8834</span> - sparse_categorical_accuracy: <span class="hljs-number">0.3333</span>
-Epoch <span class="hljs-number">9</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.8712</span> - sparse_categorical_accuracy: <span class="hljs-number">0.3600</span>
-Epoch <span class="hljs-number">10</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.8608</span> - sparse_categorical_accuracy: <span class="hljs-number">0.4467</span>
-Epoch <span class="hljs-number">11</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.8515</span> - sparse_categorical_accuracy: <span class="hljs-number">0.5067</span>
-Epoch <span class="hljs-number">12</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.8443</span> - sparse_categorical_accuracy: <span class="hljs-number">0.5267</span>
-Epoch <span class="hljs-number">13</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.8380</span> - sparse_categorical_accuracy: <span class="hljs-number">0.5533</span>
-Epoch <span class="hljs-number">14</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.8290</span> - sparse_categorical_accuracy: <span class="hljs-number">0.5800</span>
-Epoch <span class="hljs-number">15</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.8255</span> - sparse_categorical_accuracy: <span class="hljs-number">0.6400</span>
-Epoch <span class="hljs-number">16</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.8183</span> - sparse_categorical_accuracy: <span class="hljs-number">0.6467</span>
-Epoch <span class="hljs-number">17</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.8127</span> - sparse_categorical_accuracy: <span class="hljs-number">0.6267</span>
-Epoch <span class="hljs-number">18</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.8088</span> - sparse_categorical_accuracy: <span class="hljs-number">0.6467</span>
-Epoch <span class="hljs-number">19</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.8038</span> - sparse_categorical_accuracy: <span class="hljs-number">0.6600</span>
-Epoch <span class="hljs-number">20</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">40</span>us/sample - loss: <span class="hljs-number">0.7975</span> - sparse_categorical_accuracy: <span class="hljs-number">0.6733</span>
-Epoch <span class="hljs-number">21</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7936</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7000</span>
-Epoch <span class="hljs-number">22</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7882</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7267</span>
-Epoch <span class="hljs-number">23</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7837</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7600</span>
-Epoch <span class="hljs-number">24</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.7790</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7533</span>
-Epoch <span class="hljs-number">25</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7738</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7467</span>
-Epoch <span class="hljs-number">26</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.7686</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7867</span>
-Epoch <span class="hljs-number">27</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7659</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7667</span>
-Epoch <span class="hljs-number">28</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7615</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7867</span>
-Epoch <span class="hljs-number">29</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7540</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8133</span>
-Epoch <span class="hljs-number">30</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7510</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8133</span>
-Epoch <span class="hljs-number">31</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7469</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8067</span>
-Epoch <span class="hljs-number">32</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7418</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8267</span>
-Epoch <span class="hljs-number">33</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.7359</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8400</span>
-Epoch <span class="hljs-number">34</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7317</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8200</span>
-Epoch <span class="hljs-number">35</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.7242</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8200</span>
-Epoch <span class="hljs-number">36</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7242</span> - sparse_categorical_accuracy: <span class="hljs-number">0.7933</span>
-Epoch <span class="hljs-number">37</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7161</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8333</span>
-Epoch <span class="hljs-number">38</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7104</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8667</span>
-Epoch <span class="hljs-number">39</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.7069</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8333</span>
-Epoch <span class="hljs-number">40</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.7032</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8333</span>
-Epoch <span class="hljs-number">41</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.6971</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8667</span>
-Epoch <span class="hljs-number">42</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.6927</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8600</span>
-Epoch <span class="hljs-number">43</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.6875</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8800</span>
-Epoch <span class="hljs-number">44</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.6831</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8733</span>
-Epoch <span class="hljs-number">45</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.6797</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8867</span>
-Epoch <span class="hljs-number">46</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">47</span>us/sample - loss: <span class="hljs-number">0.6758</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8867</span>
-Epoch <span class="hljs-number">47</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.6699</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8467</span>
-Epoch <span class="hljs-number">48</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.6677</span> - sparse_categorical_accuracy: <span class="hljs-number">0.8533</span>
-Epoch <span class="hljs-number">49</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">53</span>us/sample - loss: <span class="hljs-number">0.6607</span> - sparse_categorical_accuracy: <span class="hljs-number">0.9067</span>
-Epoch <span class="hljs-number">50</span>/<span class="hljs-number">50</span>
-<span class="hljs-number">150</span>/<span class="hljs-number">150</span> [==============================] - <span class="hljs-number">0</span>s <span class="hljs-number">60</span>us/sample - loss: <span class="hljs-number">0.6573</span> - sparse_categorical_accuracy: <span class="hljs-number">0.9133</span>
-
-
-
-
-
-&lt;tensorflow.python.keras.callbacks.History at <span class="hljs-number">0x26689c13c88</span>&gt;</code></pre></div>
 
             </article>
             <hr>
@@ -699,6 +484,12 @@ Epoch <span class="hljs-number">50</span>/<span class="hljs-number">50</span>
                 <div class="post-prevnext row">
                   <div class="post-prev col-6">
                     
+                    
+                      <a href="/2020/3-TF3-Keras-Model-Training/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">‘[TF2]3. Keras Model Training’</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </div>
                   <div class="post-next col-6">
