@@ -208,17 +208,17 @@
               </p>
             
             <article class="markdown-body">
-              <p>这部分包括了使用 <code>tf.keras</code> 构建、训练模型的基本方法。</p>
-<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+              <div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
 print(tf.__version__)
 
 <span class="hljs-comment"># 2.1.1</span></code></pre></div>
+<p>这部分包括了使用 <code>tf.keras</code> 构建、训练模型的基本方法。</p>
 <h1 id="1-基本模型训练流程"><a href="#1-基本模型训练流程" class="headerlink" title="1. 基本模型训练流程"></a>1. 基本模型训练流程</h1><p>模型训练的一般步骤包括：</p>
 <ul>
 <li>构建模型（三种方式）</li>
-<li>训练模型：model.fit()</li>
-<li>验证模型：model.evaluate()</li>
-<li>使用模型进行预测：model.predict()</li>
+<li>训练模型：<code>model.fit()</code></li>
+<li>验证模型：<code>model.evaluate()</code></li>
+<li>使用模型进行预测：<code>model.predict()</code></li>
 </ul>
 <h2 id="1-1-构建模型"><a href="#1-1-构建模型" class="headerlink" title="1.1 构建模型"></a>1.1 构建模型</h2><div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> layers
 
@@ -259,7 +259,7 @@ y_val = np.random.randint(<span class="hljs-number">10</span>, size=(<span class
 
 x_test = np.random.random((<span class="hljs-number">200</span>, <span class="hljs-number">32</span>))
 y_test = np.random.randint(<span class="hljs-number">10</span>, size=(<span class="hljs-number">200</span>, ))</code></pre></div>
-<h2 id="1-2-训练模型"><a href="#1-2-训练模型" class="headerlink" title="1.2 训练模型"></a>1.2 训练模型</h2><p>model.fit()中的基本参数：</p>
+<h2 id="1-2-训练模型"><a href="#1-2-训练模型" class="headerlink" title="1.2 训练模型"></a>1.2 训练模型</h2><p><code>model.fit()</code>中的基本参数：</p>
 <ul>
 <li>x、y：输入数据和目标数据。</li>
 <li>batch_size：样本分组的大小，即每训练batch_size个样本，模型更新一次权重参数。</li>
@@ -271,7 +271,7 @@ results = model.evaluate(x_test, y_test, batch_size=<span class="hljs-number">12
 <div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 对x_test的前三个样本进行预测</span>
 predictions = model.predict(x_test[:<span class="hljs-number">3</span>])
 print(y_test[:<span class="hljs-number">3</span>], predictions.argmax(axis=<span class="hljs-number">1</span>))  <span class="hljs-comment"># 分类的预测输出为10个分类的概率，这里取每行最大值的索引（即对应分类）</span></code></pre></div>
-<h1 id="2-使用类别加权和样本加权"><a href="#2-使用类别加权和样本加权" class="headerlink" title="2. 使用类别加权和样本加权"></a>2. 使用类别加权和样本加权</h1><h2 id="2-1-类别加权"><a href="#2-1-类别加权" class="headerlink" title="2.1 类别加权"></a>2.1 类别加权</h2><p>model.fit()函数中包含参数<strong>class_weight</strong>，可以通过字典形式指定每个<strong>特征</strong>的权重。注意，该字典必须包含输入的<strong>全部特征</strong>，即字典长度等于输入的列数。</p>
+<h1 id="2-使用类别加权和样本加权"><a href="#2-使用类别加权和样本加权" class="headerlink" title="2. 使用类别加权和样本加权"></a>2. 使用类别加权和样本加权</h1><h2 id="2-1-类别加权"><a href="#2-1-类别加权" class="headerlink" title="2.1 类别加权"></a>2.1 类别加权</h2><p><code>model.fit()</code>函数中包含参数<strong>class_weight</strong>，可以通过字典形式指定每个<strong>特征</strong>的权重。注意，该字典必须包含输入的<strong>全部特征</strong>，即字典长度等于输入的列数。</p>
 <div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 权重字典，使模型更重视5</span>
 class_weight = &#123;&#125;
 <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">10</span>):
@@ -280,7 +280,7 @@ class_weight[<span class="hljs-number">5</span>] = <span class="hljs-number">2</
 
 <span class="hljs-comment"># 传入权重参数进行训练</span>
 model.fit(x_train, y_train, batch_size=<span class="hljs-number">100</span>, epochs=<span class="hljs-number">5</span>, validation_data=(x_val, y_val), class_weight=class_weight)</code></pre></div>
-<h2 id="2-2-样本加权"><a href="#2-2-样本加权" class="headerlink" title="2.2 样本加权"></a>2.2 样本加权</h2><p>model.fit()函数中包含参数<strong>sample_weight</strong>，可以通过数组形式指定每个<strong>样本</strong>的权重。数组长度应等于输入的行数。</p>
+<h2 id="2-2-样本加权"><a href="#2-2-样本加权" class="headerlink" title="2.2 样本加权"></a>2.2 样本加权</h2><p><code>model.fit()</code>函数中包含参数<strong>sample_weight</strong>，可以通过数组形式指定每个<strong>样本</strong>的权重。数组长度应等于输入的行数。</p>
 <div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 权重列表，使模型更重视5</span>
 sample_weight = np.ones(shape=(len(y_train),))  <span class="hljs-comment"># 所有样本权重为1</span>
 sample_weight[y_train == <span class="hljs-number">5</span>] = <span class="hljs-number">2</span>  <span class="hljs-comment"># 5的权重为2</span>

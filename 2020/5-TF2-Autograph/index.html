@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>5-TF2-Autograph - AiArt</title>
+  <title>[TF2]5. AutoGraph - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -279,7 +279,7 @@ outer_var()</code></pre></div>
 inner_var()
 inner_var()</code></pre></div>
 <p><img src="https://wx2.sbimg.cn/2020/06/10/5-7.png" srcset="/img/loading.gif" alt="Inner_Var"></p>
-<h2 id="3-被修饰的函数无法修改该外部Python列表或字典等结构类型变量"><a href="#3-被修饰的函数无法修改该外部Python列表或字典等结构类型变量" class="headerlink" title="(3) 被修饰的函数无法修改该外部Python列表或字典等结构类型变量"></a>(3) 被修饰的函数无法修改该外部Python列表或字典等结构类型变量</h2><p>与Python函数类似，列表、字典等Python内置的结构类型变量也无法嵌入计算图，因此无法被静态图修改。<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 未被修饰的函数</span>
+<h2 id="3-被修饰的函数无法修改外部Python列表或字典等结构类型变量"><a href="#3-被修饰的函数无法修改外部Python列表或字典等结构类型变量" class="headerlink" title="(3) 被修饰的函数无法修改外部Python列表或字典等结构类型变量"></a>(3) 被修饰的函数无法修改外部Python列表或字典等结构类型变量</h2><p>与Python函数类似，列表、字典等Python内置的结构类型变量也无法嵌入计算图，因此无法被静态图修改。<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 未被修饰的函数</span>
 
 tensor_list = []
 
@@ -324,7 +324,6 @@ result = add1.addprint(tf.constant(<span class="hljs-number">2.0</span>))</code>
 <p><img src="https://wx2.sbimg.cn/2020/06/10/5-10.png" srcset="/img/loading.gif" alt="MyAdd"><br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 查看其中的所有变量</span>
 print(add1.variables)
 print(add1.trainable_variables)</code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/10/5-11.png" srcset="/img/loading.gif" alt="Variables"></p>
-<p>\</p>
 
             </article>
             <hr>
@@ -501,7 +500,7 @@ print(add1.trainable_variables)</code></pre></div><br><img src="https://wx1.sbim
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "5-TF2-Autograph&nbsp;",
+        "[TF2]5. AutoGraph&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,

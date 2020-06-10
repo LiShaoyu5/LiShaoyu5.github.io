@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      734 字
+      737 字
     </span>
   
 
@@ -213,7 +213,7 @@ print(tf.__version__)
 
 <span class="hljs-comment"># 2.1.1</span></code></pre></div>
 <h1 id="1-tf-GrandientTape"><a href="#1-tf-GrandientTape" class="headerlink" title="1. tf.GrandientTape"></a>1. tf.GrandientTape</h1><p><code>tf.GrandientTape()</code> 是一个上下文管理器，能够记录变量上的操作，以便进行求导等。</p>
-<p>求 $ y=x^{3}+4x $ 中y对x的一、二阶导：<br><div class="hljs"><pre><code class="hljs Python">x = tf.constant(<span class="hljs-number">3.0</span>)
+<p>求 $ y=x^{3}+4x $ 中$ y $对$ x $的一、二阶导：<br><div class="hljs"><pre><code class="hljs Python">x = tf.constant(<span class="hljs-number">3.0</span>)
 
 <span class="hljs-comment"># 求导</span>
 <span class="hljs-keyword">with</span> tf.GradientTape() <span class="hljs-keyword">as</span> g2:  <span class="hljs-comment"># 二阶导数</span>
@@ -226,7 +226,7 @@ print(tf.__version__)
 d2y_dx2 = g2.gradient(dy_dx, x)  <span class="hljs-comment"># 6 * x = 18</span>
 print(d2y_dx2)</code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/08/4-1.png" srcset="/img/loading.gif" alt="Gradient-1"></p>
 <p>当 <code>GradientTape.gradient()</code> 方法被调用后，这个GradientTape对象就会被自动释放。如果需要多次调用这个方法（在同一个计算上多次求导），可以设置其参数 <code>persistent=True</code> ，在使用结束后手动删除它。</p>
-<p>求 $y=x^{2}, z=y^{2}$ 中y对x、z对x的一阶导：<br><div class="hljs"><pre><code class="hljs Python">x = tf.constant(<span class="hljs-number">5.0</span>)
+<p>求 $y=x^{2}, z=y^{2}$ 中$ y $对$ x $、$ z $对$ x $的一阶导：<br><div class="hljs"><pre><code class="hljs Python">x = tf.constant(<span class="hljs-number">5.0</span>)
 
 <span class="hljs-keyword">with</span> tf.GradientTape(persistent=<span class="hljs-literal">True</span>) <span class="hljs-keyword">as</span> g:
     g.watch(x)
@@ -355,7 +355,7 @@ model.fit(data, labels, batch_size=<span class="hljs-number">64</span>, epochs=<
                     
                       <a href="/2020/5-TF2-Autograph/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">5-TF2-Autograph</span>
+                        <span class="hidden-mobile">[TF2]5. AutoGraph</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
