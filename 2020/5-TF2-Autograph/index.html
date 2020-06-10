@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>[TF2]1. Installation - AiArt</title>
+  <title>5-TF2-Autograph - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -151,8 +151,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-05-31 17:23">
-      May 31, 2020 pm
+    <time datetime="2020-06-10 17:57">
+      June 10, 2020 pm
     </time>
   </div>
 
@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      414 字
+      1.1k 字
     </span>
   
 
@@ -208,27 +208,123 @@
               </p>
             
             <article class="markdown-body">
-              <p>在 <a href="https://tensorflow.google.cn/install/gpu" target="_blank" rel="noopener">https://tensorflow.google.cn/install/gpu</a> 中查看各个依赖软件的版本要求。</p>
-<h4 id="1-安装Nvidia驱动"><a href="#1-安装Nvidia驱动" class="headerlink" title="1. 安装Nvidia驱动"></a><strong>1. 安装Nvidia驱动</strong></h4><p>可以直接在GeForce Experience中更新驱动程序，或在 <a href="https://www.geforce.cn/drivers" target="_blank" rel="noopener">https://www.geforce.cn/drivers</a> 查找与自己显卡相符的驱动程序下载安装。</p>
-<h4 id="2-安装CUDA"><a href="#2-安装CUDA" class="headerlink" title="2. 安装CUDA"></a><strong>2. 安装CUDA</strong></h4><p>进入<a href="https://developer.nvidia.com/cuda-toolkit" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-toolkit</a> ，选择下载，进入选择页面。</p>
-<p>点击Legacy Releases，选择需要的CUDA版本。自己安装的是TensorFlow2.1.0，需要的CUDA版本为10.1。</p>
-<p>进入系统选择页面，选择Windows-x86_64-10，安装方式建议exe(local)，方式因网络问题造成安装失败。</p>
-<p>选择Base Installer中的Download，下载CUDA的本地安装包，安装。默认安装路径为C:\ProgramData\NVIDIA GPU Computing Toolkit。</p>
-<p>安装完成后，在命令行运行<code>nvcc -V</code>查看CUDA版本以验证安装是否成功。</p>
-<h4 id="3-安装CUDNN"><a href="#3-安装CUDNN" class="headerlink" title="3. 安装CUDNN"></a><strong>3. 安装CUDNN</strong></h4><p>进入<a href="https://developer.nvidia.com/rdp/cudnn-download" target="_blank" rel="noopener">https://developer.nvidia.com/rdp/cudnn-download</a> ，登录并填写问卷，进入下载页面。选择与CUDA版本相符的CUDNN，这里选择cuDNN v7.6.5 (November 5th, 2019) for CUDA 10.1，<br>cuDNN Library for Windows 10下载。</p>
-<p>下载完成后，解压压缩包，将三个文件夹中的文件分别移动至CUDA安装路径中的对应文件夹里。</p>
-<h4 id="4-安装TensorFlow"><a href="#4-安装TensorFlow" class="headerlink" title="4. 安装TensorFlow"></a><strong>4. 安装TensorFlow</strong></h4><ul>
-<li>网络环境好：</li>
-</ul>
-<p>直接使用<code>pip install tensorflow-gpu==2.1.0</code>即可安装所有依赖库。</p>
+              <div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+print(tf.__version__)
+
+<span class="hljs-comment"># 2.1.1</span></code></pre></div>
+<p>Tensorflow用计算图（Computional Graph）来表示计算逻辑。计算图一般有三种构建方式：</p>
 <ul>
-<li><p>网络环境不好，直接使用pip容易失败：</p>
-<p>在 <a href="https://pypi.org/" target="_blank" rel="noopener">https://pypi.org/</a> 直接搜索需要的库，在release history中选择合适版本，下载后进行本地安装<code>pip install [本地路径]</code>。</p>
-<p>查看pip支持的安装包类型，可以在需要安装TensorFlow的Python环境中执行：</p>
-<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> pip._internal.pep425tags
-print(pip._internal.pep425tags.get_supported())</code></pre></div>
-</li>
+<li>静态图：首先创建图的结构，然后开启一个会话（Session），显式地执行图。这种方式编译器对网络的优化程度高，便于模型的复用。</li>
+<li>动态图：按照代码的顺序执行。这种方式更利于调试和开发</li>
+<li>AutoGraph：将动态图转换为静态图。</li>
 </ul>
+<h1 id="1-AutoGraph的机制原理与使用规范"><a href="#1-AutoGraph的机制原理与使用规范" class="headerlink" title="1. AutoGraph的机制原理与使用规范"></a>1. AutoGraph的机制原理与使用规范</h1><p>使用 <code>@tf.function</code> 修饰函数以使用AutoGraph，即将函数创建静态图。<br>AutoGraph使用中一般需要注意以下三点：</p>
+<h2 id="1-优先使用TensorFlow中提供的函数"><a href="#1-优先使用TensorFlow中提供的函数" class="headerlink" title="(1) 优先使用TensorFlow中提供的函数"></a>(1) 优先使用TensorFlow中提供的函数</h2><p>在被 <code>@tf.function</code> 修饰的函数第一次执行时，会首先创建计算图，然后执行计算图。但是由于非TensorFlow的函数无法嵌入静态图，所以再次执行时可能会出现不同的结果。</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 非TensorFlow的函数无法嵌入静态图的例子</span>
+
+<span class="hljs-meta">@tf.function</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">myadd</span><span class="hljs-params">(a, b)</span>:</span>
+    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> tf.range(<span class="hljs-number">3</span>):
+        tf.print(i)
+    c = a + b
+    print(<span class="hljs-string">'Python function'</span>)
+    <span class="hljs-keyword">return</span> c</code></pre></div>
+<p>第一次执行时，TensorFlow中的函数被加入了静态图，而Python函数直接执行，没有加入静态图；图创建完成后被执行，只执行了TensorFlow中的函数。</p>
+<div class="hljs"><pre><code class="hljs Python">myadd(tf.constant(<span class="hljs-string">'aaa'</span>), tf.constant(<span class="hljs-string">'bbb'</span>))  <span class="hljs-comment"># 第一次执行较慢</span></code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/06/10/5-1.png" srcset="/img/loading.gif" alt="AutoGraph-1"></p>
+<p>再次执行时，只会执行创建完成的计算图，所以Python函数没有执行。<br><div class="hljs"><pre><code class="hljs Python">myadd(tf.constant(<span class="hljs-string">'aaa'</span>), tf.constant(<span class="hljs-string">'bbb'</span>))  <span class="hljs-comment"># 已创建的计算图执行很快</span></code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/10/5-2.png" srcset="/img/loading.gif" alt="AutoGraph-2"></p>
+<p>如果传入不同类型的参数，则会创建新的静态图。<br><div class="hljs"><pre><code class="hljs Python">myadd(tf.constant(<span class="hljs-number">1</span>), tf.constant(<span class="hljs-number">3</span>))</code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/10/5-3.png" srcset="/img/loading.gif" alt="AutoGraph-3"></p>
+<p>若不使用TensorFlow中的数据类型，则每次都会创建新的图。<br><div class="hljs"><pre><code class="hljs Python">myadd(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>)
+myadd(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)</code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/10/5-4.png" srcset="/img/loading.gif" alt="AutoGraph-4"></p>
+<p>使用非TensorFlow函数还会导致一些其他的问题。<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+<span class="hljs-meta">@tf.function</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">np_random</span><span class="hljs-params">()</span>:</span>
+    a = np.random.randn(<span class="hljs-number">3</span>, <span class="hljs-number">3</span>)
+    tf.print(a)
+
+<span class="hljs-meta">@tf.function</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">tf_random</span><span class="hljs-params">()</span>:</span>
+    a = tf.random.normal((<span class="hljs-number">3</span>, <span class="hljs-number">3</span>))
+    tf.print(a)
+
+<span class="hljs-comment"># 使用@tf.function将函数添加入静态图后，numpy中的随机函数每次都输出相同的结果</span>
+np_random()
+np_random()
+<span class="hljs-comment"># 使用tensorflow中的随机函数，运行正常</span>
+tf_random()
+tf_random()</code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/10/5-5.png" srcset="/img/loading.gif" alt="AutoGraph-Random"></p>
+<h2 id="2-避免在被修饰的函数内部定义Variable"><a href="#2-避免在被修饰的函数内部定义Variable" class="headerlink" title="(2) 避免在被修饰的函数内部定义Variable"></a>(2) 避免在被修饰的函数内部定义Variable</h2><p>在动态图中,  <code>tf.Variable</code> 是一个普通的Python变量, 超出了其作用域范围就会被销毁；而在静态图中,  <code>tf.Variable</code> 则是计算图中一个持续存在的节点, 不受Python的作用域的影响。在转换成图的过程中， <code>tf.function</code> 可能会将一个函数执行多次，如果在函数内部有创建Variable的语句，就会因为多次创建相同的Variable而出错。</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 正确的方式：在外部定义变量</span>
+
+x = tf.Variable(<span class="hljs-number">1</span>, dtype=tf.float32)
+<span class="hljs-meta">@tf.function</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">outer_var</span><span class="hljs-params">()</span>:</span>
+    x.assign_add(<span class="hljs-number">1</span>)
+    tf.print(x)
+    <span class="hljs-keyword">return</span> x
+
+outer_var()
+outer_var()</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/06/10/5-6.png" srcset="/img/loading.gif" alt="Outer_Var"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 错误的方式：在内部定义变量</span>
+
+<span class="hljs-meta">@tf.function</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">inner_var</span><span class="hljs-params">()</span>:</span>
+    x = tf.Variable(<span class="hljs-number">1</span>, dtype=tf.float32)
+    x.assign_add(<span class="hljs-number">1</span>)
+    tf.print(x)
+    <span class="hljs-keyword">return</span> x
+
+inner_var()
+inner_var()</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/06/10/5-7.png" srcset="/img/loading.gif" alt="Inner_Var"></p>
+<h2 id="3-被修饰的函数无法修改该外部Python列表或字典等结构类型变量"><a href="#3-被修饰的函数无法修改该外部Python列表或字典等结构类型变量" class="headerlink" title="(3) 被修饰的函数无法修改该外部Python列表或字典等结构类型变量"></a>(3) 被修饰的函数无法修改该外部Python列表或字典等结构类型变量</h2><p>与Python函数类似，列表、字典等Python内置的结构类型变量也无法嵌入计算图，因此无法被静态图修改。<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 未被修饰的函数</span>
+
+tensor_list = []
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">append_tensor</span><span class="hljs-params">(x)</span>:</span>
+    tensor_list.append(x)
+    <span class="hljs-keyword">return</span> tensor_list
+
+append_tensor(tf.constant(<span class="hljs-number">5.0</span>))
+append_tensor(tf.constant(<span class="hljs-number">6.0</span>))
+print(tensor_list)  <span class="hljs-comment"># 里面有两个tensor</span></code></pre></div><br><img src="https://wx2.sbimg.cn/2020/06/10/5-8.png" srcset="/img/loading.gif" alt="Undecorated"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 被修饰的函数</span>
+
+tensor_list = []
+
+<span class="hljs-meta">@tf.function</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">append_tensor</span><span class="hljs-params">(x)</span>:</span>
+    tensor_list.append(x)
+    <span class="hljs-keyword">return</span> tensor_list
+
+append_tensor(tf.constant(<span class="hljs-number">5.0</span>))
+append_tensor(tf.constant(<span class="hljs-number">6.0</span>))
+print(tensor_list)  <span class="hljs-comment"># 里面只有一个空的tensor</span></code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/06/10/5-9.png" srcset="/img/loading.gif" alt="Decorated"></p>
+<h1 id="2-AutoGraph的使用方法"><a href="#2-AutoGraph的使用方法" class="headerlink" title="2. AutoGraph的使用方法"></a>2. AutoGraph的使用方法</h1><p>不应该在被 <code>@tf.function</code> 修饰的函数内定义Variable，但是将其定义在函数之外又与封装的理念相违背。为了解决这个问题，一般通过继承 <code>tf.Module</code>  生成子类，将函数和变量都封装起来。</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyAdd</span><span class="hljs-params">(tf.Module)</span>:</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, init_value=tf.constant<span class="hljs-params">(<span class="hljs-number">0.0</span>)</span>, name=None)</span>:</span>
+        super(MyAdd, self).__init__(name=name)
+        <span class="hljs-keyword">with</span> self.name_scope:
+            self.x = tf.Variable(init_value, dtype=tf.float32, trainable=<span class="hljs-literal">True</span>)
+
+<span class="hljs-meta">    @tf.function(input_signature=[tf.TensorSpec(shape=[], dtype=tf.float32)])</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">addprint</span><span class="hljs-params">(self, a)</span>:</span>
+        <span class="hljs-keyword">with</span> self.name_scope:
+            self.x.assign_add(a)
+            tf.print(self.x)
+            <span class="hljs-keyword">return</span> self.x</code></pre></div>
+<p><code>with self.name_scope</code> 相当于 <code>with tf.namescope(myadd)</code>，圈定了其中变量的所属范围（但是不影响变量的使用范围）。</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 执行</span>
+add1 = MyAdd(init_value=tf.constant(<span class="hljs-number">1.0</span>))
+result = add1.addprint(tf.constant(<span class="hljs-number">2.0</span>))</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/06/10/5-10.png" srcset="/img/loading.gif" alt="MyAdd"><br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 查看其中的所有变量</span>
+print(add1.variables)
+print(add1.trainable_variables)</code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/10/5-11.png" srcset="/img/loading.gif" alt="Variables"></p>
+<p>\</p>
 
             </article>
             <hr>
@@ -261,18 +357,12 @@ print(pip._internal.pep425tags.get_supported())</code></pre></div>
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/pip-tips/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">pip tips</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/Test-Blog/">
-                        <span class="hidden-mobile">Test Blog</span>
+                      <a href="/2020/4-TF2-Custom-Training-Process/">
+                        <span class="hidden-mobile">[TF2]4. Custom Training Process</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -411,7 +501,7 @@ print(pip._internal.pep425tags.get_supported())</code></pre></div>
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "[TF2]1. Installation&nbsp;",
+        "5-TF2-Autograph&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,

@@ -203,32 +203,34 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：June 7, 2020 am
+                  本文最后更新于：June 10, 2020 pm
                 
               </p>
             
             <article class="markdown-body">
               <p>首先导入tensorflow，查看版本和设备信息：</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
-print(tf.__version__)</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># print(tf.test.is_gpu_available())  # Not recommended, use following instead</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+print(tf.__version__)
+
+<span class="hljs-comment"># 2.1.1</span></code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># print(tf.test.is_gpu_available())  # Not recommended, use following instead</span>
 print(tf.config.list_physical_devices(<span class="hljs-string">'GPU'</span>))</code></pre></div>
 <h1 id="1-张量与操作"><a href="#1-张量与操作" class="headerlink" title="1. 张量与操作"></a>1. 张量与操作</h1><p>tensorflow中有两种表示变量的方式：tf.Variable和tf.Tensor。Variale在Tensor基础上有一些额外的功能，通常用于单独的数据操作；Tensor则通常用于保存计算的中间结果。</p>
-<p>使用Python自带的数据格式创建Variable：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># rank意为变量的维度</span>
+<p>使用Python自带的数据格式创建Variable：<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># rank意为变量的维度</span>
 
 r0 = tf.Variable(<span class="hljs-string">'rank0'</span>, tf.string)
 print(r0, <span class="hljs-string">'\nrank: '</span>, tf.rank(r0), <span class="hljs-string">'  shape: '</span>, tf.shape(r0), <span class="hljs-string">'\n'</span>)  <span class="hljs-comment"># rank=1, shape=(1,)</span>
 
 r2 = tf.Variable([[<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>]], tf.int16)  <span class="hljs-comment"># rank=2, shape=(2,)</span>
 print(r2, <span class="hljs-string">'\nrank: '</span>, tf.rank(r2), <span class="hljs-string">'  shape: '</span>, tf.shape(r2), <span class="hljs-string">'\n'</span>)</code></pre></div></p>
-<p>创建特殊矩阵、变型等方法类似于numpy：<br><div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># create tensor</span>
+<p>创建特殊矩阵、变型等方法类似于numpy：<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># create tensor</span>
 
 tf.constant([[<span class="hljs-number">1</span>], [<span class="hljs-number">2</span>], [<span class="hljs-number">3</span>]], tf.int16)
 
 tf.zeros((<span class="hljs-number">3</span>, <span class="hljs-number">3</span>), tf.float16)
 
 <span class="hljs-comment"># print(tf.dtypes.cast(x, tf.int16))  # 改变格式</span></code></pre></div></p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># reshape</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># reshape</span>
 
 t = tf.ones((<span class="hljs-number">2</span>, <span class="hljs-number">3</span>), tf.int16)
 print(tf.reshape(t, (<span class="hljs-number">3</span>, <span class="hljs-number">2</span>)))</code></pre></div>
@@ -287,7 +289,7 @@ print(tf.reshape(t, (<span class="hljs-number">3</span>, <span class="hljs-numbe
 <li>tf.nn：底层的函数库</li>
 </ul>
 <p>一些建立、配置层的基本操作：</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 数据</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 数据</span>
 a = tf.random.uniform((<span class="hljs-number">10</span>, <span class="hljs-number">100</span>, <span class="hljs-number">50</span>), minval=<span class="hljs-number">-0.5</span>, maxval=<span class="hljs-number">0.5</span>)
 
 <span class="hljs-comment"># 实例化层对象</span>
@@ -307,22 +309,22 @@ tf.keras.layers.Dense(<span class="hljs-number">64</span>, kernel_initializer=<s
 <span class="hljs-comment"># 偏差向量初始化为2.0</span>
 tf.keras.layers.Dense(<span class="hljs-number">64</span>, bias_initializer=tf.keras.initializers.Constant(<span class="hljs-number">2.0</span>))</code></pre></div>
 <h1 id="3-三种建模方式"><a href="#3-三种建模方式" class="headerlink" title="3. 三种建模方式"></a>3. 三种建模方式</h1><p>tensorflow中有三种主要的建模方式，分别为顺序式、函数式和子类式。</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> layers</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> layers</code></pre></div>
 <h2 id="1-Sequential-Model-顺序模型"><a href="#1-Sequential-Model-顺序模型" class="headerlink" title="(1) Sequential Model (顺序模型)"></a>(1) Sequential Model (顺序模型)</h2><p>顺序模型使用 tf.keras.Sequential ，适用于建立较为简单的、数据流向单一的模型。</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 第一种方式：逐层添加</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 第一种方式：逐层添加</span>
 
 model = tf.keras.Sequential()
 model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">'relu'</span>))
 model.add(layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">'relu'</span>))
 model.add(layers.Dense(<span class="hljs-number">10</span>))</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 第二种方式：使用list传入</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 第二种方式：使用list传入</span>
 
 model = tf.keras.Sequential([
     layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">'relu'</span>, input_shape=(<span class="hljs-number">32</span>,)),
     layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">'relu'</span>),
     layers.Dense(<span class="hljs-number">10</span>)
 ])</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 配置模型训练用的参数</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 配置模型训练用的参数</span>
 
 model.compile(
     optimizer=tf.keras.optimizers.Adam(<span class="hljs-number">0.01</span>),
@@ -342,7 +344,7 @@ model.fit(data, labels, epochs=<span class="hljs-number">10</span>, batch_size=<
 <li>具有共享图层的模型</li>
 <li>具有非顺序数据流的模型</li>
 </ul>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 输入，可以有多个</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 输入，可以有多个</span>
 input1 = tf.keras.Input(shape=(<span class="hljs-number">32</span>,))
 input2 = tf.keras.Input(shape=(<span class="hljs-number">32</span>,))
 
@@ -354,7 +356,7 @@ x = layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hl
 
 <span class="hljs-comment"># 输出</span>
 pred = layers.Dense(<span class="hljs-number">10</span>)(x)</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 配置模型</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 配置模型</span>
 model = tf.keras.Model(inputs=(input1, input2), outputs=pred)
 model.compile(
     optimizer=tf.keras.optimizers.RMSprop(<span class="hljs-number">0.001</span>),
@@ -370,7 +372,7 @@ labels = np.random.random((<span class="hljs-number">1000</span>, <span class="h
 <span class="hljs-comment"># 训练</span>
 model.fit((data1, data2), labels, epochs=<span class="hljs-number">10</span>, batch_size=<span class="hljs-number">10</span>)</code></pre></div>
 <h2 id="3-Subclassing-Model-子类化模型"><a href="#3-Subclassing-Model-子类化模型" class="headerlink" title="(3) Subclassing Model (子类化模型)"></a>(3) Subclassing Model (子类化模型)</h2><p>继承tf.keras.Model，高度可定制化。</p>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 定义模型</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 定义模型</span>
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span><span class="hljs-params">(tf.keras.Model)</span>:</span>
 
@@ -395,7 +397,7 @@ model.fit((data1, data2), labels, epochs=<span class="hljs-number">10</span>, ba
         pred = self.dense_4(x)
 
         <span class="hljs-keyword">return</span> pred</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 配置模型</span>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 配置模型</span>
 model = MyModel(num_classes=<span class="hljs-number">10</span>)
 model.compile(
     optimizer=tf.keras.optimizers.RMSprop(<span class="hljs-number">0.001</span>),
@@ -410,7 +412,7 @@ labels = np.random.random((<span class="hljs-number">1000</span>, <span class="h
 
 <span class="hljs-comment"># 训练</span>
 model.fit((data1, data2), labels, epochs=<span class="hljs-number">10</span>, batch_size=<span class="hljs-number">10</span>)</code></pre></div>
-<h1 id="4-练习"><a href="#4-练习" class="headerlink" title="4. 练习"></a>4. 练习</h1><div class="hljs"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sklearn <span class="hljs-keyword">import</span> datasets
+<h1 id="4-练习"><a href="#4-练习" class="headerlink" title="4. 练习"></a>4. 练习</h1><div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> sklearn <span class="hljs-keyword">import</span> datasets
 <span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
 
 iris = datasets.load_iris()
@@ -418,14 +420,14 @@ data = iris.data
 labels = iris.target
 data = np.concatenate((data,labels.reshape(<span class="hljs-number">150</span>,<span class="hljs-number">1</span>)),axis=<span class="hljs-number">-1</span>)
 np.random.shuffle(data)</code></pre></div>
-<div class="hljs"><pre><code class="hljs python">data.shape</code></pre></div>
-<div class="hljs"><pre><code class="hljs python">X = data[:,:<span class="hljs-number">4</span>]
+<div class="hljs"><pre><code class="hljs Python">data.shape</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python">X = data[:,:<span class="hljs-number">4</span>]
 Y = data[:,<span class="hljs-number">-1</span>]
 
 print(X.shape, Y.shape)</code></pre></div>
-<div class="hljs"><pre><code class="hljs python">print(np.unique(Y))</code></pre></div>
-<div class="hljs"><pre><code class="hljs python">print(X[<span class="hljs-number">0</span>])</code></pre></div>
-<div class="hljs"><pre><code class="hljs python"><span class="hljs-comment"># 自己完成的部分</span>
+<div class="hljs"><pre><code class="hljs Python">print(np.unique(Y))</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python">print(X[<span class="hljs-number">0</span>])</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 自己完成的部分</span>
 
 <span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
 <span class="hljs-keyword">import</span> tensorflow.keras.layers <span class="hljs-keyword">as</span> layers
@@ -447,7 +449,7 @@ print(X.shape, Y.shape)</code></pre></div>
         <span class="hljs-keyword">return</span> x
 
 model = MyModel(num_classes=<span class="hljs-number">3</span>)</code></pre></div>
-<div class="hljs"><pre><code class="hljs python">model.compile(optimizer=tf.keras.optimizers.Adam(),
+<div class="hljs"><pre><code class="hljs Python">model.compile(optimizer=tf.keras.optimizers.Adam(),
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=<span class="hljs-literal">True</span>),
               metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
 

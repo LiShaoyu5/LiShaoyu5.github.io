@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      731 字
+      734 字
     </span>
   
 
@@ -203,121 +203,123 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：June 8, 2020 pm
+                  本文最后更新于：June 10, 2020 pm
                 
               </p>
             
             <article class="markdown-body">
-              <div class="hljs"><pre><code class="hljs vim">import tensorflow <span class="hljs-keyword">as</span> <span class="hljs-keyword">tf</span>
-<span class="hljs-keyword">print</span>(<span class="hljs-keyword">tf</span>.__version__)</code></pre></div>
-<h1 id="1-tf-GrandientTape"><a href="#1-tf-GrandientTape" class="headerlink" title="1. tf.GrandientTape"></a>1. tf.GrandientTape</h1><p><code>tf.GrandientTape()</code> 是一个上下文管理器，能够记录变量上的操作，以便进行求导等。</p>
-<p>求 $ y=x^{3}+4x $ 中y对x的一、二阶导：<br><div class="hljs"><pre><code class="hljs gml"><span class="hljs-symbol">x</span> = tf.constant(<span class="hljs-number">3.0</span>)
+              <div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+print(tf.__version__)
 
-# 求导
-<span class="hljs-keyword">with</span> tf.GradientTape() as g2:  # 二阶导数
-    g2.watch(<span class="hljs-symbol">x</span>)  # 使g2追踪<span class="hljs-symbol">x</span>
-    <span class="hljs-keyword">with</span> tf.GradientTape() as g1:  # 一阶导数
-        g1.watch(<span class="hljs-symbol">x</span>)
-        <span class="hljs-symbol">y</span> = <span class="hljs-symbol">x</span> * <span class="hljs-symbol">x</span> * <span class="hljs-symbol">x</span> + <span class="hljs-number">4</span> * <span class="hljs-symbol">x</span>        
-    dy_dx = g1.gradient(<span class="hljs-symbol">y</span>, <span class="hljs-symbol">x</span>)  # <span class="hljs-number">3</span> * <span class="hljs-symbol">x</span>^<span class="hljs-number">2</span> + <span class="hljs-number">4</span> = <span class="hljs-number">31</span>
+<span class="hljs-comment"># 2.1.1</span></code></pre></div>
+<h1 id="1-tf-GrandientTape"><a href="#1-tf-GrandientTape" class="headerlink" title="1. tf.GrandientTape"></a>1. tf.GrandientTape</h1><p><code>tf.GrandientTape()</code> 是一个上下文管理器，能够记录变量上的操作，以便进行求导等。</p>
+<p>求 $ y=x^{3}+4x $ 中y对x的一、二阶导：<br><div class="hljs"><pre><code class="hljs Python">x = tf.constant(<span class="hljs-number">3.0</span>)
+
+<span class="hljs-comment"># 求导</span>
+<span class="hljs-keyword">with</span> tf.GradientTape() <span class="hljs-keyword">as</span> g2:  <span class="hljs-comment"># 二阶导数</span>
+    g2.watch(x)  <span class="hljs-comment"># 使g2追踪x</span>
+    <span class="hljs-keyword">with</span> tf.GradientTape() <span class="hljs-keyword">as</span> g1:  <span class="hljs-comment"># 一阶导数</span>
+        g1.watch(x)
+        y = x * x * x + <span class="hljs-number">4</span> * x        
+    dy_dx = g1.gradient(y, x)  <span class="hljs-comment"># 3 * x^2 + 4 = 31</span>
     print(dy_dx)
-d2y_dx2 = g2.gradient(dy_dx, <span class="hljs-symbol">x</span>)  # <span class="hljs-number">6</span> * <span class="hljs-symbol">x</span> = <span class="hljs-number">18</span>
+d2y_dx2 = g2.gradient(dy_dx, x)  <span class="hljs-comment"># 6 * x = 18</span>
 print(d2y_dx2)</code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/08/4-1.png" srcset="/img/loading.gif" alt="Gradient-1"></p>
 <p>当 <code>GradientTape.gradient()</code> 方法被调用后，这个GradientTape对象就会被自动释放。如果需要多次调用这个方法（在同一个计算上多次求导），可以设置其参数 <code>persistent=True</code> ，在使用结束后手动删除它。</p>
-<p>求 $y=x^{2}, z=y^{2}$ 中y对x、z对x的一阶导：<br><div class="hljs"><pre><code class="hljs gml"><span class="hljs-symbol">x</span> = tf.constant(<span class="hljs-number">5.0</span>)
+<p>求 $y=x^{2}, z=y^{2}$ 中y对x、z对x的一阶导：<br><div class="hljs"><pre><code class="hljs Python">x = tf.constant(<span class="hljs-number">5.0</span>)
 
-<span class="hljs-keyword">with</span> tf.GradientTape(<span class="hljs-symbol">persistent</span>=True) as g:
-    g.watch(<span class="hljs-symbol">x</span>)
-    <span class="hljs-symbol">y</span> = <span class="hljs-symbol">x</span> * <span class="hljs-symbol">x</span>
-    z = <span class="hljs-symbol">y</span> * <span class="hljs-symbol">y</span>
-dy_dx = g.gradient(<span class="hljs-symbol">y</span>, <span class="hljs-symbol">x</span>)  # <span class="hljs-number">2</span> * <span class="hljs-symbol">x</span> = <span class="hljs-number">10</span>
+<span class="hljs-keyword">with</span> tf.GradientTape(persistent=<span class="hljs-literal">True</span>) <span class="hljs-keyword">as</span> g:
+    g.watch(x)
+    y = x * x
+    z = y * y
+dy_dx = g.gradient(y, x)  <span class="hljs-comment"># 2 * x = 10</span>
 print(dy_dx)
-dz_dx = g.gradient(z, <span class="hljs-symbol">x</span>)  # <span class="hljs-number">4</span> * <span class="hljs-symbol">x</span>^<span class="hljs-number">3</span> = <span class="hljs-number">500</span>
+dz_dx = g.gradient(z, x)  <span class="hljs-comment"># 4 * x^3 = 500</span>
 print(dz_dx)
-del g  # 需要手动删除</code></pre></div><br><img src="https://wx2.sbimg.cn/2020/06/08/4-2.png" srcset="/img/loading.gif" alt="Gradient-2"></p>
+<span class="hljs-keyword">del</span> g  <span class="hljs-comment"># 需要手动删除</span></code></pre></div><br><img src="https://wx2.sbimg.cn/2020/06/08/4-2.png" srcset="/img/loading.gif" alt="Gradient-2"></p>
 <h1 id="2-自定义模型训练过程"><a href="#2-自定义模型训练过程" class="headerlink" title="2. 自定义模型训练过程"></a>2. 自定义模型训练过程</h1><p>模型的训练 <code>fit()</code> 是以下过程的循环：</p>
 <ul>
 <li>预测→计算损失→反向传播计算梯度→优化器使用梯度更新模型参数</li>
 </ul>
 <p>因此，使用GradientTape，可以方便地自定义训练过程。</p>
-<p>首先构建模型，设置优化器、损失函数、评价指标，准备数据：<br><div class="hljs"><pre><code class="hljs reasonml"># 构建模型（定义前向传播过程）
+<p>首先构建模型，设置优化器、损失函数、评价指标，准备数据：<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 构建模型（定义前向传播过程）</span>
 
-from tensorflow.keras.layers import Dense
+<span class="hljs-keyword">from</span> tensorflow.keras.layers <span class="hljs-keyword">import</span> Dense
 
-<span class="hljs-keyword">class</span> <span class="hljs-constructor">MyModel(<span class="hljs-params">tf</span>.<span class="hljs-params">keras</span>.Model)</span>:
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span><span class="hljs-params">(tf.keras.Model)</span>:</span>
 
-    def <span class="hljs-constructor">__init__(<span class="hljs-params">self</span>, <span class="hljs-params">num_classes</span>=10)</span>:
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, num_classes=<span class="hljs-number">10</span>)</span>:</span>
 
-        super(MyModel, self).<span class="hljs-constructor">__init__()</span>
+        super(MyModel, self).__init__()
         self.num_classes = num_classes
 
-        self.dense1 = <span class="hljs-constructor">Dense(32, <span class="hljs-params">activation</span>='<span class="hljs-params">relu</span>')</span>
-        self.dense2 = <span class="hljs-constructor">Dense(10)</span>
+        self.dense1 = Dense(<span class="hljs-number">32</span>, activation=<span class="hljs-string">'relu'</span>)
+        self.dense2 = Dense(<span class="hljs-number">10</span>)
 
-    def call(self, x):
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">call</span><span class="hljs-params">(self, x)</span>:</span>
 
         x = self.dense1(x)
         x = self.dense2(x)
 
-        return x
+        <span class="hljs-keyword">return</span> x
 
 
-model = <span class="hljs-constructor">MyModel(<span class="hljs-params">num_classes</span>=10)</span>
+model = MyModel(num_classes=<span class="hljs-number">10</span>)
 
 
-# 定义优化器、损失函数和评价指标
+<span class="hljs-comment"># 定义优化器、损失函数和评价指标</span>
 
-optimizer = tf.keras.optimizers.<span class="hljs-constructor">SGD(<span class="hljs-params">learning_rate</span>=0.001)</span>
-loss = tf.keras.losses.<span class="hljs-constructor">CategoricalCrossentropy()</span>
-train_metric = tf.keras.metrics.<span class="hljs-constructor">CategoricalAccuracy()</span>
-val_metric = tf.keras.metrics.<span class="hljs-constructor">CategoricalAccuracy()</span>
+optimizer = tf.keras.optimizers.SGD(learning_rate=<span class="hljs-number">0.001</span>)
+loss = tf.keras.losses.CategoricalCrossentropy()
+train_metric = tf.keras.metrics.CategoricalAccuracy()
+val_metric = tf.keras.metrics.CategoricalAccuracy()
 
 
-# 准备数据
+<span class="hljs-comment"># 准备数据</span>
 
-import numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
 
-x_train = np.random.random((<span class="hljs-number">6400</span>, <span class="hljs-number">32</span>))  # <span class="hljs-number">32</span>个输入特征
-y_train = np.random.random((<span class="hljs-number">6400</span>, <span class="hljs-number">10</span>))  # <span class="hljs-number">10</span>个输出特征
-train_dataset = tf.data.<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Dataset</span>.</span></span>from<span class="hljs-constructor">_tensor_slices((<span class="hljs-params">x_train</span>, <span class="hljs-params">y_train</span>)</span>).batch(<span class="hljs-number">64</span>)
+x_train = np.random.random((<span class="hljs-number">6400</span>, <span class="hljs-number">32</span>))  <span class="hljs-comment"># 32个输入特征</span>
+y_train = np.random.random((<span class="hljs-number">6400</span>, <span class="hljs-number">10</span>))  <span class="hljs-comment"># 10个输出特征</span>
+train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(<span class="hljs-number">64</span>)
 
 x_val = np.random.random((<span class="hljs-number">640</span>, <span class="hljs-number">32</span>))
 y_val = np.random.random((<span class="hljs-number">640</span>, <span class="hljs-number">10</span>))
-val_dataset = tf.data.<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Dataset</span>.</span></span>from<span class="hljs-constructor">_tensor_slices((<span class="hljs-params">x_val</span>, <span class="hljs-params">y_val</span>)</span>).batch(<span class="hljs-number">64</span>)</code></pre></div></p>
-<p>然后自定义训练过程，也就是手动执行 <code>fit()</code> 中的各个步骤：<br><div class="hljs"><pre><code class="hljs sql"><span class="hljs-comment"># 自定义训练</span>
+val_dataset = tf.data.Dataset.from_tensor_slices((x_val, y_val)).batch(<span class="hljs-number">64</span>)</code></pre></div></p>
+<p>然后自定义训练过程，也就是手动执行 <code>fit()</code> 中的各个步骤：<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 自定义训练</span>
 
-for epoch in range(5):  <span class="hljs-comment"># 5个epoch</span>
+<span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> range(<span class="hljs-number">5</span>):  <span class="hljs-comment"># 5个epoch</span>
 
-    loss_epoch = 0  <span class="hljs-comment"># 整个epoch的平均loss</span>
+    loss_epoch = <span class="hljs-number">0</span>  <span class="hljs-comment"># 整个epoch的平均loss</span>
 
-    for step, (x_batch, y_batch) in enumerate(train_dataset):  <span class="hljs-comment"># 遍历每个batch</span>
+    <span class="hljs-keyword">for</span> step, (x_batch, y_batch) <span class="hljs-keyword">in</span> enumerate(train_dataset):  <span class="hljs-comment"># 遍历每个batch</span>
 
         <span class="hljs-keyword">with</span> tf.GradientTape() <span class="hljs-keyword">as</span> tape:  <span class="hljs-comment"># 使用GradientTape记录模型的前向传播以便求导</span>
 
-            <span class="hljs-keyword">prediction</span> = <span class="hljs-keyword">model</span>(x_batch, training=<span class="hljs-literal">True</span>)  <span class="hljs-comment"># 运行前向传播，得到预测值</span>
+            prediction = model(x_batch, training=<span class="hljs-literal">True</span>)  <span class="hljs-comment"># 运行前向传播，得到预测值</span>
 
-            loss_value = loss(y_batch, <span class="hljs-keyword">prediction</span>)  <span class="hljs-comment"># 计算损失</span>
+            loss_value = loss(y_batch, prediction)  <span class="hljs-comment"># 计算损失</span>
 
         grad = tape.gradient(loss_value, model.trainable_weights)  <span class="hljs-comment"># 得到梯度</span>
 
         optimizer.apply_gradients(zip(grad, model.trainable_weights))  <span class="hljs-comment"># 优化器使用梯度更新权重参数</span>
 
-        loss_epoch += <span class="hljs-built_in">float</span>(loss_value)
+        loss_epoch += float(loss_value)
 
-        train_metric(y_batch, <span class="hljs-keyword">prediction</span>)  <span class="hljs-comment"># 每个batch更新一次metric</span>
+        train_metric(y_batch, prediction)  <span class="hljs-comment"># 每个batch更新一次metric</span>
 
-    print(<span class="hljs-string">'Epoch &#123;&#125;/5: \nLoss=&#123;&#125;, Accuracy=&#123;&#125;'</span>.format(epoch + <span class="hljs-number">1</span>, loss_epoch / <span class="hljs-number">100</span>, <span class="hljs-built_in">float</span>(train_metric.result())))
+    print(<span class="hljs-string">'Epoch &#123;&#125;/5: \nLoss=&#123;&#125;, Accuracy=&#123;&#125;'</span>.format(epoch + <span class="hljs-number">1</span>, loss_epoch / <span class="hljs-number">100</span>, float(train_metric.result())))
     train_metric.reset_states()  <span class="hljs-comment"># 每个epoch结束后重置metric</span>
 
     <span class="hljs-comment"># 在评价集上计算metric</span>
     <span class="hljs-keyword">for</span> x_batch, y_vatch <span class="hljs-keyword">in</span> val_dataset:
-        <span class="hljs-keyword">validation</span> = <span class="hljs-keyword">model</span>(x_batch)
-        val_metric(y_vatch, <span class="hljs-keyword">validation</span>)
-    print(<span class="hljs-string">'Accuracy on validation set: &#123;&#125;\n'</span>.format(<span class="hljs-built_in">float</span>(val_metric.result())))
+        validation = model(x_batch)
+        val_metric(y_vatch, validation)
+    print(<span class="hljs-string">'Accuracy on validation set: &#123;&#125;\n'</span>.format(float(val_metric.result())))
     val_metric.reset_states()</code></pre></div><br><img src="https://wx2.sbimg.cn/2020/06/08/4-3.png" srcset="/img/loading.gif" alt="CustomTraining"></p>
-<p>作为对比，使用 <code>fit()</code> 进行训练：<br><div class="hljs"><pre><code class="hljs routeros">model = MyModel(<span class="hljs-attribute">num_classes</span>=10)
-model.compile(<span class="hljs-attribute">optimizer</span>=optimizer, <span class="hljs-attribute">loss</span>=loss, metrics=[<span class="hljs-string">'accuracy'</span>])
-model.fit(data, labels, <span class="hljs-attribute">batch_size</span>=64, <span class="hljs-attribute">epochs</span>=5)</code></pre></div></p>
+<p>作为对比，使用 <code>fit()</code> 进行训练：<br><div class="hljs"><pre><code class="hljs Python">model = MyModel(num_classes=<span class="hljs-number">10</span>)
+model.compile(optimizer=optimizer, loss=loss, metrics=[<span class="hljs-string">'accuracy'</span>])
+model.fit(data, labels, batch_size=<span class="hljs-number">64</span>, epochs=<span class="hljs-number">5</span>)</code></pre></div></p>
 <p><img src="https://wx2.sbimg.cn/2020/06/08/4-4.png" srcset="/img/loading.gif" alt="DefaultTraining"></p>
 
             </article>
@@ -350,6 +352,12 @@ model.fit(data, labels, <span class="hljs-attribute">batch_size</span>=64, <span
                 <div class="post-prevnext row">
                   <div class="post-prev col-6">
                     
+                    
+                      <a href="/2020/5-TF2-Autograph/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">5-TF2-Autograph</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </div>
                   <div class="post-next col-6">

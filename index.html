@@ -167,6 +167,57 @@
     
     
     <div class="col-12 col-md-12 mx-auto index-info">
+      <a class="index-header" href="/2020/5-TF2-Autograph/">5-TF2-Autograph</a>
+
+      <a href="/2020/5-TF2-Autograph/" class="index-excerpt">
+        
+        
+          
+        
+        <div>import tensorflow as tf
+print(tf.__version__)
+
+# 2.1.1
+Tensorflow用计算图（Computional Graph）来表示计算逻辑。计算图一般有三种构建方式：
+
+静态图：首先创建图的结构，然后开启一个会话（Session），显式地执行图。这种方式编译器对网络的优化程度高，便于模型的复用。
+动态图：按照代码的顺序执行。这种方式更利于调试和开</div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>&nbsp;2020-06-10
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/TensorFlow2%E5%AD%A6%E4%B9%A0/">TensorFlow2学习</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Python/">Python</a>
+            
+              <a href="/tags/TensorFlow/">TensorFlow</a>
+            
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            
+          </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <div class="col-12 col-md-12 mx-auto index-info">
       <a class="index-header" href="/2020/4-TF2-Custom-Training-Process/">[TF2]4. Custom Training Process</a>
 
       <a href="/2020/4-TF2-Custom-Training-Process/" class="index-excerpt">
@@ -176,11 +227,13 @@
         
         <div>import tensorflow as tf
 print(tf.__version__)
+
+# 2.1.1
 1. tf.GrandientTapetf.GrandientTape() 是一个上下文管理器，能够记录变量上的操作，以便进行求导等。
 求 $ y=x^{3}+4x $ 中y对x的一、二阶导：x = tf.constant(3.0)
 
 # 求导
-with tf.GradientTape() as g2:  </div>
+with tf.GradientTape()</div>
       </a>
 
       <div class="index-btm post-metas">
@@ -227,6 +280,8 @@ with tf.GradientTape() as g2:  </div>
         <div>这部分包括了使用 tf.keras 构建、训练模型的基本方法。
 import tensorflow as tf
 print(tf.__version__)
+
+# 2.1.1
 1. 基本模型训练流程模型训练的一般步骤包括：
 
 构建模型（三种方式）
@@ -234,7 +289,7 @@ print(tf.__version__)
 验证模型：model.evaluate()
 使用模型进行预测：model.predict()
 
-1.1 构建模型from tensorfl</div>
+1.1 构建模型from</div>
       </a>
 
       <div class="index-btm post-metas">
@@ -281,9 +336,10 @@ print(tf.__version__)
         <div>首先导入tensorflow，查看版本和设备信息：
 import tensorflow as tf
 print(tf.__version__)
+
+# 2.1.1
 # print(tf.test.is_gpu_available())  # Not recommended, use following instead
-print(tf.config.list_physical_devices('GPU'))
-1. 张</div>
+print(tf.config.list_physical_devices('GP</div>
       </a>
 
       <div class="index-btm post-metas">
