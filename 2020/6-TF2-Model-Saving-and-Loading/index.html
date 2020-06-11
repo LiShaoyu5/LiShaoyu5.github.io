@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tabicon.png">
+  <link rel="icon" type="image/png" href="/img/tabicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Li Shaoyu">
+  <meta name="keywords" content="">
+  <title>[TF2]6. Model Saving and Loading - AiArt</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/atom-one-dark.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>AiArt</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-06-11 20:10">
+      June 11, 2020 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.3k 字
+    </span>
+  
+
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-post-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-post-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：June 11, 2020 pm
+                
+              </p>
+            
+            <article class="markdown-body">
+              <div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+print(tf.__version__)
+
+<span class="hljs-comment"># 2.1.1</span></code></pre></div>
+<p>当一个模型创建、进行训练后，我们可以将其保存至本地，以便继续训练、快速重新使用、部署到别的平台等。</p>
+<h1 id="1-Keras模型的保存与加载"><a href="#1-Keras模型的保存与加载" class="headerlink" title="1. Keras模型的保存与加载"></a>1. Keras模型的保存与加载</h1><p>首先定义一个Keras模型并训练：</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> sklearn <span class="hljs-keyword">import</span> datasets
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+iris = datasets.load_iris()
+data = iris.data
+labels = iris.target
+data = np.concatenate((data, labels.reshape(<span class="hljs-number">150</span>,<span class="hljs-number">1</span>)), axis=<span class="hljs-number">-1</span>)
+np.random.shuffle(data)
+
+X = data[:, :<span class="hljs-number">4</span>]  <span class="hljs-comment"># 前四列为特征</span>
+Y = data[:, <span class="hljs-number">-1</span>]  <span class="hljs-comment"># 最后一列为标签</span>
+
+print(X.shape)  <span class="hljs-comment"># 4个特征，150个样本</span>
+print(Y.shape)  <span class="hljs-comment"># 150个样本</span>
+print(np.unique(Y))  <span class="hljs-comment"># 3类</span></code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+<span class="hljs-keyword">import</span> tensorflow.keras.layers <span class="hljs-keyword">as</span> layers
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span><span class="hljs-params">(tf.keras.Model)</span>:</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, num_classes=<span class="hljs-number">3</span>)</span>:</span>
+        super(MyModel, self).__init__()
+        self.num_classes = num_classes
+
+        self.Dense1 = layers.Dense(<span class="hljs-number">32</span>, activation=<span class="hljs-string">'relu'</span>, input_shape=(<span class="hljs-number">4</span>,))
+        self.Dense2 = layers.Dense(<span class="hljs-number">3</span>)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">call</span><span class="hljs-params">(self, inputs)</span>:</span>
+
+        x = self.Dense1(inputs)
+        x = self.Dense2(x)
+
+        <span class="hljs-keyword">return</span> x
+
+model = MyModel(num_classes=<span class="hljs-number">3</span>)
+model.compile(optimizer=tf.keras.optimizers.Adam(<span class="hljs-number">0.001</span>),
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=<span class="hljs-literal">True</span>),
+              metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python">model.fit(X, Y, batch_size=<span class="hljs-number">10</span>, epochs=<span class="hljs-number">20</span>, shuffle=<span class="hljs-literal">True</span>)</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python">model.summary()</code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/06/11/6-9.png" srcset="/img/loading.gif" alt="ModelSummary"><br><div class="hljs"><pre><code class="hljs Python">print(model.predict(X[<span class="hljs-number">140</span>:]).argmax(axis=<span class="hljs-number">1</span>))
+print(Y[<span class="hljs-number">140</span>:])</code></pre></div><br><img src="https://wx1.sbimg.cn/2020/06/11/6-10.png" srcset="/img/loading.gif" alt="OriginalPrediction"></p>
+<blockquote>
+<p>若保存过程中发生OSError错误，先创建相应的文件夹再保存。</p>
+</blockquote>
+<h2 id="（1）-model-save-weights"><a href="#（1）-model-save-weights" class="headerlink" title="（1） model.save_weights()"></a>（1） <code>model.save_weights()</code></h2><p>这种方法仅保存了模型的权重，重新读取、使用依赖于原来的代码。</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 保存权重</span>
+model.save_weights(<span class="hljs-string">'model/test/weight_saving/weight_saving.h5'</span>)
+
+<span class="hljs-comment"># 读取权重需要通过相同类的模型实例</span>
+model_load_1 = MyModel(num_classes=<span class="hljs-number">3</span>)
+model_load_1.compile(optimizer=tf.keras.optimizers.Adam(<span class="hljs-number">0.001</span>),
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=<span class="hljs-literal">True</span>),
+              metrics=[tf.keras.metrics.SparseCategoricalAccuracy()])
+model_load_1.fit(X, Y, epochs=<span class="hljs-number">0</span>)  <span class="hljs-comment"># 建立层</span>
+
+<span class="hljs-comment"># 读取权重</span>
+model_load_1.load_weights(<span class="hljs-string">'model/test/weight_saving/weight_saving.h5'</span>)
+print(model_load_1.predict(X[<span class="hljs-number">140</span>:]).argmax(axis=<span class="hljs-number">1</span>))
+print(Y[<span class="hljs-number">140</span>:])</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/06/11/6-1.png" srcset="/img/loading.gif" alt="1-Prediction"></p>
+<h2 id="2-model-save"><a href="#2-model-save" class="headerlink" title="(2) model.save()"></a>(2) <code>model.save()</code></h2><p><code>model.save()</code>能保存模型的完整信息（包括权重、优化器等模型配置），加载模型不依赖原来的代码。</p>
+<p>参数<code>save_format</code>在tf 2.x中默认为<code>&#39;tf&#39;</code>，也可手动指定为<code>&#39;h5&#39;</code>，但是<strong>HDF5格式不应用于保存子类式的模型</strong>。<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 保存整个模型</span>
+model.save(<span class="hljs-string">'model/test/model_saving/'</span>, save_format=<span class="hljs-string">'tf'</span>)
+
+<span class="hljs-comment"># save_format在tf2.x版本中默认为'tf'，也可选择'h5'</span>
+<span class="hljs-comment"># model.save('./model/./model/test/model_saving.h5', save_format='h5')</span>
+
+<span class="hljs-comment"># 读取模型，不需要先构建模型实例</span>
+model_load_2 = tf.keras.models.load_model(<span class="hljs-string">'model/test/model_saving/'</span>)
+print(model_load_2.predict(X[<span class="hljs-number">140</span>:]).argmax(axis=<span class="hljs-number">1</span>))
+print(Y[<span class="hljs-number">140</span>:])</code></pre></div><br><img src="https://wx2.sbimg.cn/2020/06/11/6-2.png" srcset="/img/loading.gif" alt="2-Prediction"></p>
+<h2 id="3-tf-saved-model-save"><a href="#3-tf-saved-model-save" class="headerlink" title="(3) tf.saved_model.save()"></a>(3) <code>tf.saved_model.save()</code></h2><p><code>tf.saved_model.save()</code>保存的模型可以直接预测，但不保存优化器等配置，适用于部署的场景。</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 保存没有优化器等配置的模型</span>
+tf.saved_model.save(model, <span class="hljs-string">'model/test/model_saving_noconf/'</span>)
+
+<span class="hljs-comment"># 读取不需要依赖已有实例，但是只能用于预测</span>
+model_load_3 = tf.saved_model.load(<span class="hljs-string">'model/test/model_saving_noconf/'</span>)
+<span class="hljs-comment"># 读取的模型不是keras模型，需要通过签名指定输入来得到预测结果</span>
+f = model_load_3.signatures[<span class="hljs-string">"serving_default"</span>]
+pred = f(input_1 = tf.constant(X[<span class="hljs-number">140</span>:].tolist()))
+print(pred)</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/06/11/6-3.png" srcset="/img/loading.gif" alt="3-Load"><br><div class="hljs"><pre><code class="hljs Python">print(pred[<span class="hljs-string">'output_1'</span>].numpy().argmax(axis=<span class="hljs-number">1</span>))
+print(Y[<span class="hljs-number">140</span>:])</code></pre></div><br><img src="https://wx2.sbimg.cn/2020/06/11/6-4.png" srcset="/img/loading.gif" alt="3-Prediction"></p>
+<h1 id="2-自定义模型的保存与加载"><a href="#2-自定义模型的保存与加载" class="headerlink" title="2. 自定义模型的保存与加载"></a>2. 自定义模型的保存与加载</h1><p>自定义模型保存时注意模型中<code>call()</code>函数需要用<code>@tf.function</code>修饰使其成为静态图。</p>
+<p>保存、读取后的使用细节与Keras模型稍有不同。</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> tensorflow.keras.layers <span class="hljs-keyword">import</span> Dense
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span><span class="hljs-params">(tf.keras.Model)</span>:</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, num_classes=<span class="hljs-number">10</span>)</span>:</span>
+
+        super(MyModel, self).__init__()
+        self.num_classes = num_classes
+
+        self.dense1 = Dense(<span class="hljs-number">32</span>, activation=<span class="hljs-string">'relu'</span>)
+        self.dense2 = Dense(<span class="hljs-number">10</span>)
+
+    <span class="hljs-comment"># 修饰时指定输入形状和类型</span>
+<span class="hljs-meta">    @tf.function(input_signature=[tf.TensorSpec(shape=[None, 32], dtype=tf.float32)])</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">call</span><span class="hljs-params">(self, x)</span>:</span>
+
+        x = self.dense1(x)
+        x = self.dense2(x)
+
+        <span class="hljs-keyword">return</span> x
+
+
+model = MyModel(num_classes=<span class="hljs-number">10</span>)
+
+<span class="hljs-comment"># 定义优化器、损失函数和评价指标</span>
+
+optimizer = tf.keras.optimizers.SGD(learning_rate=<span class="hljs-number">0.001</span>)
+loss = tf.keras.losses.CategoricalCrossentropy()
+train_metric = tf.keras.metrics.CategoricalAccuracy()
+val_metric = tf.keras.metrics.CategoricalAccuracy()</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 准备数据</span>
+
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+x_train = np.random.random((<span class="hljs-number">6400</span>, <span class="hljs-number">32</span>))  <span class="hljs-comment"># 32个输入特征</span>
+y_train = np.random.random((<span class="hljs-number">6400</span>, <span class="hljs-number">10</span>))  <span class="hljs-comment"># 10个输出特征</span>
+train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(<span class="hljs-number">64</span>)
+
+x_val = np.random.random((<span class="hljs-number">640</span>, <span class="hljs-number">32</span>))
+y_val = np.random.random((<span class="hljs-number">640</span>, <span class="hljs-number">10</span>))
+val_dataset = tf.data.Dataset.from_tensor_slices((x_val, y_val)).batch(<span class="hljs-number">64</span>)</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 自定义训练</span>
+
+<span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> range(<span class="hljs-number">5</span>):  <span class="hljs-comment"># 5个epoch</span>
+
+    loss_epoch = <span class="hljs-number">0</span>
+
+    <span class="hljs-keyword">for</span> step, (x_batch, y_batch) <span class="hljs-keyword">in</span> enumerate(train_dataset):  <span class="hljs-comment"># 遍历每个batch</span>
+
+        <span class="hljs-keyword">with</span> tf.GradientTape() <span class="hljs-keyword">as</span> tape:  <span class="hljs-comment"># 使用GradientTape记录模型的前向传播以便求导</span>
+
+            prediction = model(x_batch, training=<span class="hljs-literal">True</span>)  <span class="hljs-comment"># 运行前向传播，得到预测值</span>
+
+            loss_value = loss(y_batch, prediction)  <span class="hljs-comment"># 计算损失</span>
+
+        grad = tape.gradient(loss_value, model.trainable_weights)  <span class="hljs-comment"># 得到梯度</span>
+
+        optimizer.apply_gradients(zip(grad, model.trainable_weights))  <span class="hljs-comment"># 优化器使用梯度更新权重参数</span>
+
+        loss_epoch += float(loss_value)
+
+        train_metric(y_batch, prediction)  <span class="hljs-comment"># 每个batch更新一次metric</span>
+
+    print(<span class="hljs-string">'Epoch &#123;&#125;/5: \nLoss=&#123;&#125;, Accuracy=&#123;&#125;'</span>.format(epoch + <span class="hljs-number">1</span>, loss_epoch / <span class="hljs-number">100</span>, float(train_metric.result())))
+    train_metric.reset_states()  <span class="hljs-comment"># 每个epoch结束后重置metric</span>
+
+    <span class="hljs-comment"># 在评价集上计算metric</span>
+    <span class="hljs-keyword">for</span> x_batch, y_vatch <span class="hljs-keyword">in</span> val_dataset:
+        validation = model(x_batch)
+        val_metric(y_vatch, validation)
+    print(<span class="hljs-string">'Accuracy on validation set: &#123;&#125;\n'</span>.format(float(val_metric.result())))
+    val_metric.reset_states()</code></pre></div>
+<h2 id="（1）-model-save-weights-1"><a href="#（1）-model-save-weights-1" class="headerlink" title="（1） model.save_weights()"></a>（1） <code>model.save_weights()</code></h2><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 保存权重</span>
+model.save_weights(<span class="hljs-string">'model/test/weight_saving/weight_saving.h5'</span>)
+
+<span class="hljs-comment"># 读取权重需要通过相同类的模型实例</span>
+model_load_1 = MyModel(num_classes=<span class="hljs-number">3</span>)
+model_load_1.compile(optimizer=optimizer,
+              loss=loss,
+              metrics=[train_metric, val_metric])
+model_load_1.fit(x_train, y_train, epochs=<span class="hljs-number">0</span>)  <span class="hljs-comment"># 建立层</span>
+
+<span class="hljs-comment"># 读取权重</span>
+model_load_1.load_weights(<span class="hljs-string">'model/test/weight_saving/weight_saving.h5'</span>)
+print(model_load_1(x_val[:<span class="hljs-number">1</span>]))
+print(y_val[:<span class="hljs-number">1</span>])</code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/06/11/6-5.png" srcset="/img/loading.gif" alt="1-Prediction"></p>
+<h2 id="2-model-save-1"><a href="#2-model-save-1" class="headerlink" title="(2) model.save()"></a>(2) <code>model.save()</code></h2><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 保存整个模型</span>
+model._set_inputs(tf.TensorSpec(shape=[<span class="hljs-literal">None</span>, <span class="hljs-number">32</span>], dtype=tf.float32))  <span class="hljs-comment"># 要首先指定输入格式，与call的装饰器中保持相同</span>
+model.save(<span class="hljs-string">'model/test/model_saving/'</span>, save_format=<span class="hljs-string">'tf'</span>)
+
+<span class="hljs-comment"># 读取模型，不需要先构建模型实例</span>
+model_load_2 = tf.keras.models.load_model(<span class="hljs-string">'model/test/model_saving/'</span>)
+print(model_load_1(x_val[:<span class="hljs-number">1</span>]))
+print(y_val[:<span class="hljs-number">1</span>])</code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/06/11/6-6.png" srcset="/img/loading.gif" alt="2-Prediction"></p>
+<h2 id="3-tf-saved-model-save-1"><a href="#3-tf-saved-model-save-1" class="headerlink" title="(3) tf.saved_model.save()"></a>(3) <code>tf.saved_model.save()</code></h2><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 保存没有优化器等配置的模型</span>
+tf.saved_model.save(model, <span class="hljs-string">'model/test/model_saving_noconf/'</span>)
+
+<span class="hljs-comment"># 读取不需要依赖已有实例，但是只能用于预测</span>
+model_load_3 = tf.saved_model.load(<span class="hljs-string">'model/test/model_saving_noconf/'</span>)
+<span class="hljs-comment"># 读取的模型不是keras模型，需要通过签名指定输入来得到预测结果</span>
+f = model_load_3.signatures[<span class="hljs-string">"serving_default"</span>]
+pred = f(args_0 = tf.constant(x_val[:<span class="hljs-number">1</span>].tolist()))
+print(pred)</code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/06/11/6-7.png" srcset="/img/loading.gif" alt="3-Load"></p>
+<div class="hljs"><pre><code class="hljs Python">print(pred[<span class="hljs-string">'output_1'</span>].numpy())
+print(y_val[:<span class="hljs-number">1</span>])</code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/06/11/6-8.png" srcset="/img/loading.gif" alt="3-Prediction"></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/TensorFlow2%E5%AD%A6%E4%B9%A0/">TensorFlow2学习</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/TensorFlow/">TensorFlow</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/5-TF2-Autograph/">
+                        <span class="hidden-mobile">[TF2]5. AutoGraph</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "[TF2]6. Model Saving and Loading&nbsp;",
+      ],
+      cursorChar: "〆",
+      typeSpeed: 50,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.staticfile.org/mathjax/3.0.5/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
