@@ -230,15 +230,16 @@ print(data.shape)
 print(target.shape)</code></pre></div>
 <p><img src="https://wx1.sbimg.cn/2020/06/12/7-1.png" srcset="/img/loading.gif" alt="DataShape"></p>
 <p>对于一个线性层，其计算方式是 $y = xw + b$ 。对于iris数据集：$ x \in R^{(150, 4)} , w \in R^{(4, 1)} , b \in R^{(1)} , y \in R^{(150, 1)} $。</p>
-<h1 id="1-自定义层的基本方法"><a href="#1-自定义层的基本方法" class="headerlink" title="1. 自定义层的基本方法"></a>1. 自定义层的基本方法</h1><h2 id="1-在-init-中使用Iitializer初始化参数"><a href="#1-在-init-中使用Iitializer初始化参数" class="headerlink" title="(1). 在__init__()中使用Iitializer初始化参数"></a>(1). 在<code>__init__()</code>中使用<code>Iitializer</code>初始化参数</h2><p><code>tf.keras.initializers.Initializer</code>类能够生成指定形状、格式、分布的Tensor。</p>
+<h1 id="1-自定义层的基本方法"><a href="#1-自定义层的基本方法" class="headerlink" title="1. 自定义层的基本方法"></a>1. 自定义层的基本方法</h1><h2 id="1-在-init-中使用Iitializer初始化参数"><a href="#1-在-init-中使用Iitializer初始化参数" class="headerlink" title="(1) 在__init__()中使用Iitializer初始化参数"></a>(1) 在<code>__init__()</code>中使用<code>Iitializer</code>初始化参数</h2><p><code>tf.keras.initializers.Initializer</code>类能够生成指定形状、格式、分布的Tensor。</p>
 <div class="hljs"><pre><code class="hljs Python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Linear</span><span class="hljs-params">(tf.keras.layers.Layer)</span>:</span>
 
+    <span class="hljs-comment"># units为神经元个数，即每个神经元有一个input_dim*1的w</span>
     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, units=<span class="hljs-number">1</span>, input_dim=<span class="hljs-number">4</span>)</span>:</span>
         super(Linear, self).__init__()
 
         w_init = tf.random_normal_initializer()  <span class="hljs-comment"># 正态分布</span>
         self.w = tf.Variable(
-            initial_value=w_init(shape=(input_dim, units), dtype=tf.float32),  <span class="hljs-comment"># units为神经元个数，即每个神经元有一个4*1的w</span>
+            initial_value=w_init(shape=(input_dim, units), dtype=tf.float32),
             trainable=<span class="hljs-literal">True</span>
         )
         b_init = tf.zeros_initializer()
@@ -253,7 +254,7 @@ print(target.shape)</code></pre></div>
 y = linear(data)
 print(y[:<span class="hljs-number">5</span>])  <span class="hljs-comment"># 查看前5个预测结果</span></code></pre></div>
 <p><img src="https://wx1.sbimg.cn/2020/06/12/7-2.png" srcset="/img/loading.gif" alt="Custom1"></p>
-<h2 id="2-在-init-中使用add-weight-初始化参数"><a href="#2-在-init-中使用add-weight-初始化参数" class="headerlink" title="(2). 在__init__()中使用add_weight()初始化参数"></a>(2). 在<code>__init__()</code>中使用<code>add_weight()</code>初始化参数</h2><p>方法基本与(1)相同，只是不需要使用单独的Initializer，而是直接在<code>add_weight()</code>的参数中指定。</p>
+<h2 id="2-在-init-中使用add-weight-初始化参数"><a href="#2-在-init-中使用add-weight-初始化参数" class="headerlink" title="(2) 在__init__()中使用add_weight()初始化参数"></a>(2) 在<code>__init__()</code>中使用<code>add_weight()</code>初始化参数</h2><p>方法基本与(1)相同，只是不需要使用单独的Initializer，而是直接在<code>add_weight()</code>的参数中指定。</p>
 <div class="hljs"><pre><code class="hljs Python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Linear</span><span class="hljs-params">(tf.keras.layers.Layer)</span>:</span>
 
     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, units=<span class="hljs-number">1</span>, input_dim=<span class="hljs-number">4</span>)</span>:</span>
@@ -276,7 +277,7 @@ print(y[:<span class="hljs-number">5</span>])  <span class="hljs-comment"># 查�
 y = linear(data)
 print(y[:<span class="hljs-number">5</span>])</code></pre></div>
 <p><img src="https://wx2.sbimg.cn/2020/06/12/7-3.png" srcset="/img/loading.gif" alt="Custom2"></p>
-<h2 id="3-在build-中初始化参数"><a href="#3-在build-中初始化参数" class="headerlink" title="(3). 在build()中初始化参数"></a>(3). 在<code>build()</code>中初始化参数</h2><p>使用这种方法，就不需要再在实例化层时显式地指定输入维度，而是可以从输入中读取。</p>
+<h2 id="3-在build-中初始化参数"><a href="#3-在build-中初始化参数" class="headerlink" title="(3) 在build()中初始化参数"></a>(3) 在<code>build()</code>中初始化参数</h2><p>使用这种方法，就不需要再在实例化层时显式地指定输入维度，而是可以从输入中读取。</p>
 <div class="hljs"><pre><code class="hljs Python"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Linear</span><span class="hljs-params">(tf.keras.layers.Layer)</span>:</span>
 
     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, units=<span class="hljs-number">1</span>)</span>:</span>
