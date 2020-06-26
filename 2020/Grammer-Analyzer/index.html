@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tabicon.png">
+  <link rel="icon" type="image/png" href="/img/tabicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Li Shaoyu">
+  <meta name="keywords" content="">
+  <title>Grammer Analyzer Base On Python and Qt - AiArt</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/atom-one-dark.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>AiArt</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-06-26 17:10">
+      June 26, 2020 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.2k 字
+    </span>
+  
+
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-post-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-post-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：June 26, 2020 pm
+                
+              </p>
+            
+            <article class="markdown-body">
+              <p>编译原理课程的大作业，要求为实现一个带有图形界面的语法分析器，能够求First集、Follow集、LL分析表和LR分析表。</p>
+<p>项目地址：<a href="https://github.com/LiShaoyu5/LL-LR-Parser" target="_blank" rel="noopener">https://github.com/LiShaoyu5/LL-LR-Parser</a></p>
+<p>测试不多，还有很多问题待修改。</p>
+<h1 id="1-环境要求"><a href="#1-环境要求" class="headerlink" title="1. 环境要求"></a>1. 环境要求</h1><p>开发环境：Python 3.7.7, PyQt 5.13.0</p>
+<p>使用PyInstaller 3.6打包为可执行程序。</p>
+<h1 id="2-使用说明"><a href="#2-使用说明" class="headerlink" title="2. 使用说明"></a>2. 使用说明</h1><h2 id="2-1-可执行程序"><a href="#2-1-可执行程序" class="headerlink" title="2.1 可执行程序"></a>2.1 可执行程序</h2><p>由于单个文件25MB的大小限制，可执行程序没有上传到Github。在源码目录下，具有上节环境的命令行中执行命令：</p>
+<div class="hljs"><pre><code class="hljs reasonml">pyinstaller -F -w <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">MainWindow</span>.</span></span>py</code></pre></div>
+<p>生成可执行程序。</p>
+<h2 id="2-2-输入说明"><a href="#2-2-输入说明" class="headerlink" title="2.2 输入说明"></a>2.2 输入说明</h2><p>一条规范的推导式示例：A-&gt;c|Bc|ε</p>
+<ul>
+<li>推出符号为-&gt;，空符号为ε，候选式分隔符为|。</li>
+<li>推导式中不应包含空格。</li>
+<li>每条推导式占一行。</li>
+<li>符号集（包括终结符和非终结符）中不应包含#、-、&gt;、|、’、”、\、·，符号集只接受单个字符，如E’会被识别为E和’。</li>
+<li>同一非终结符可推出的候选式不应有重复。</li>
+<li>同一非终结符可推出的候选式应写在同一行。错误的写法： A-&gt;a A-&gt;b；正确的写法：A-&gt;a|b。</li>
+<li>此条不影响程序运行，但推荐使用大写字母表示非终结符、小写字母或数字表示终结符。</li>
+</ul>
+<h1 id="3-源代码"><a href="#3-源代码" class="headerlink" title="3. 源代码"></a>3. 源代码</h1><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># MainWindow.py</span>
+<span class="hljs-comment"># -*- coding: utf-8 -*-</span>
+
+<span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">import</span> sys
+<span class="hljs-keyword">from</span> PyQt5 <span class="hljs-keyword">import</span> QtCore, QtGui, QtWidgets
+<span class="hljs-keyword">from</span> PyQt5.QtWidgets <span class="hljs-keyword">import</span> QFileDialog, QTableWidgetItem
+
+
+<span class="hljs-comment"># 状态集</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">State</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, root, content, isroot, parent, idx)</span>:</span>
+        self.root = root  <span class="hljs-comment"># 基本推导式集</span>
+        self.content = content  <span class="hljs-comment"># 此状态内的推导式集</span>
+        self.isroot = isroot  <span class="hljs-comment"># 是否为IO</span>
+        self.parent = parent  <span class="hljs-comment"># 父节点</span>
+        self.next = &#123;&#125;  <span class="hljs-comment"># 子节点</span>
+        self.idx = idx  <span class="hljs-comment"># 状态集编号</span>
+        self.VN = []  <span class="hljs-comment"># 非终结符集</span>
+        self.Symbol = []  <span class="hljs-comment"># 符号集</span>
+        self.EndNum = &#123;&#125;  <span class="hljs-comment"># 文法中已推导至结束的式子数和式子总数</span>
+
+        <span class="hljs-keyword">if</span> root:
+            self.GetSymbol()
+            self.Generate()
+            self.FindNext()
+
+    <span class="hljs-comment"># 自己是否为终结态</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">End</span><span class="hljs-params">(self)</span>:</span>
+        cnt = <span class="hljs-number">0</span>
+        <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self.content:
+            <span class="hljs-keyword">if</span> c[<span class="hljs-number">-1</span>] == <span class="hljs-string">'·'</span>:
+                cnt += <span class="hljs-number">1</span>
+        self.EndNum = &#123;<span class="hljs-string">'end'</span>: cnt, <span class="hljs-string">'all'</span>: len(self.content)&#125;
+
+    <span class="hljs-comment"># 得到符号集</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">GetSymbol</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-comment"># 非终结符</span>
+        <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self.root:
+            self.VN.append(c[<span class="hljs-number">0</span>])
+        self.VN = list(set(self.VN))
+        <span class="hljs-comment"># 所有符号</span>
+        <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self.root:
+            <span class="hljs-keyword">for</span> r <span class="hljs-keyword">in</span> c:
+                <span class="hljs-keyword">if</span> r <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> self.Symbol <span class="hljs-keyword">and</span> r <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> [<span class="hljs-string">'·'</span>, <span class="hljs-string">'-'</span>, <span class="hljs-string">'&gt;'</span>]:
+                    self.Symbol.append(r)
+
+    <span class="hljs-comment"># 生成此状态集中的推导式</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Generate</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-comment"># 根节点内的推导式集就是基本推导式集</span>
+        <span class="hljs-keyword">if</span> self.isroot:
+            self.content = self.root
+        <span class="hljs-comment"># 非根节点的推导式集</span>
+        <span class="hljs-keyword">else</span>:
+            new_content = []
+
+            <span class="hljs-comment"># 将父节点传来的推导式中·后移一位</span>
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self.content:
+                c = c.split(<span class="hljs-string">'·'</span>)
+                c = c[<span class="hljs-number">0</span>] + c[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] + <span class="hljs-string">'·'</span> + c[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>:]
+                new_content.append(c)
+
+            <span class="hljs-comment"># 若存在·VN的形式，则将所有VN-&gt;*的推导式加入</span>
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> new_content:
+                <span class="hljs-keyword">if</span> c.index(<span class="hljs-string">'·'</span>) == len(c) - <span class="hljs-number">2</span> <span class="hljs-keyword">and</span> c[<span class="hljs-number">-1</span>] <span class="hljs-keyword">in</span> self.VN:
+                    <span class="hljs-keyword">for</span> r <span class="hljs-keyword">in</span> self.root:
+                        <span class="hljs-keyword">if</span> r[<span class="hljs-number">0</span>] == c[<span class="hljs-number">-1</span>]:
+                            new_content.append(r)
+
+            new_content = list(set(new_content))
+            self.content = new_content
+
+    <span class="hljs-comment"># 得到每个符号对应的下一个状态中的推导式</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">FindNext</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> self.Symbol:
+            self.next[s] = []
+        <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self.content:
+            pos = c.index(<span class="hljs-string">'·'</span>)
+            <span class="hljs-keyword">if</span> pos != len(c) - <span class="hljs-number">1</span>:
+                <span class="hljs-comment"># ·之后符号对应的next里加入这个式子</span>
+                self.next[c[pos + <span class="hljs-number">1</span>]].append(c)
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Ui_MainWindow</span><span class="hljs-params">(object)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">setupUi</span><span class="hljs-params">(self, MainWindow)</span>:</span>
+        MainWindow.setObjectName(<span class="hljs-string">"Analyzer"</span>)
+        MainWindow.resize(<span class="hljs-number">1200</span>, <span class="hljs-number">750</span>)
+        MainWindow.setFixedSize(<span class="hljs-number">1200</span>, <span class="hljs-number">750</span>)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(<span class="hljs-number">0</span>)
+        sizePolicy.setVerticalStretch(<span class="hljs-number">0</span>)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily(<span class="hljs-string">"微软雅黑"</span>)
+        font.setPointSize(<span class="hljs-number">12</span>)
+        MainWindow.setFont(font)
+        self.Base = QtWidgets.QWidget(MainWindow)
+        self.Base.setObjectName(<span class="hljs-string">"Base"</span>)
+        self.InputArea = QtWidgets.QTextEdit(self.Base)
+        self.InputArea.setGeometry(QtCore.QRect(<span class="hljs-number">50</span>, <span class="hljs-number">40</span>, <span class="hljs-number">520</span>, <span class="hljs-number">300</span>))
+        self.InputArea.setObjectName(<span class="hljs-string">"InputArea"</span>)
+        self.FirstSet = QtWidgets.QTextEdit(self.Base)
+        self.FirstSet.setGeometry(QtCore.QRect(<span class="hljs-number">50</span>, <span class="hljs-number">375</span>, <span class="hljs-number">520</span>, <span class="hljs-number">150</span>))
+        self.FirstSet.setObjectName(<span class="hljs-string">"FirstSet"</span>)
+        self.FollowSet = QtWidgets.QTextEdit(self.Base)
+        self.FollowSet.setGeometry(QtCore.QRect(<span class="hljs-number">50</span>, <span class="hljs-number">560</span>, <span class="hljs-number">520</span>, <span class="hljs-number">150</span>))
+        self.FollowSet.setObjectName(<span class="hljs-string">"FollowSet"</span>)
+        self.AnalyticalTable = QtWidgets.QTableWidget(self.Base)
+        self.AnalyticalTable.setGeometry(QtCore.QRect(<span class="hljs-number">630</span>, <span class="hljs-number">40</span>, <span class="hljs-number">520</span>, <span class="hljs-number">485</span>))
+        self.AnalyticalTable.setObjectName(<span class="hljs-string">"AnalyticalTable"</span>)
+        self.AnalyticalTable.setColumnCount(<span class="hljs-number">50</span>)
+        self.AnalyticalTable.setRowCount(<span class="hljs-number">50</span>)
+        self.RunButton = QtWidgets.QPushButton(self.Base)
+        self.RunButton.setGeometry(QtCore.QRect(<span class="hljs-number">670</span>, <span class="hljs-number">570</span>, <span class="hljs-number">170</span>, <span class="hljs-number">45</span>))
+        self.RunButton.setObjectName(<span class="hljs-string">"RunButton"</span>)
+        self.ClearButton = QtWidgets.QPushButton(self.Base)
+        self.ClearButton.setGeometry(QtCore.QRect(<span class="hljs-number">940</span>, <span class="hljs-number">570</span>, <span class="hljs-number">170</span>, <span class="hljs-number">45</span>))
+        self.ClearButton.setObjectName(<span class="hljs-string">"ClearButton"</span>)
+        self.HelpButton = QtWidgets.QPushButton(self.Base)
+        self.HelpButton.setGeometry(QtCore.QRect(<span class="hljs-number">940</span>, <span class="hljs-number">655</span>, <span class="hljs-number">170</span>, <span class="hljs-number">45</span>))
+        self.HelpButton.setObjectName(<span class="hljs-string">"HelpButton"</span>)
+        self.OpenButton = QtWidgets.QPushButton(self.Base)
+        self.OpenButton.setGeometry(QtCore.QRect(<span class="hljs-number">670</span>, <span class="hljs-number">655</span>, <span class="hljs-number">170</span>, <span class="hljs-number">45</span>))
+        self.OpenButton.setObjectName(<span class="hljs-string">"OpenButton"</span>)
+        self.label_1 = QtWidgets.QLabel(self.Base)
+        self.label_1.setGeometry(QtCore.QRect(<span class="hljs-number">50</span>, <span class="hljs-number">15</span>, <span class="hljs-number">121</span>, <span class="hljs-number">21</span>))
+        self.label_1.setObjectName(<span class="hljs-string">"label_1"</span>)
+        self.label_2 = QtWidgets.QLabel(self.Base)
+        self.label_2.setGeometry(QtCore.QRect(<span class="hljs-number">50</span>, <span class="hljs-number">350</span>, <span class="hljs-number">121</span>, <span class="hljs-number">21</span>))
+        self.label_2.setObjectName(<span class="hljs-string">"label_2"</span>)
+        self.label_3 = QtWidgets.QLabel(self.Base)
+        self.label_3.setGeometry(QtCore.QRect(<span class="hljs-number">50</span>, <span class="hljs-number">535</span>, <span class="hljs-number">121</span>, <span class="hljs-number">21</span>))
+        self.label_3.setObjectName(<span class="hljs-string">"label_3"</span>)
+        self.label_4 = QtWidgets.QLabel(self.Base)
+        self.label_4.setGeometry(QtCore.QRect(<span class="hljs-number">630</span>, <span class="hljs-number">15</span>, <span class="hljs-number">121</span>, <span class="hljs-number">21</span>))
+        self.label_4.setObjectName(<span class="hljs-string">"label_4"</span>)
+        MainWindow.setCentralWidget(self.Base)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        <span class="hljs-comment"># 自定义变量</span>
+        self.SymbolSet = []  <span class="hljs-comment"># 符号集，保存每一个符号</span>
+        self.Derivation = &#123;&#125;  <span class="hljs-comment"># 推导式集，以字典形式保存，key为str型左侧非终结符，value为list型右侧候选式</span>
+        self.First = &#123;&#125;  <span class="hljs-comment"># First集，</span>
+        self.Follow = &#123;&#125;  <span class="hljs-comment"># Follow集</span>
+        self.VT = []  <span class="hljs-comment"># 终结符集</span>
+        self.VN = []  <span class="hljs-comment"># 非终结符集</span>
+        self.e_list = [<span class="hljs-string">'ε'</span>]  <span class="hljs-comment"># 可推导出ε的符号集</span>
+        self.I = []  <span class="hljs-comment"># 状态集</span>
+
+        <span class="hljs-comment"># 自定义槽函数</span>
+        self.OpenButton.clicked.connect(self.OpenFile)
+        self.RunButton.clicked.connect(self.Analyze)
+        self.ClearButton.clicked.connect(self.Clear)
+        self.HelpButton.clicked.connect(self.Help)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">retranslateUi</span><span class="hljs-params">(self, MainWindow)</span>:</span>
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"Analyzer"</span>))
+        self.InputArea.setPlaceholderText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"输入文法前请先确认符合同目录下操作手册.docx中的规范！"</span>))
+        self.RunButton.setText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"分析"</span>))
+        self.ClearButton.setText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"清空"</span>))
+        self.HelpButton.setText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"帮助"</span>))
+        self.OpenButton.setText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"从文件打开.."</span>))
+        self.label_1.setText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"输入区"</span>))
+        self.label_2.setText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"First集"</span>))
+        self.label_3.setText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"Follow集"</span>))
+        self.label_4.setText(_translate(<span class="hljs-string">"MainWindow"</span>, <span class="hljs-string">"分析表"</span>))
+
+    <span class="hljs-comment"># 从文件读入文法</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">OpenFile</span><span class="hljs-params">(self)</span>:</span>
+        self.Clear()
+        fname = QFileDialog.getOpenFileName(self.OpenButton, <span class="hljs-string">'打开文件'</span>, <span class="hljs-string">'.'</span>)
+        <span class="hljs-keyword">if</span> fname[<span class="hljs-number">0</span>]:
+            f = open(fname[<span class="hljs-number">0</span>], <span class="hljs-string">'r'</span>, encoding=<span class="hljs-string">'utf-8'</span>)
+            <span class="hljs-keyword">with</span> f:
+                data = f.read()
+                self.InputArea.setText(data)
+
+    <span class="hljs-comment"># 分析文法</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Analyze</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">if</span> self.SymbolSet:
+            <span class="hljs-keyword">return</span>
+        content = self.InputArea.toPlainText()
+        <span class="hljs-keyword">if</span> content == <span class="hljs-string">''</span>:
+            self.FirstSet.setText(<span class="hljs-string">'没有输入！'</span>)
+            self.FollowSet.setText(<span class="hljs-string">'没有输入！'</span>)
+        <span class="hljs-keyword">else</span>:
+            data = self.InputArea.toPlainText()
+            <span class="hljs-comment"># 获取符号集</span>
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> data:
+                <span class="hljs-keyword">if</span> c != <span class="hljs-string">'|'</span> <span class="hljs-keyword">and</span> c != <span class="hljs-string">'-'</span> <span class="hljs-keyword">and</span> c != <span class="hljs-string">'&gt;'</span> <span class="hljs-keyword">and</span> c != <span class="hljs-string">'\n'</span> <span class="hljs-keyword">and</span> c != <span class="hljs-string">' '</span> <span class="hljs-keyword">and</span> c <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> self.SymbolSet:
+                    self.SymbolSet.append(c)
+            <span class="hljs-comment"># 按行拆分，读取推导规则，保存为字典格式</span>
+            data = data.split(<span class="hljs-string">'\n'</span>)
+            <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> data:
+                <span class="hljs-keyword">if</span> line == <span class="hljs-string">''</span>:
+                    <span class="hljs-keyword">continue</span>
+                line = line.split(<span class="hljs-string">'-&gt;'</span>)
+                self.Derivation[line[<span class="hljs-number">0</span>]] = line[<span class="hljs-number">1</span>].split(<span class="hljs-string">'|'</span>)  <span class="hljs-comment"># 左侧为key，右侧为value（list格式）</span>
+
+            <span class="hljs-comment"># 建立终结符集和非终结符集</span>
+            <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> self.SymbolSet:
+                <span class="hljs-keyword">if</span> s <span class="hljs-keyword">in</span> self.Derivation.keys():
+                    self.VN.append(s)
+                <span class="hljs-keyword">else</span>:
+                    self.VT.append(s)
+
+            <span class="hljs-comment"># 建立First集</span>
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self.SymbolSet:  <span class="hljs-comment"># 初始化</span>
+                self.First[c] = []
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self.SymbolSet:  <span class="hljs-comment"># 建立First集</span>
+                self.FindFirst(c)
+
+            <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> self.First.keys():  <span class="hljs-comment"># 去重</span>
+                self.First[key] = list(set(self.First[key]))
+            <span class="hljs-comment"># 设置文本显示，将self.First（字典）转换为字符串，添加换行，去掉空格和单引号</span>
+            text = <span class="hljs-string">'符号的First集：\n'</span>
+            <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> self.First.items():
+                <span class="hljs-comment"># 去掉引号，将list的[]换成集合的&#123;&#125;</span>
+                text += <span class="hljs-string">'First('</span> + str(item[<span class="hljs-number">0</span>]).replace(<span class="hljs-string">'\''</span>, <span class="hljs-string">''</span>) + <span class="hljs-string">'): '</span> \
+                        + str(item[<span class="hljs-number">1</span>]).replace(<span class="hljs-string">'\''</span>, <span class="hljs-string">''</span>).replace(<span class="hljs-string">'['</span>, <span class="hljs-string">'&#123;'</span>).replace(<span class="hljs-string">']'</span>, <span class="hljs-string">'&#125;'</span>) \
+                        + <span class="hljs-string">'\n'</span>
+            text += <span class="hljs-string">'\n候选式的First集：\n'</span>
+            c_list = []
+            <span class="hljs-keyword">for</span> value <span class="hljs-keyword">in</span> self.Derivation.values():
+                <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> value:
+                    <span class="hljs-keyword">if</span> c <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> c_list <span class="hljs-keyword">and</span> c != <span class="hljs-string">'ε'</span>:
+                        c_list.append(c)
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> c_list:
+                f = self.cFirst(c)
+                f = str(f).replace(<span class="hljs-string">'\''</span>, <span class="hljs-string">''</span>).replace(<span class="hljs-string">'['</span>, <span class="hljs-string">'&#123;'</span>).replace(<span class="hljs-string">']'</span>, <span class="hljs-string">'&#125;'</span>) + <span class="hljs-string">'\n'</span>
+                text += <span class="hljs-string">'First('</span> + str(c).replace(<span class="hljs-string">'\''</span>, <span class="hljs-string">''</span>) + <span class="hljs-string">'): '</span> + f
+            self.FirstSet.setText(text)
+
+            <span class="hljs-comment"># 统计能推出ε的符号</span>
+            self.FindE()
+
+            <span class="hljs-comment"># 建立Follow集</span>
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> self.VN:  <span class="hljs-comment"># Follow集只考虑非终结符</span>
+                self.Follow[c] = []
+            self.FindFollow()
+
+            <span class="hljs-keyword">for</span> key <span class="hljs-keyword">in</span> self.Follow.keys():  <span class="hljs-comment"># 去重</span>
+                self.Follow[key] = list(set(self.Follow[key]))
+            <span class="hljs-comment"># 设置文本显示，将self.Follow（字典）转换为字符串，添加换行，去掉空格和单引号</span>
+            text = <span class="hljs-string">''</span>
+            <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> self.Follow.items():
+                <span class="hljs-comment"># 去掉引号，将list的[]换成集合的&#123;&#125;</span>
+                text += <span class="hljs-string">'Follow('</span> + str(item[<span class="hljs-number">0</span>]).replace(<span class="hljs-string">'\''</span>, <span class="hljs-string">''</span>) + <span class="hljs-string">'): '</span> \
+                        + str(item[<span class="hljs-number">1</span>]).replace(<span class="hljs-string">'\''</span>, <span class="hljs-string">''</span>).replace(<span class="hljs-string">'['</span>, <span class="hljs-string">'&#123;'</span>).replace(<span class="hljs-string">']'</span>, <span class="hljs-string">'&#125;'</span>) \
+                        + <span class="hljs-string">'\n'</span>
+            self.FollowSet.setText(text)
+
+            <span class="hljs-comment"># 构建分析表</span>
+            self.VT.append(<span class="hljs-string">'#'</span>)
+            self.LL1()
+            self.LR0()
+
+    <span class="hljs-comment"># 寻找非终结符c的First集</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">FindFirst</span><span class="hljs-params">(self, c)</span>:</span>
+        <span class="hljs-comment"># 终结符的First集为自己</span>
+        <span class="hljs-keyword">if</span> c <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> self.VN:
+            self.First[c] = [c]
+            <span class="hljs-keyword">return</span> self.First[c]
+
+        <span class="hljs-comment"># 非终结符遍历其候选式的首字母：</span>
+        <span class="hljs-keyword">else</span>:
+            <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> self.Derivation[c]:
+                <span class="hljs-comment"># 终结符或ε直接加入左侧符号的First集中</span>
+                <span class="hljs-keyword">if</span> s[<span class="hljs-number">0</span>] <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> self.VN:
+                    self.First[c].append(s[<span class="hljs-number">0</span>])
+                <span class="hljs-comment"># 非终结符</span>
+                <span class="hljs-keyword">else</span>:
+                    <span class="hljs-comment"># 将其First集加入左侧符号的First集中</span>
+                    <span class="hljs-keyword">if</span> c != s[<span class="hljs-number">0</span>]:
+                        extend = self.FindFirst(s[<span class="hljs-number">0</span>])
+                        <span class="hljs-comment"># 若开头的非终结符能推出ε但此候选式长度不为1，其First集中ε不会加入左侧符号的First集中</span>
+                        <span class="hljs-keyword">if</span> len(s) != <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-string">'ε'</span> <span class="hljs-keyword">in</span> extend:
+                            extend.remove(<span class="hljs-string">'ε'</span>)
+                        self.First[c].extend(extend)
+                        <span class="hljs-comment"># 若开头的非终结符能推出ε，则将其下一个符号的First集加入左侧符号的First集中</span>
+                        <span class="hljs-keyword">if</span> <span class="hljs-string">'ε'</span> <span class="hljs-keyword">in</span> self.Derivation[s[<span class="hljs-number">0</span>]] <span class="hljs-keyword">and</span> len(s) != <span class="hljs-number">1</span>:
+                            extend = self.FindFirst(s[<span class="hljs-number">1</span>])
+                            self.First[c].extend(extend)
+            <span class="hljs-keyword">return</span> self.First[c]
+
+    <span class="hljs-comment"># 建立文法的Follow集</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">FindFollow</span><span class="hljs-params">(self)</span>:</span>
+        self.Follow[self.SymbolSet[<span class="hljs-number">0</span>]].append(<span class="hljs-string">'#'</span>)
+        <span class="hljs-comment"># while中的过程直至所有的Follow集不再增大</span>
+        isChange = <span class="hljs-literal">True</span>
+        <span class="hljs-keyword">while</span> isChange:
+            isChange = <span class="hljs-literal">False</span>
+            <span class="hljs-comment"># 遍历每一条推导式</span>
+            <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> self.Derivation.items():  <span class="hljs-comment"># 每条推导式</span>
+                <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(value)):  <span class="hljs-comment"># 每条候选式value[i]</span>
+                    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> range(len(value[i])):  <span class="hljs-comment"># 候选式中的每个符号value[i][j]</span>
+                        <span class="hljs-keyword">if</span> value[i][j] <span class="hljs-keyword">in</span> self.VN:  <span class="hljs-comment"># 只考虑非终结符</span>
+                            l = len(value[i])
+                            <span class="hljs-comment"># a-&gt;*b或a-&gt;*bc且c-&gt;ε，将Follow(a)加入Follow(b)</span>
+                            <span class="hljs-comment"># value[i][j]是结尾字符</span>
+                            <span class="hljs-keyword">if</span> j == l - <span class="hljs-number">1</span>:
+                                l_o = len(self.Follow[value[i][j]])  <span class="hljs-comment"># 原本的长度</span>
+                                self.Follow[value[i][j]].extend(self.Follow[key])  <span class="hljs-comment"># 将Follow(key)加入Follow(value[i][j])</span>
+                                self.Follow[value[i][j]] = list(set(self.Follow[value[i][j]]))  <span class="hljs-comment"># 去重</span>
+                                <span class="hljs-keyword">if</span> len(self.Follow[value[i][j]]) != l_o:  <span class="hljs-comment"># 检查是否发生变化</span>
+                                    isChange = <span class="hljs-literal">True</span>
+                            <span class="hljs-comment"># a-&gt;*bc且c-&gt;ε，将Follow(a)加入Follow(b)</span>
+                            <span class="hljs-comment"># value[i][j]是倒数第二个字符，且value[i][j+1]是非终结符</span>
+                            <span class="hljs-keyword">elif</span> (j == l - <span class="hljs-number">2</span>) <span class="hljs-keyword">and</span> (value[i][j + <span class="hljs-number">1</span>] <span class="hljs-keyword">in</span> self.VN):
+                                l_o = len(self.Follow[value[i][j]])  <span class="hljs-comment"># 原本的长度</span>
+                                extend = self.First[value[i][j + <span class="hljs-number">1</span>]]
+                                <span class="hljs-keyword">if</span> <span class="hljs-string">'ε'</span> <span class="hljs-keyword">in</span> extend:
+                                    extend.remove(<span class="hljs-string">'ε'</span>)
+                                self.Follow[value[i][j]].extend(extend)  <span class="hljs-comment"># 将First(value[i][j+1])加入Follow(value[i][j])</span>
+                                self.Follow[value[i][j]] = list(set(self.Follow[value[i][j]]))  <span class="hljs-comment"># 去重</span>
+                                <span class="hljs-keyword">if</span> len(self.Follow[value[i][j]]) != l_o:  <span class="hljs-comment"># 检查是否发生变化</span>
+                                    isChange = <span class="hljs-literal">True</span>
+                                <span class="hljs-comment"># value[i][j+1]能推出ε</span>
+                                <span class="hljs-keyword">if</span> <span class="hljs-string">'ε'</span> <span class="hljs-keyword">in</span> self.Derivation[value[i][j + <span class="hljs-number">1</span>]]:
+                                    l_o = len(self.Follow[value[i][j]])  <span class="hljs-comment"># 原本的长度</span>
+                                    self.Follow[value[i][j]].extend(
+                                        self.Follow[key])  <span class="hljs-comment"># 将Follow(key)加入Follow(value[i][j])</span>
+                                    self.Follow[value[i][j]] = list(set(self.Follow[value[i][j]]))  <span class="hljs-comment"># 去重</span>
+                                    <span class="hljs-keyword">if</span> len(self.Follow[value[i][j]]) != l_o:  <span class="hljs-comment"># 检查是否发生变化</span>
+                                        isChange = <span class="hljs-literal">True</span>
+                            <span class="hljs-comment"># a-&gt;*bc*，将First(c)-&#123;ε&#125;加入Follow(b)</span>
+                            <span class="hljs-keyword">else</span>:
+                                l_o = len(self.Follow[value[i][j]])  <span class="hljs-comment"># 原本的长度</span>
+                                extend = self.First[value[i][j + <span class="hljs-number">1</span>]]
+                                <span class="hljs-keyword">if</span> <span class="hljs-string">'ε'</span> <span class="hljs-keyword">in</span> extend:
+                                    extend.remove(<span class="hljs-string">'ε'</span>)
+                                self.Follow[value[i][j]].extend(extend)  <span class="hljs-comment"># 将First(value[i][j+1])加入Follow(value[i][j])</span>
+                                self.Follow[value[i][j]] = list(set(self.Follow[value[i][j]]))  <span class="hljs-comment"># 去重</span>
+                                <span class="hljs-keyword">if</span> len(self.Follow[value[i][j]]) != l_o:  <span class="hljs-comment"># 检查是否发生变化</span>
+                                    isChange = <span class="hljs-literal">True</span>
+
+    <span class="hljs-comment"># 判断是否为LL(1)文法</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isLL1</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-comment"># 遍历每个推导式</span>
+        <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> self.Derivation.items():
+
+            <span class="hljs-comment"># 同一个符号的候选式至多只能有一个能推出ε</span>
+            cnt = <span class="hljs-number">0</span>
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> value:
+                <span class="hljs-keyword">if</span> self.isE(c):
+                    cnt += <span class="hljs-number">1</span>
+                <span class="hljs-keyword">if</span> cnt &gt; <span class="hljs-number">1</span>:
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+
+            c_e = []  <span class="hljs-comment"># 能推出ε的候选式</span>
+            c_none = []  <span class="hljs-comment"># 不能推出ε的候选式</span>
+
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> value:
+                <span class="hljs-comment"># 存在左递归则不是LL(1)文法</span>
+                <span class="hljs-keyword">if</span> key == c[<span class="hljs-number">0</span>]:
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+
+                <span class="hljs-comment"># 候选式按能否推出ε分类</span>
+                <span class="hljs-keyword">if</span> self.isE(c):
+                    c_e.append(c)
+                <span class="hljs-keyword">else</span>:
+                    c_none.append(c)
+
+            <span class="hljs-comment"># 对不能推出ε的候选式，两两First交集为空</span>
+            <span class="hljs-keyword">if</span> len(c_none) &gt; <span class="hljs-number">1</span>:  <span class="hljs-comment"># 至少得有两个候选式</span>
+                <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> c_none:  <span class="hljs-comment"># 两两比较</span>
+                    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> c_none:
+                        <span class="hljs-keyword">if</span> i == j:  <span class="hljs-comment"># 不能自己跟自己比</span>
+                            <span class="hljs-keyword">continue</span>
+                        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> self.Derivation.values():  <span class="hljs-comment"># 要是同一个符号的候选式</span>
+                            <span class="hljs-keyword">if</span> i <span class="hljs-keyword">in</span> v <span class="hljs-keyword">and</span> j <span class="hljs-keyword">in</span> v:
+                                i_first = set(self.cFirst(i))
+                                j_first = set(self.cFirst(j))
+                                <span class="hljs-keyword">if</span> i_first &amp; j_first == set():  <span class="hljs-comment"># 交集为空集</span>
+                                    <span class="hljs-keyword">continue</span>
+                                <span class="hljs-keyword">else</span>:
+                                    <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+
+            <span class="hljs-comment"># 对能推出ε的候选式，First(候选式)与Follow(c)交集为空</span>
+            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> c_e:
+                i_first = set(self.cFirst(i))
+                key_first = set(self.Follow[key])
+                <span class="hljs-keyword">if</span> i_first &amp; key_first == set():  <span class="hljs-comment"># 交集为空集</span>
+                    <span class="hljs-keyword">continue</span>
+                <span class="hljs-keyword">else</span>:
+                    <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+
+    <span class="hljs-comment"># 建立LL分析表</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">LL1</span><span class="hljs-params">(self)</span>:</span>
+        <span class="hljs-keyword">if</span> self.isLL1():
+
+            <span class="hljs-comment"># 表头部分</span>
+            self.AnalyticalTable.setItem(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, QTableWidgetItem(<span class="hljs-string">'LL Parser'</span>))
+            self.AnalyticalTable.setSpan(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, len(self.VT) + <span class="hljs-number">1</span>)
+
+            column = <span class="hljs-number">1</span>
+            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> self.VT:
+                <span class="hljs-keyword">if</span> i != <span class="hljs-string">'ε'</span>:
+                    self.AnalyticalTable.setItem(<span class="hljs-number">1</span>, column, QTableWidgetItem(i))
+                    column += <span class="hljs-number">1</span>
+            row = <span class="hljs-number">2</span>
+            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> self.VN:
+                self.AnalyticalTable.setItem(row, <span class="hljs-number">0</span>, QTableWidgetItem(i))
+                row += <span class="hljs-number">1</span>
+            <span class="hljs-comment"># 坐标：</span>
+            <span class="hljs-comment"># 行：在self.VN中的坐标+2</span>
+            <span class="hljs-comment"># 列：在self.VT中的坐标+1</span>
+            <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> self.Derivation.items():
+                <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> value:
+                    c_first = self.cFirst(c)
+                    <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> c_first:
+                        <span class="hljs-keyword">if</span> a != <span class="hljs-string">'ε'</span>:
+                            x = self.VN.index(key) + <span class="hljs-number">2</span>
+                            y = self.VT.index(a)
+                            <span class="hljs-keyword">if</span> <span class="hljs-string">'ε'</span> <span class="hljs-keyword">in</span> self.VT:
+                                <span class="hljs-keyword">if</span> y &lt; self.VT.index(<span class="hljs-string">'ε'</span>):
+                                    y += <span class="hljs-number">1</span>
+                            <span class="hljs-keyword">else</span>:
+                                y += <span class="hljs-number">1</span>
+                            content = QTableWidgetItem(key + <span class="hljs-string">'-&gt;'</span> + c)
+                            self.AnalyticalTable.setItem(x, y, content)
+                            <span class="hljs-keyword">if</span> <span class="hljs-string">'ε'</span> <span class="hljs-keyword">in</span> self.First[a]:
+                                <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> self.Follow[key]:
+                                    x = self.VN.index(key) + <span class="hljs-number">2</span>
+                                    y = self.VT.index(b) + <span class="hljs-number">1</span>
+                                    content = QTableWidgetItem(key + <span class="hljs-string">'-&gt;'</span> + c)
+                                    self.AnalyticalTable.setItem(x, y, content)
+
+        <span class="hljs-comment"># 不是LL(1)文法</span>
+        <span class="hljs-keyword">else</span>:
+            self.AnalyticalTable.setItem(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, QTableWidgetItem(<span class="hljs-string">'This is not a LL grammer.'</span>))
+            self.AnalyticalTable.setColumnWidth(<span class="hljs-number">0</span>, <span class="hljs-number">200</span>)
+
+    <span class="hljs-comment"># 建立LR分析表</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">LR0</span><span class="hljs-params">(self)</span>:</span>
+
+        <span class="hljs-comment"># 建立状态集</span>
+        root = []
+        <span class="hljs-comment"># 每个结果不是ε的推导式，在候选式前加·，放进root</span>
+        <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> self.Derivation.items():
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> value:
+                root.append(key + <span class="hljs-string">'-&gt;·'</span> + c)
+        idx = <span class="hljs-number">0</span>
+        I0 = State(root, [], <span class="hljs-literal">True</span>, <span class="hljs-literal">None</span>, idx)
+        idx += <span class="hljs-number">1</span>
+        I = [I0]  <span class="hljs-comment"># 状态集</span>
+        isChange = <span class="hljs-literal">True</span>
+        <span class="hljs-keyword">while</span> isChange:
+            isChange = <span class="hljs-literal">False</span>
+            <span class="hljs-comment"># 查看每个状态集是否还能推导</span>
+            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> I:
+                <span class="hljs-comment"># 检查next中的每个对象</span>
+                <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> i.next.items():
+                    <span class="hljs-comment"># 若value为列表，则要将其转换为State</span>
+                    <span class="hljs-keyword">if</span> type(value) == list <span class="hljs-keyword">and</span> value != []:
+                        isExist = <span class="hljs-literal">False</span>
+                        <span class="hljs-comment"># 若value对应的State已经存在于I中，则直接建立引用</span>
+                        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> I:
+                            value_new = []
+                            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> value:
+                                c = c.split(<span class="hljs-string">'·'</span>)
+                                c = c[<span class="hljs-number">0</span>] + c[<span class="hljs-number">1</span>][<span class="hljs-number">0</span>] + <span class="hljs-string">'·'</span> + c[<span class="hljs-number">1</span>][<span class="hljs-number">1</span>:]
+                                value_new.append(c)
+                            <span class="hljs-keyword">if</span> j.content == value_new:
+                                i.next[key] = j
+                                isExist = <span class="hljs-literal">True</span>
+                                isChange = <span class="hljs-literal">True</span>
+                                <span class="hljs-keyword">break</span>
+                        <span class="hljs-comment"># 若不存在，则建立新的State</span>
+                        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> isExist:
+                            i.next[key] = State(root, value, <span class="hljs-literal">False</span>, i, idx)
+                            I.append(i.next[key])
+                            idx += <span class="hljs-number">1</span>
+                            isChange = <span class="hljs-literal">True</span>
+
+        I.insert(<span class="hljs-number">1</span>, State([], [], <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>))  <span class="hljs-comment"># 增广</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> I:
+            i.End()  <span class="hljs-comment"># 得到其中·在最后的式子的数量</span>
+
+        <span class="hljs-comment"># 表头部分</span>
+        row = len(self.VN) + <span class="hljs-number">6</span>
+        column = <span class="hljs-number">1</span>
+        self.AnalyticalTable.setItem(row - <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, QTableWidgetItem(<span class="hljs-string">'LR Parser'</span>))
+        self.AnalyticalTable.setSpan(row - <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, len(self.VT) + len(self.VN) + <span class="hljs-number">1</span>)
+        self.AnalyticalTable.setItem(row - <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, QTableWidgetItem(<span class="hljs-string">'Action'</span>))
+        self.AnalyticalTable.setSpan(row - <span class="hljs-number">2</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, len(self.VT))
+        self.AnalyticalTable.setItem(row - <span class="hljs-number">2</span>, len(self.VT) + <span class="hljs-number">1</span>, QTableWidgetItem(<span class="hljs-string">'Goto'</span>))
+        self.AnalyticalTable.setSpan(row - <span class="hljs-number">2</span>, len(self.VT) + <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, len(self.VN))
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> self.VT:
+            <span class="hljs-keyword">if</span> i != <span class="hljs-string">'ε'</span>:
+                self.AnalyticalTable.setItem(row - <span class="hljs-number">1</span>, column, QTableWidgetItem(i))
+                column += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> self.VN:
+            self.AnalyticalTable.setItem(row - <span class="hljs-number">1</span>, column+<span class="hljs-number">1</span>, QTableWidgetItem(i))
+            column += <span class="hljs-number">1</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(I)):
+            self.AnalyticalTable.setItem(row, <span class="hljs-number">0</span>, QTableWidgetItem(str(i)))
+            row += <span class="hljs-number">1</span>
+
+        <span class="hljs-comment"># 填表</span>
+
+        <span class="hljs-comment"># Ia通过key到Ib，则(a, key) = sb/b，取决于key是终结符还是非终结符</span>
+        <span class="hljs-comment"># key∈VT, key = self.VT.index(key)+1</span>
+        <span class="hljs-comment"># key∈VN, key = self.VN.index(key)+1+len(self.VT)</span>
+        <span class="hljs-comment"># 遍历I：</span>
+        <span class="hljs-comment"># 若其中只有一个推导式且·在末尾，则全填rx</span>
+        <span class="hljs-comment"># 若有多个推导式，一部位·在末尾，则这几个式子对应的格子填rx，key为从这个式子到终结态的key</span>
+
+        isLR = <span class="hljs-literal">True</span>
+        <span class="hljs-comment"># sb/b</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(I)):
+            <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> I[i].next.items():
+                <span class="hljs-keyword">if</span> value:  <span class="hljs-comment"># 每一对Ia-&gt;Ib</span>
+                    x = len(self.VN) + <span class="hljs-number">6</span> + i
+                    <span class="hljs-comment"># key为终结符，填sb</span>
+                    <span class="hljs-keyword">if</span> key <span class="hljs-keyword">in</span> self.VT:
+                        y = self.VT.index(key) + <span class="hljs-number">1</span>
+                        source = <span class="hljs-string">'s'</span> + str(I.index(value))
+                        <span class="hljs-keyword">if</span> self.AnalyticalTable.item(x, y):
+                            isLR = <span class="hljs-literal">False</span>
+                        <span class="hljs-keyword">else</span>:
+                            self.AnalyticalTable.setItem(x, y, QTableWidgetItem(source))
+
+                    <span class="hljs-comment"># key为非终结符，填b</span>
+                    <span class="hljs-keyword">else</span>:
+                        y = self.VN.index(key) + <span class="hljs-number">1</span> + len(self.VT)
+                        source = str(I.index(value))
+                        <span class="hljs-keyword">if</span> self.AnalyticalTable.item(x, y):
+                            isLR = <span class="hljs-literal">False</span>
+                        <span class="hljs-keyword">else</span>:
+                            self.AnalyticalTable.setItem(x, y, QTableWidgetItem(source))
+        <span class="hljs-comment"># rb</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(I)):
+            x = len(self.VN) + <span class="hljs-number">6</span> + i
+            <span class="hljs-comment"># I[i]中只有一个式子且·在末尾，则在这一行的Action下全填rx，x为该式子在root对应式子的编号</span>
+            <span class="hljs-keyword">if</span> I[i].EndNum[<span class="hljs-string">'end'</span>] == <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> I[i].EndNum[<span class="hljs-string">'all'</span>] == <span class="hljs-number">1</span>:
+                c = I[i].content[<span class="hljs-number">0</span>][:<span class="hljs-number">-1</span>].split(<span class="hljs-string">'-&gt;'</span>)
+                c = c[<span class="hljs-number">0</span>] + <span class="hljs-string">'-&gt;·'</span> + c[<span class="hljs-number">1</span>]
+                source = root.index(c) + <span class="hljs-number">1</span>
+                source = <span class="hljs-string">'r'</span> + str(source)
+                <span class="hljs-keyword">for</span> y <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, len(self.VT)):
+                    <span class="hljs-keyword">if</span> self.AnalyticalTable.item(x, y):
+                        isLR = <span class="hljs-literal">False</span>
+                    <span class="hljs-keyword">else</span>:
+                        self.AnalyticalTable.setItem(x, y, QTableWidgetItem(source))
+            <span class="hljs-comment"># I[i]中一部分式子·在末尾，则在#列下填rx</span>
+            <span class="hljs-keyword">else</span>:
+                <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> I[i].content:
+                    <span class="hljs-keyword">if</span> c[<span class="hljs-number">-1</span>] == <span class="hljs-string">'·'</span>:
+                        c = c[:<span class="hljs-number">-1</span>].split(<span class="hljs-string">'-&gt;'</span>)
+                        c = c[<span class="hljs-number">0</span>] + <span class="hljs-string">'-&gt;·'</span> + c[<span class="hljs-number">1</span>]
+                        source = root.index(c) + <span class="hljs-number">1</span>
+                        source = <span class="hljs-string">'r'</span> + str(source)
+                        y = len(self.VT)
+                        <span class="hljs-keyword">if</span> self.AnalyticalTable.item(x, y):
+                            isLR = <span class="hljs-literal">False</span>
+                        <span class="hljs-keyword">else</span>:
+                            self.AnalyticalTable.setItem(x, y, QTableWidgetItem(source))
+        self.AnalyticalTable.setItem(len(self.VN) + <span class="hljs-number">6</span> + <span class="hljs-number">1</span>, self.VT.index(<span class="hljs-string">'#'</span>) + <span class="hljs-number">1</span>, QTableWidgetItem(<span class="hljs-string">'acc'</span>))
+
+        <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> self.Derivation.items():
+            <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> value:
+                <span class="hljs-comment"># 存在左递归则不是LR文法</span>
+                <span class="hljs-keyword">if</span> key == c[<span class="hljs-number">0</span>]:
+                    isLR = <span class="hljs-literal">False</span>
+        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> isLR:
+            <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> range(len(self.VN) + <span class="hljs-number">6</span>, len(self.VN) + <span class="hljs-number">7</span> + len(I)):
+                <span class="hljs-keyword">for</span> y <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>, len(self.VT) + len(self.VN) + <span class="hljs-number">1</span>):
+                    self.AnalyticalTable.setItem(x, y, QTableWidgetItem(<span class="hljs-string">''</span>))
+            self.AnalyticalTable.setItem(len(self.VN) + <span class="hljs-number">3</span>, <span class="hljs-number">0</span>, QTableWidgetItem(<span class="hljs-string">'This is not a LR grammer.'</span>))
+
+    <span class="hljs-comment"># 判断候选式是否能推导出ε</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">isE</span><span class="hljs-params">(self, c)</span>:</span>
+        <span class="hljs-keyword">if</span> c == <span class="hljs-string">'ε'</span>:
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+        <span class="hljs-comment"># 有终结符存在必不可能推导出ε</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> c:
+            <span class="hljs-keyword">if</span> i <span class="hljs-keyword">in</span> self.VT:
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+        <span class="hljs-comment"># 无终结符，则遍历每个符号，若全都能推出ε，则此候选式能推出ε</span>
+        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> c:
+            <span class="hljs-keyword">if</span> i <span class="hljs-keyword">in</span> self.e_list:
+                <span class="hljs-keyword">continue</span>
+            <span class="hljs-keyword">else</span>:
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+
+    <span class="hljs-comment"># 建立ε集</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">FindE</span><span class="hljs-params">(self)</span>:</span>
+        isChange = <span class="hljs-literal">True</span>
+        <span class="hljs-keyword">while</span> isChange:
+            isChange = <span class="hljs-literal">False</span>
+            <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">in</span> self.Derivation.items():
+                <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> value:
+                    <span class="hljs-keyword">if</span> c <span class="hljs-keyword">in</span> self.e_list <span class="hljs-keyword">and</span> key <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> self.e_list:  <span class="hljs-comment"># 如果c可以推出ε，那key也可以</span>
+                        self.e_list.append(key)
+                        isChange = <span class="hljs-literal">True</span>
+
+    <span class="hljs-comment"># 求候选式的First集</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">cFirst</span><span class="hljs-params">(self, c)</span>:</span>
+        <span class="hljs-comment"># 终结符开头，则其First集为这个终结符</span>
+        <span class="hljs-keyword">if</span> c[<span class="hljs-number">0</span>] <span class="hljs-keyword">in</span> self.VT:
+            <span class="hljs-keyword">return</span> [c[<span class="hljs-number">0</span>]]
+        <span class="hljs-comment"># 非终结符，则返回其First集</span>
+        <span class="hljs-keyword">else</span>:
+            result = self.First[c[<span class="hljs-number">0</span>]]
+            <span class="hljs-comment"># 若c[0]能推出ε，则还要加上其后符号的First集</span>
+            <span class="hljs-keyword">if</span> <span class="hljs-string">'ε'</span> <span class="hljs-keyword">in</span> self.Derivation[c[<span class="hljs-number">0</span>]] <span class="hljs-keyword">and</span> len(c) != <span class="hljs-number">1</span>:
+                result.extend(self.First[c[<span class="hljs-number">1</span>]])
+            <span class="hljs-keyword">return</span> list(set(result))
+
+    <span class="hljs-comment"># 重置为初始状态</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Clear</span><span class="hljs-params">(self)</span>:</span>
+        self.InputArea.clear()
+        self.FirstSet.clear()
+        self.FollowSet.clear()
+        self.AnalyticalTable.clear()
+        self.AnalyticalTable.setColumnCount(<span class="hljs-number">0</span>)
+        self.AnalyticalTable.setRowCount(<span class="hljs-number">0</span>)
+        self.AnalyticalTable.setColumnCount(<span class="hljs-number">50</span>)
+        self.AnalyticalTable.setRowCount(<span class="hljs-number">50</span>)
+        self.SymbolSet = []  <span class="hljs-comment"># 符号集，保存每一个符号</span>
+        self.Derivation = &#123;&#125;  <span class="hljs-comment"># 推导式集，以字典形式保存，key为str型左侧非终结符，value为list型右侧候选式</span>
+        self.First = &#123;&#125;  <span class="hljs-comment"># First集</span>
+        self.Follow = &#123;&#125;  <span class="hljs-comment"># Follow集</span>
+        self.VT = []  <span class="hljs-comment"># 终结符集</span>
+        self.VN = []  <span class="hljs-comment"># 非终结符集</span>
+        self.e_list = [<span class="hljs-string">'ε'</span>]  <span class="hljs-comment"># 可推导出ε的符号集</span>
+        self.I = []  <span class="hljs-comment"># 状态集</span>
+
+    <span class="hljs-comment"># 帮助</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">Help</span><span class="hljs-params">(self)</span>:</span>
+        os.startfile(<span class="hljs-string">'操作手册.docx'</span>)
+
+
+<span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    app = QtWidgets.QApplication(sys.argv)
+    gui = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(gui)
+    gui.show()
+    sys.exit(app.exec_())</code></pre></div>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Qt/">Qt</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/7-TF2-Custom-Layer/">
+                        <span class="hidden-mobile">[TF2]7. Custom Layer</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "Grammer Analyzer Base On Python and Qt&nbsp;",
+      ],
+      cursorChar: "〆",
+      typeSpeed: 50,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.staticfile.org/mathjax/3.0.5/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
