@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      609 字
+      702 字
     </span>
   
 
@@ -203,7 +203,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：June 30, 2020 am
+                  本文最后更新于：June 30, 2020 pm
                 
               </p>
             
@@ -226,6 +226,7 @@ mnist = np.load(<span class="hljs-string">'./data/mnist.npz'</span>)
 x_train, y_train, x_test, y_test = mnist[<span class="hljs-string">'x_train'</span>] / <span class="hljs-number">255.0</span>, mnist[<span class="hljs-string">'y_train'</span>], mnist[<span class="hljs-string">'x_test'</span>] / <span class="hljs-number">255.0</span>, mnist[<span class="hljs-string">'y_test'</span>]
 print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)</code></pre></div>
 <p><img src="https://wx1.sbimg.cn/2020/06/30/2uHC6.png" srcset="/img/loading.gif" alt="Shape-1"></p>
+<p>可以看到，训练集中有60000条数据，每条数据是一个28*28的图像，对应一个标签（0-9）；测试集有10000条数据。</p>
 <div class="hljs"><pre><code class="hljs Python">fig, ax = plt.subplots(
     nrows=<span class="hljs-number">2</span>,
     ncols=<span class="hljs-number">5</span>,
@@ -243,19 +244,22 @@ plt.tight_layout()
 
 plt.show()</code></pre></div>
 <p><img src="https://wx1.sbimg.cn/2020/06/30/2uKLO.png" srcset="/img/loading.gif" alt="Plot"></p>
-<div class="hljs"><pre><code class="hljs Python">x_train = x_train[..., tf.newaxis]
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 加入新的轴</span>
+x_train = x_train[..., tf.newaxis]
 x_test = x_test[..., tf.newaxis]
 
+<span class="hljs-comment"># 将标签转换为独热变量</span>
 y_train = tf.one_hot(y_train,depth=<span class="hljs-number">10</span>)
 y_test = tf.one_hot(y_test,depth=<span class="hljs-number">10</span>)
 
+<span class="hljs-comment"># 建立Dataset</span>
 train_ds = tf.data.Dataset.from_tensor_slices((x_train, y_train)).shuffle(<span class="hljs-number">10000</span>).batch(<span class="hljs-number">32</span>)
 test_ds = tf.data.Dataset.from_tensor_slices((x_test, y_test)).batch(<span class="hljs-number">32</span>)
 
 print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)</code></pre></div>
 <p><img src="https://wx1.sbimg.cn/2020/06/30/2ut9A.png" srcset="/img/loading.gif" alt="Shape-2"></p>
-<h2 id="2-2-自定义FocalLoss损失函数"><a href="#2-2-自定义FocalLoss损失函数" class="headerlink" title="2.2 自定义FocalLoss损失函数"></a>2.2 自定义FocalLoss损失函数</h2><p>多分类的FocalLoss损失函数：$ FL(p<em>t) = \sum</em>{c=1}^{m} -(1-p_t)^\gamma <em> y_c </em> \log(p_t) $</p>
-<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 类方式</span>
+<h2 id="2-2-自定义FocalLoss损失函数"><a href="#2-2-自定义FocalLoss损失函数" class="headerlink" title="2.2 自定义FocalLoss损失函数"></a>2.2 自定义FocalLoss损失函数</h2><p>多分类的FocalLoss损失函数：</p>
+<script type="math/tex; mode=display">FL(p_t) = \sum_{c=1}^{m} -(1-p_t)^{\gamma} * y_c * \log(p_t)</script><p>使用类的方式自定义损失函数，需继承<code>tf.keras.losses.Loss</code>类：<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 类方式</span>
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FocalLoss_cls</span><span class="hljs-params">(tf.keras.losses.Loss)</span>:</span>
 
     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, gamma=<span class="hljs-number">2.0</span>, alpha=<span class="hljs-number">0.25</span>)</span>:</span>
@@ -275,8 +279,8 @@ print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)</code></pre></di
         loss = -y_true * tf.math.pow(<span class="hljs-number">1</span> - y_pred, self.gamma) * tf.math.log(y_pred)
         loss = tf.math.reduce_sum(loss)
 
-        <span class="hljs-keyword">return</span> loss</code></pre></div>
-<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 函数方式</span>
+        <span class="hljs-keyword">return</span> loss</code></pre></div></p>
+<p>使用函数方式自定义损失函数：<br><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 函数方式</span>
 <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">FocalLoss_func</span><span class="hljs-params">(gamma=<span class="hljs-number">2.0</span>, alpha=<span class="hljs-number">0.25</span>)</span>:</span>
     <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">focal_loss_fixed</span><span class="hljs-params">(y_true, y_pred)</span>:</span>
         y_pred = tf.nn.softmax(y_pred, axis=<span class="hljs-number">-1</span>)  <span class="hljs-comment"># 转换为概率</span>
@@ -289,7 +293,7 @@ print(x_train.shape, y_train.shape, x_test.shape, y_test.shape)</code></pre></di
         loss = tf.math.reduce_sum(loss)
 
         <span class="hljs-keyword">return</span> loss
-    <span class="hljs-keyword">return</span> focal_loss_fixed</code></pre></div>
+    <span class="hljs-keyword">return</span> focal_loss_fixed</code></pre></div></p>
 <h1 id="3-训练模型"><a href="#3-训练模型" class="headerlink" title="3. 训练模型"></a>3. 训练模型</h1><div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> tensorflow.keras.layers <span class="hljs-keyword">import</span> Conv2D, Flatten, Dense
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span><span class="hljs-params">(tf.keras.Model)</span>:</span>
