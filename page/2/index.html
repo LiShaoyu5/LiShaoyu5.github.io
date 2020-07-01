@@ -268,10 +268,11 @@ b = torch.randn(1, 1, dtype=torch.float, requi</div>
           
         
         <div>1. 指定源使用如下方法指定源：
-pip install &lt;package&gt; -i &lt;source&gt;
+pip install 库名 -i 源链接
 最常用的国内源是 https://pypi.tuna.tsinghua.edu.cn/simple/ 清华源。
-2. 设置超时时间使用如下方法设置超时时间（单位为秒）：
-pip install --default-time=&lt;time&gt; &lt;package&</div>
+2. 设置超时时间安装较大的库时，有时虽然有下载速度，但经常会因为超时而终止下载。这种情况可以将超时时间设置长一些。
+使用如下方法设置超时时间（单位为秒）：
+pip install --default-time</div>
       </a>
 
       <div class="index-btm post-metas">

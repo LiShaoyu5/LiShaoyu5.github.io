@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      194 字
+      241 字
     </span>
   
 
@@ -203,25 +203,26 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：June 4, 2020 pm
+                  本文最后更新于：July 1, 2020 pm
                 
               </p>
             
             <article class="markdown-body">
               <h3 id="1-指定源"><a href="#1-指定源" class="headerlink" title="1. 指定源"></a>1. 指定源</h3><p>使用如下方法指定源：</p>
-<div class="hljs"><pre><code class="hljs sql">pip <span class="hljs-keyword">install</span> &lt;<span class="hljs-keyword">package</span>&gt; -i &lt;<span class="hljs-keyword">source</span>&gt;</code></pre></div>
+<div class="hljs"><pre><code class="hljs cmake">pip <span class="hljs-keyword">install</span> 库名 -i 源链接</code></pre></div>
 <p>最常用的国内源是 <a href="https://pypi.tuna.tsinghua.edu.cn/simple/" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple/</a> 清华源。</p>
-<h3 id="2-设置超时时间"><a href="#2-设置超时时间" class="headerlink" title="2. 设置超时时间"></a>2. 设置超时时间</h3><p>使用如下方法设置超时时间（单位为秒）：</p>
-<div class="hljs"><pre><code class="hljs verilog">pip install --<span class="hljs-keyword">default</span>-<span class="hljs-keyword">time</span>=&lt;<span class="hljs-keyword">time</span>&gt; &lt;<span class="hljs-keyword">package</span>&gt;</code></pre></div>
+<h3 id="2-设置超时时间"><a href="#2-设置超时时间" class="headerlink" title="2. 设置超时时间"></a>2. 设置超时时间</h3><p>安装较大的库时，有时虽然有下载速度，但经常会因为超时而终止下载。这种情况可以将超时时间设置长一些。</p>
+<p>使用如下方法设置超时时间（单位为秒）：</p>
+<div class="hljs"><pre><code class="hljs routeros">pip install <span class="hljs-attribute">--default-time</span>=时间 库名</code></pre></div>
 <h3 id="3-本地安装方法"><a href="#3-本地安装方法" class="headerlink" title="3. 本地安装方法"></a>3. 本地安装方法</h3><p>首先在对应的环境中执行以下代码，可以查看这个环境的pip支持的安装包类型：</p>
-<div class="hljs"><pre><code class="hljs css"><span class="hljs-selector-tag">import</span> <span class="hljs-selector-tag">pip</span><span class="hljs-selector-class">._internal</span><span class="hljs-selector-class">.pep425tags</span>
-<span class="hljs-selector-tag">print</span>(<span class="hljs-selector-tag">pip</span><span class="hljs-selector-class">._internal</span><span class="hljs-selector-class">.pep425tags</span><span class="hljs-selector-class">.get_supported</span>())</code></pre></div>
+<div class="hljs"><pre><code class="hljs coffeescript"><span class="hljs-keyword">import</span> wheel.pep425tags <span class="hljs-keyword">as</span> w
+<span class="hljs-built_in">print</span>(w.get_supported(<span class="hljs-string">"win_amd64"</span>))  <span class="hljs-comment"># 64位</span></code></pre></div>
 <p>然后到 <a href="https://pypi.org/" target="_blank" rel="noopener">https://pypi.org/</a> 或其他源网站，搜索需要的包。</p>
 <ul>
 <li>在 Release history 中可以选择自己需要的版本。</li>
 <li>在 Download files 中可以找到安装包，选择自己的pip支持的类型下载到本地。</li>
 </ul>
-<p>下载完成后，使用pip安装即可。</p>
+<p>下载完成后，使用<code>pip install 文件路径</code>即可。</p>
 
             </article>
             <hr>
