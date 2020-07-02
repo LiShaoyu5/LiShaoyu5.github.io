@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>‘Install COCOAPI on Windows 10’</title>
+    <link href="/2020/Install-COCOAPI-on-Windows-10/"/>
+    <url>/2020/Install-COCOAPI-on-Windows-10/</url>
+    
+    <content type="html"><![CDATA[<p>在Window 10上安装Python用的COCO API时，直接使用<code>pip install pycocotools</code>经常会报错，在这里总结一下遇到的各种问题。</p><h1 id="1-安装步骤"><a href="#1-安装步骤" class="headerlink" title="1. 安装步骤"></a>1. 安装步骤</h1><p>采用下载源码再编译安装的方式。在命令行中（我是在Anaconda Prompt中，且激活了目标环境）依次执行以下命令：<br><div class="hljs"><pre><code class="hljs vim">git clone http<span class="hljs-variable">s:</span>//github.<span class="hljs-keyword">com</span>/pdollar/coco.git<span class="hljs-keyword">cd</span> coco/PythonAPI<span class="hljs-keyword">python</span> setup.<span class="hljs-keyword">py</span> build_ext --inplace<span class="hljs-keyword">python</span> setup.<span class="hljs-keyword">py</span> build_ext install</code></pre></div></p><h1 id="2-报错解决"><a href="#2-报错解决" class="headerlink" title="2. 报错解决"></a>2. 报错解决</h1><h2 id="2-1-Error-Unable-to-find-vcvarsall-bat"><a href="#2-1-Error-Unable-to-find-vcvarsall-bat" class="headerlink" title="2.1 Error:Unable to find vcvarsall.bat"></a>2.1 Error:Unable to find vcvarsall.bat</h2><p>需要安装对应的Window 10 SDK。</p><p>首先右键开始，选择系统，查看自己的Window 10版本：</p><p><img src="https://wx1.sbimg.cn/2020/07/02/2Wnv1.png" srcset="/img/loading.gif" alt="Windows-1"><br><img src="https://wx1.sbimg.cn/2020/07/02/2WNHJ.png" srcset="/img/loading.gif" alt="Windows-2"></p><p>然后在 <a href="https://developer.microsoft.com/zh-cn/windows/downloads/sdk-archive/" target="_blank" rel="noopener">https://developer.microsoft.com/zh-cn/windows/downloads/sdk-archive/</a> 中找到对应版本的SDK下载。推荐下载ISO文件，避免网络问题安装失败：</p><p><img src="https://wx1.sbimg.cn/2020/07/02/2W842.png" srcset="/img/loading.gif" alt="Download-1"></p><p>下载完成后，装载ISO，运行其中的Win10SDKSetup.exe安装。</p><p>安装完成后问题解决。</p><h2 id="2-2-LINK-fatal-error-LNK1158-cannot-run-‘rc-exe’"><a href="#2-2-LINK-fatal-error-LNK1158-cannot-run-‘rc-exe’" class="headerlink" title="2.2 LINK : fatal error LNK1158: cannot run ‘rc.exe’"></a>2.2 LINK : fatal error LNK1158: cannot run ‘rc.exe’</h2><p>将<code>C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86</code>（10.0.18362.0可能需要替换为自己系统的版本对应的文件夹，或同目录下的x86文件夹）中的rc.exe和rcdll.dll两个文件复制到<code>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin</code>中，即可解决问题。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Python</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>深度学习</tag>
+      
+      <tag>环境设置</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>[PyTorch]1. Installation</title>
     <link href="/2020/PyTorch-1-Installation/"/>
     <url>/2020/PyTorch-1-Installation/</url>
@@ -330,7 +359,7 @@
     
     <categories>
       
-      <category>Pytorch学习</category>
+      <category>PyTorch学习</category>
       
     </categories>
     
@@ -339,7 +368,7 @@
       
       <tag>Python</tag>
       
-      <tag>Pytorch</tag>
+      <tag>PyTorch</tag>
       
     </tags>
     
