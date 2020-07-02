@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>Install COCOAPI on Windows 10 - AiArt</title>
+  <title>[TF2]10. TensorBoard - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -151,8 +151,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-07-02 09:09">
-      July 2, 2020 am
+    <time datetime="2020-07-02 15:24">
+      July 2, 2020 pm
     </time>
   </div>
 
@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      299 字
+      591 字
     </span>
   
 
@@ -203,24 +203,85 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：July 2, 2020 am
+                  本文最后更新于：July 2, 2020 pm
                 
               </p>
             
             <article class="markdown-body">
-              <p>在Window 10上安装Python用的COCO API时，直接使用<code>pip install pycocotools</code>经常会报错，在这里总结一下遇到的各种问题。</p>
-<h1 id="1-安装步骤"><a href="#1-安装步骤" class="headerlink" title="1. 安装步骤"></a>1. 安装步骤</h1><p>采用下载源码再编译安装的方式。在命令行中（我是在Anaconda Prompt中，且激活了目标环境）依次执行以下命令：<br><div class="hljs"><pre><code class="hljs vim">git clone http<span class="hljs-variable">s:</span>//github.<span class="hljs-keyword">com</span>/pdollar/coco.git
-<span class="hljs-keyword">cd</span> coco/PythonAPI
-<span class="hljs-keyword">python</span> setup.<span class="hljs-keyword">py</span> build_ext --inplace
-<span class="hljs-keyword">python</span> setup.<span class="hljs-keyword">py</span> build_ext install</code></pre></div></p>
-<h1 id="2-报错解决"><a href="#2-报错解决" class="headerlink" title="2. 报错解决"></a>2. 报错解决</h1><h2 id="2-1-Error-Unable-to-find-vcvarsall-bat"><a href="#2-1-Error-Unable-to-find-vcvarsall-bat" class="headerlink" title="2.1 Error:Unable to find vcvarsall.bat"></a>2.1 Error:Unable to find vcvarsall.bat</h2><p>需要安装对应的Window 10 SDK。</p>
-<p>首先右键开始，选择系统，查看自己的Window 10版本：</p>
-<p><img src="https://wx1.sbimg.cn/2020/07/02/2Wnv1.png" srcset="/img/loading.gif" alt="Windows-1"><br><img src="https://wx1.sbimg.cn/2020/07/02/2WNHJ.png" srcset="/img/loading.gif" alt="Windows-2"></p>
-<p>然后在 <a href="https://developer.microsoft.com/zh-cn/windows/downloads/sdk-archive/" target="_blank" rel="noopener">https://developer.microsoft.com/zh-cn/windows/downloads/sdk-archive/</a> 中找到对应版本的SDK下载。推荐下载ISO文件，避免网络问题安装失败：</p>
-<p><img src="https://wx1.sbimg.cn/2020/07/02/2W842.png" srcset="/img/loading.gif" alt="Download-1"></p>
-<p>下载完成后，装载ISO，运行其中的Win10SDKSetup.exe安装。</p>
-<p>安装完成后问题解决。</p>
-<h2 id="2-2-LINK-fatal-error-LNK1158-cannot-run-‘rc-exe’"><a href="#2-2-LINK-fatal-error-LNK1158-cannot-run-‘rc-exe’" class="headerlink" title="2.2 LINK : fatal error LNK1158: cannot run ‘rc.exe’"></a>2.2 LINK : fatal error LNK1158: cannot run ‘rc.exe’</h2><p>将<code>C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86</code>（10.0.18362.0可能需要替换为自己系统的版本对应的文件夹，或同目录下的x86文件夹）中的rc.exe和rcdll.dll两个文件复制到<code>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin</code>中，即可解决问题。</p>
+              <div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+print(tf.__version__)
+
+<span class="hljs-comment"># 2.1.1</span></code></pre></div>
+<h1 id="1-TensorBoard参数"><a href="#1-TensorBoard参数" class="headerlink" title="1. TensorBoard参数"></a>1. TensorBoard参数</h1><ul>
+<li>log_dir：保存TensorBoard要解析的日志文件的目录的路径。</li>
+<li>histogram_freq：频率（在epoch中），计算模型层的激活和权重直方图。如果设置为0，则不会计算直方图。必须为直方图可视化指定验证：数据（或拆分）。</li>
+<li>write_graph：是否在TensorBoard中可视化图像。当write_graph设置为True时，日志文件可能会变得非常大。</li>
+<li>write_images：是否在TensorBoard中编写模型权重以显示为图像。</li>
+<li>update_freq：‘batch’或’epoch’或整数。使用‘batch’时，在每个batch后将损失和指标(评估函数)写入TensorBoard。这同样适用’epoch’。如果使用整数，比方说1000，回调将会在每1000个样本后将指标和损失写入TensorBoard。请注意，过于频繁地写入TensorBoard会降低您的训练速度。</li>
+<li>profile_batch：分析批次以采样计算特征。profile_batch必须是非负整数或正整数对的逗号分隔字符串。一对正整数表示要分析的批次范围。默认情况下，它将配置第二批。将profile_batch = 0设置为禁用性能分析。必须在TensorFlow eager模式下运行。</li>
+<li>embeddings_freq：可视化嵌入层的频率（以epoch为单位）。如果设置为0，则嵌入将不可见。</li>
+<li>embeddings_metadata：字典，它将层名称映射到文件名，该嵌入层的元数据保存在该文件名中。</li>
+</ul>
+<h1 id="2-在Keras模型训练中使用TensorBoard"><a href="#2-在Keras模型训练中使用TensorBoard" class="headerlink" title="2. 在Keras模型训练中使用TensorBoard"></a>2. 在Keras模型训练中使用TensorBoard</h1><div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> __future__ <span class="hljs-keyword">import</span> absolute_import, division, print_function, unicode_literals
+<span class="hljs-keyword">from</span> tensorflow.keras.layers <span class="hljs-keyword">import</span> Dense, Flatten, Conv2D
+<span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> Model
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-keyword">import</span> datetime</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 准备数据</span>
+mnist = np.load(<span class="hljs-string">'data/mnist.npz'</span>)
+x_train, y_train, x_test, y_test = mnist[<span class="hljs-string">'x_train'</span>],mnist[<span class="hljs-string">'y_train'</span>],mnist[<span class="hljs-string">'x_test'</span>],mnist[<span class="hljs-string">'y_test'</span>]
+
+x_train, x_test = x_train / <span class="hljs-number">255.0</span>, x_test / <span class="hljs-number">255.0</span>
+
+<span class="hljs-comment"># Add a channels dimension</span>
+x_train = x_train[..., tf.newaxis]
+x_test = x_test[..., tf.newaxis]</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 构建模型</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span><span class="hljs-params">(Model)</span>:</span>
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+        super(MyModel, self).__init__()
+        self.conv2d = Conv2D(<span class="hljs-number">32</span>, <span class="hljs-number">3</span>, activation=<span class="hljs-string">'relu'</span>)
+        self.flatten = Flatten()
+        self.dense1 = Dense(<span class="hljs-number">128</span>, activation=<span class="hljs-string">'relu'</span>)
+        self.dense2 = Dense(<span class="hljs-number">10</span>, activation=<span class="hljs-string">'softmax'</span>)
+
+<span class="hljs-meta">    @tf.function</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">call</span><span class="hljs-params">(self, x)</span>:</span>
+        x = self.conv2d(x)
+        x = self.flatten(x)
+        x = self.dense1(x)
+        x = self.dense2(x)
+        <span class="hljs-keyword">return</span> x
+
+model = MyModel()
+model.compile(
+    optimizer=<span class="hljs-string">'adam'</span>,
+    loss=<span class="hljs-string">'sparse_categorical_crossentropy'</span>,
+    metrics=[<span class="hljs-string">'accuracy'</span>]
+)</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 训练</span>
+
+<span class="hljs-comment"># 定义TensorBoard</span>
+tb = tf.keras.callbacks.TensorBoard(
+    log_dir=<span class="hljs-string">'log_keras'</span>,
+    histogram_freq=<span class="hljs-number">1</span>,
+    profile_batch=<span class="hljs-number">100000000</span>
+)
+
+<span class="hljs-comment"># 训练</span>
+model.fit(
+    x=x_train,
+    y=y_train,
+    epochs=<span class="hljs-number">10</span>,
+    validation_data=(x_test, y_test),
+    callbacks=[tb]
+)</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/02/2YT6I.png" srcset="/img/loading.gif" alt="Training"></p>
+<h1 id="3-查看TensorBoard"><a href="#3-查看TensorBoard" class="headerlink" title="3. 查看TensorBoard"></a>3. 查看TensorBoard</h1><p>训练完成后，在命令行中进入之前指定的log_dir（即log_keras）的上一级目录中，执行命令：<br><div class="hljs"><pre><code class="hljs ada">tensorboard <span class="hljs-comment">--logdir log_keras</span></code></pre></div><br>启动了TensorBoard：</p>
+<p><img src="https://wx2.sbimg.cn/2020/07/02/2YrWa.png" srcset="/img/loading.gif" alt="CMD"></p>
+<p>在浏览器中打开给出的链接，可以查看TensorBoard：</p>
+<p><img src="https://wx2.sbimg.cn/2020/07/02/2YOVR.png" srcset="/img/loading.gif" alt="TensorBoard"></p>
 
             </article>
             <hr>
@@ -230,7 +291,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Python/">Python</a>
+                      <a class="hover-with-bg" href="/categories/TensorFlow2%E5%AD%A6%E4%B9%A0/">TensorFlow2学习</a>
                     
                   </div>
                 
@@ -242,7 +303,7 @@
                     
                       <a class="hover-with-bg" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/">环境设置</a>
+                      <a class="hover-with-bg" href="/tags/TensorFlow/">TensorFlow</a>
                     
                   </div>
                 
@@ -253,18 +314,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/TF2-10-TensorBoard/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[TF2]10. TensorBoard</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/PyTorch-1-Installation/">
-                        <span class="hidden-mobile">[PyTorch]1. Installation</span>
+                      <a href="/2020/Install-COCOAPI-on-Windows-10/">
+                        <span class="hidden-mobile">Install COCOAPI on Windows 10</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -403,7 +458,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Install COCOAPI on Windows 10&nbsp;",
+        "[TF2]10. TensorBoard&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,

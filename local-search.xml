@@ -4,7 +4,36 @@
   
   
   <entry>
-    <title>‘Install COCOAPI on Windows 10’</title>
+    <title>[TF2]10. TensorBoard</title>
+    <link href="/2020/TF2-10-TensorBoard/"/>
+    <url>/2020/TF2-10-TensorBoard/</url>
+    
+    <content type="html"><![CDATA[<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tfprint(tf.__version__)<span class="hljs-comment"># 2.1.1</span></code></pre></div><h1 id="1-TensorBoard参数"><a href="#1-TensorBoard参数" class="headerlink" title="1. TensorBoard参数"></a>1. TensorBoard参数</h1><ul><li>log_dir：保存TensorBoard要解析的日志文件的目录的路径。</li><li>histogram_freq：频率（在epoch中），计算模型层的激活和权重直方图。如果设置为0，则不会计算直方图。必须为直方图可视化指定验证：数据（或拆分）。</li><li>write_graph：是否在TensorBoard中可视化图像。当write_graph设置为True时，日志文件可能会变得非常大。</li><li>write_images：是否在TensorBoard中编写模型权重以显示为图像。</li><li>update_freq：‘batch’或’epoch’或整数。使用‘batch’时，在每个batch后将损失和指标(评估函数)写入TensorBoard。这同样适用’epoch’。如果使用整数，比方说1000，回调将会在每1000个样本后将指标和损失写入TensorBoard。请注意，过于频繁地写入TensorBoard会降低您的训练速度。</li><li>profile_batch：分析批次以采样计算特征。profile_batch必须是非负整数或正整数对的逗号分隔字符串。一对正整数表示要分析的批次范围。默认情况下，它将配置第二批。将profile_batch = 0设置为禁用性能分析。必须在TensorFlow eager模式下运行。</li><li>embeddings_freq：可视化嵌入层的频率（以epoch为单位）。如果设置为0，则嵌入将不可见。</li><li>embeddings_metadata：字典，它将层名称映射到文件名，该嵌入层的元数据保存在该文件名中。</li></ul><h1 id="2-在Keras模型训练中使用TensorBoard"><a href="#2-在Keras模型训练中使用TensorBoard" class="headerlink" title="2. 在Keras模型训练中使用TensorBoard"></a>2. 在Keras模型训练中使用TensorBoard</h1><div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> __future__ <span class="hljs-keyword">import</span> absolute_import, division, print_function, unicode_literals<span class="hljs-keyword">from</span> tensorflow.keras.layers <span class="hljs-keyword">import</span> Dense, Flatten, Conv2D<span class="hljs-keyword">from</span> tensorflow.keras <span class="hljs-keyword">import</span> Model<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np<span class="hljs-keyword">import</span> datetime</code></pre></div><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 准备数据</span>mnist = np.load(<span class="hljs-string">'data/mnist.npz'</span>)x_train, y_train, x_test, y_test = mnist[<span class="hljs-string">'x_train'</span>],mnist[<span class="hljs-string">'y_train'</span>],mnist[<span class="hljs-string">'x_test'</span>],mnist[<span class="hljs-string">'y_test'</span>]x_train, x_test = x_train / <span class="hljs-number">255.0</span>, x_test / <span class="hljs-number">255.0</span><span class="hljs-comment"># Add a channels dimension</span>x_train = x_train[..., tf.newaxis]x_test = x_test[..., tf.newaxis]</code></pre></div><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 构建模型</span><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyModel</span><span class="hljs-params">(Model)</span>:</span>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>        super(MyModel, self).__init__()        self.conv2d = Conv2D(<span class="hljs-number">32</span>, <span class="hljs-number">3</span>, activation=<span class="hljs-string">'relu'</span>)        self.flatten = Flatten()        self.dense1 = Dense(<span class="hljs-number">128</span>, activation=<span class="hljs-string">'relu'</span>)        self.dense2 = Dense(<span class="hljs-number">10</span>, activation=<span class="hljs-string">'softmax'</span>)<span class="hljs-meta">    @tf.function</span>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">call</span><span class="hljs-params">(self, x)</span>:</span>        x = self.conv2d(x)        x = self.flatten(x)        x = self.dense1(x)        x = self.dense2(x)        <span class="hljs-keyword">return</span> xmodel = MyModel()model.compile(    optimizer=<span class="hljs-string">'adam'</span>,    loss=<span class="hljs-string">'sparse_categorical_crossentropy'</span>,    metrics=[<span class="hljs-string">'accuracy'</span>])</code></pre></div><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 训练</span><span class="hljs-comment"># 定义TensorBoard</span>tb = tf.keras.callbacks.TensorBoard(    log_dir=<span class="hljs-string">'log_keras'</span>,    histogram_freq=<span class="hljs-number">1</span>,    profile_batch=<span class="hljs-number">100000000</span>)<span class="hljs-comment"># 训练</span>model.fit(    x=x_train,    y=y_train,    epochs=<span class="hljs-number">10</span>,    validation_data=(x_test, y_test),    callbacks=[tb])</code></pre></div><p><img src="https://wx2.sbimg.cn/2020/07/02/2YT6I.png" srcset="/img/loading.gif" alt="Training"></p><h1 id="3-查看TensorBoard"><a href="#3-查看TensorBoard" class="headerlink" title="3. 查看TensorBoard"></a>3. 查看TensorBoard</h1><p>训练完成后，在命令行中进入之前指定的log_dir（即log_keras）的上一级目录中，执行命令：<br><div class="hljs"><pre><code class="hljs ada">tensorboard <span class="hljs-comment">--logdir log_keras</span></code></pre></div><br>启动了TensorBoard：</p><p><img src="https://wx2.sbimg.cn/2020/07/02/2YrWa.png" srcset="/img/loading.gif" alt="CMD"></p><p>在浏览器中打开给出的链接，可以查看TensorBoard：</p><p><img src="https://wx2.sbimg.cn/2020/07/02/2YOVR.png" srcset="/img/loading.gif" alt="TensorBoard"></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>TensorFlow2学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>深度学习</tag>
+      
+      <tag>TensorFlow</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Install COCOAPI on Windows 10</title>
     <link href="/2020/Install-COCOAPI-on-Windows-10/"/>
     <url>/2020/Install-COCOAPI-on-Windows-10/</url>
     
