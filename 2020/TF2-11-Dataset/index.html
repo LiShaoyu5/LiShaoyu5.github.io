@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>[TF2]10. Dataset - AiArt</title>
+  <title>[TF2]11. Dataset - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -211,26 +211,21 @@
               <div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
 print(tf.__version__)
 
-<span class="hljs-comment"># 2.2.0</span>
-```  
-
-`tf.data`是TensorFlow中用于构建输pipeline的一组`Dataset`的API。
-
-`Dataset`：TensorFlow中用于表示数据的类，可以看作是数据的有序列表。它有三个常用子类：
-- `FixedLengthRecordDataset`: 用于从二进制文件中读取定长记录的`Dataset`。
-- `TFRecordDataset`: 从一个或多个TFRecord文件中读取并组成记录的`Dataset`。
-- `TextLineDataset`: 从一个或多个文本文件中读取并组成记录的`Dataset`。
-
-<span class="hljs-comment"># 1. `Dataset`的基本使用</span>
-
-建立`Dataset`，有三种读取数据的方法：
-- `from_tensors`: 读取Tensor并合并，创建只有单个元素的`Dataset`。
-- `from_tensor_slices`: 将读入的Tensor按第一维分割，创建有多个元素的`Dataset`。
-- `from_generator`: 读取一个generator（可以调用iter()方法的对象），创建一个使用此generator生成数据的`Dataset`。
-
-
-```Python
-<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+<span class="hljs-comment"># 2.2.0</span></code></pre></div>
+<p><code>tf.data</code>是TensorFlow中用于构建输pipeline的一组<code>Dataset</code>的API。</p>
+<p><code>Dataset</code>：TensorFlow中用于表示数据的类，可以看作是数据的有序列表。它有三个常用子类：</p>
+<ul>
+<li><code>FixedLengthRecordDataset</code>: 用于从二进制文件中读取定长记录的<code>Dataset</code>。</li>
+<li><code>TFRecordDataset</code>: 从一个或多个TFRecord文件中读取并组成记录的<code>Dataset</code>。</li>
+<li><code>TextLineDataset</code>: 从一个或多个文本文件中读取并组成记录的<code>Dataset</code>。</li>
+</ul>
+<h1 id="1-Dataset的基本使用"><a href="#1-Dataset的基本使用" class="headerlink" title="1. Dataset的基本使用"></a>1. <code>Dataset</code>的基本使用</h1><p>建立<code>Dataset</code>，有三种读取数据的方法：</p>
+<ul>
+<li><code>from_tensors</code>: 读取Tensor并合并，创建只有单个元素的<code>Dataset</code>。</li>
+<li><code>from_tensor_slices</code>: 将读入的Tensor按第一维分割，创建有多个元素的<code>Dataset</code>。</li>
+<li><code>from_generator</code>: 读取一个generator（可以调用iter()方法的对象），创建一个使用此generator生成数据的<code>Dataset</code>。</li>
+</ul>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
 
 data1 = np.zeros(shape=(<span class="hljs-number">3</span>,<span class="hljs-number">5</span>,<span class="hljs-number">2</span>),dtype=np.float32)
 data2 = tf.constant([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>]])</code></pre></div>
@@ -702,7 +697,7 @@ test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name=<span class="hlj
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "[TF2]10. Dataset&nbsp;",
+        "[TF2]11. Dataset&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,
