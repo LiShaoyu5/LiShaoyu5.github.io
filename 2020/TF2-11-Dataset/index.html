@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tabicon.png">
+  <link rel="icon" type="image/png" href="/img/tabicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Li Shaoyu">
+  <meta name="keywords" content="">
+  <title>[TF2]10. Dataset - AiArt</title>
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/atom-one-dark.min.css" />
+  
+
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>AiArt</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-07-10 20:42">
+      July 10, 2020 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.9k 字
+    </span>
+  
+
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-post-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-post-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：July 10, 2020 pm
+                
+              </p>
+            
+            <article class="markdown-body">
+              <div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
+print(tf.__version__)
+
+<span class="hljs-comment"># 2.2.0</span>
+```  
+
+`tf.data`是TensorFlow中用于构建输pipeline的一组`Dataset`的API。
+
+`Dataset`：TensorFlow中用于表示数据的类，可以看作是数据的有序列表。它有三个常用子类：
+- `FixedLengthRecordDataset`: 用于从二进制文件中读取定长记录的`Dataset`。
+- `TFRecordDataset`: 从一个或多个TFRecord文件中读取并组成记录的`Dataset`。
+- `TextLineDataset`: 从一个或多个文本文件中读取并组成记录的`Dataset`。
+
+<span class="hljs-comment"># 1. `Dataset`的基本使用</span>
+
+建立`Dataset`，有三种读取数据的方法：
+- `from_tensors`: 读取Tensor并合并，创建只有单个元素的`Dataset`。
+- `from_tensor_slices`: 将读入的Tensor按第一维分割，创建有多个元素的`Dataset`。
+- `from_generator`: 读取一个generator（可以调用iter()方法的对象），创建一个使用此generator生成数据的`Dataset`。
+
+
+```Python
+<span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
+
+data1 = np.zeros(shape=(<span class="hljs-number">3</span>,<span class="hljs-number">5</span>,<span class="hljs-number">2</span>),dtype=np.float32)
+data2 = tf.constant([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>], [<span class="hljs-number">3</span>, <span class="hljs-number">4</span>]])</code></pre></div>
+<p>从Tensor读取数据，可以看出<code>from_tensors</code>和<code>from_generator</code>的区别：</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 合并元素，建立具有单个元素的Dataset</span>
+
+dataset1 = tf.data.Dataset.from_tensors(data1)
+print(<span class="hljs-string">'dataset1:'</span>)
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> dataset1:
+    print(line.shape)  <span class="hljs-comment"># 只有1个元素，形状为3*5*2</span>
+
+dataset2 = tf.data.Dataset.from_tensors(data2)
+print(<span class="hljs-string">'\ndataset2:'</span>)
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> dataset2:
+    print(line)  <span class="hljs-comment"># 只有1个元素，形状为2*2</span></code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/07/10/CgD8G.png" srcset="/img/loading.gif" alt="from_tensors"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 以输入tensor的第一维分割，建立具有多个元素的Dataset</span>
+
+dataset1 = tf.data.Dataset.from_tensor_slices(data1)
+print(<span class="hljs-string">'dataset1:'</span>)
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> dataset1:
+    print(line.shape)  <span class="hljs-comment"># 3*5*2的数据被分割为3个5*2的数据</span>
+
+dataset2 = tf.data.Dataset.from_tensor_slices(data2)
+print(<span class="hljs-string">'\ndataset2:'</span>)
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> dataset2:
+    print(line)  <span class="hljs-comment"># 2*2的数据被分割为2个1*2的数据</span></code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/07/10/CgCuK.png" srcset="/img/loading.gif" alt="from_tensor_slices"></p>
+<p>因此，读取数据集一般使用<code>from_tensors</code>方法：</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 从numpy读取数据</span>
+
+mnist = np.load(<span class="hljs-string">'./data/mnist.npz'</span>)
+x_train, y_train = mnist[<span class="hljs-string">'x_train'</span>],mnist[<span class="hljs-string">'y_train'</span>]
+x_train = np.expand_dims(x_train, axis=<span class="hljs-number">-1</span>)
+print(x_train.shape, y_train.shape)
+
+
+<span class="hljs-comment"># 输入数据为元组，在迭代时也可以成对地读取</span>
+mnist_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
+<span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+<span class="hljs-keyword">for</span> image, label <span class="hljs-keyword">in</span> mnist_dataset:
+    plt.title(label.numpy())
+    plt.imshow(image.numpy()[:, :,<span class="hljs-number">0</span>])
+    plt.show()
+    <span class="hljs-keyword">break</span></code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/07/10/CgkOR.png" srcset="/img/loading.gif" alt="mnist"></p>
+<p>可以看出，x_train和y_train均被分割为60000个Tensor，每个表示一张28*28的单通道图像对应一个label。</p>
+<p>从pandas读取数据的方法类似：</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 从pandas读取数据</span>
+<span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd
+df = pd.read_csv(<span class="hljs-string">'./data/tfdata/heart.csv'</span>)
+df.head()</code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/07/10/Cg2DI.png" srcset="/img/loading.gif" alt="pandas-1"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 处理非数值类型的数据</span>
+df[<span class="hljs-string">'thal'</span>] = pd.Categorical(df[<span class="hljs-string">'thal'</span>])
+df[<span class="hljs-string">'thal'</span>] = df.thal.cat.codes
+df.head()</code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/07/10/Cgpza.png" srcset="/img/loading.gif" alt="pandas-2"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 将数据分为特征和标签</span>
+value = df.pop(<span class="hljs-string">'target'</span>)
+print(df.shape, value.shape)</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/CgomT.png" srcset="/img/loading.gif" alt="pandas-3"></p>
+<div class="hljs"><pre><code class="hljs Python">dataset = tf.data.Dataset.from_tensor_slices((df.values, value.values))
+<span class="hljs-keyword">for</span> feature, target <span class="hljs-keyword">in</span> dataset:
+    print(feature.shape, feature)
+    print(target.shape, target)
+    <span class="hljs-keyword">break</span></code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/Cg3gw.png" srcset="/img/loading.gif" alt="pandas-4"></p>
+<p>对一个建立好的<code>Dataset</code>，常用到以下处理函数：</p>
+<ul>
+<li><code>Dataset.map(f)</code>: 对其中所有元素应用函数f，得到新的数据集。</li>
+<li><code>Dataset.shuffle(buffer_size)</code>: 打乱数据集。</li>
+<li><code>Dataset.batch(batch_size)</code>: 将数据集分成批次。</li>
+</ul>
+<h1 id="2-TFRecordDataset的使用"><a href="#2-TFRecordDataset的使用" class="headerlink" title="2. TFRecordDataset的使用"></a>2. <code>TFRecordDataset</code>的使用</h1><p><code>TFRecordDataset</code>常用于处理体积过大而无法一次性读入内存的数据集，TensorFlow能高效、快速地处理<code>.tfrecords</code>格式的文件。</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 定义Feature结构，告诉解码器每个Feature的类型是什么</span>
+feature_description = &#123;
+    <span class="hljs-string">'image'</span>: tf.io.FixedLenFeature([], tf.string),
+    <span class="hljs-string">'label'</span>: tf.io.FixedLenFeature([], tf.int64),
+&#125;
+
+<span class="hljs-comment"># 将TFRecord文件中的每一个序列化的tf.train.Example解码</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_parse_example</span><span class="hljs-params">(example_string)</span>:</span>
+    feature_dict = tf.io.parse_single_example(example_string, feature_description)
+    feature_dict[<span class="hljs-string">'image'</span>] = tf.io.decode_jpeg(feature_dict[<span class="hljs-string">'image'</span>])    <span class="hljs-comment"># 解码JPEG图片</span>
+    feature_dict[<span class="hljs-string">'image'</span>] = tf.image.resize(feature_dict[<span class="hljs-string">'image'</span>], [<span class="hljs-number">256</span>, <span class="hljs-number">256</span>]) / <span class="hljs-number">255.0</span>
+    <span class="hljs-keyword">return</span> feature_dict[<span class="hljs-string">'image'</span>], feature_dict[<span class="hljs-string">'label'</span>]
+
+train_dataset = tf.data.TFRecordDataset(<span class="hljs-string">"./data/tfdata/sub_train.tfrecords"</span>)    <span class="hljs-comment"># 读取 TFRecord 文件</span>
+
+train_dataset = train_dataset.map(_parse_example)
+
+<span class="hljs-keyword">for</span> image,label <span class="hljs-keyword">in</span> train_dataset:
+    print(image)
+    print(label)
+    <span class="hljs-keyword">break</span></code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/Cg6ao.png" srcset="/img/loading.gif" alt="TFRecordDataset"></p>
+<h1 id="3-TextLineDataset类的使用"><a href="#3-TextLineDataset类的使用" class="headerlink" title="3. TextLineDataset类的使用"></a>3. <code>TextLineDataset</code>类的使用</h1><p><code>TextLineDataset</code>提供了从文本文件读取生成数据集的简单方法，它将文本文件的一行视为一个Tensor。</p>
+<div class="hljs"><pre><code class="hljs Python">titanic_lines = tf.data.TextLineDataset([<span class="hljs-string">'./data/tfdata/train.csv'</span>,<span class="hljs-string">'./data/tfdata/eval.csv'</span>])
+
+<span class="hljs-comment"># 将一行string按，分开</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">data_func</span><span class="hljs-params">(line)</span>:</span>
+    line = tf.strings.split(line, sep = <span class="hljs-string">","</span>)
+    <span class="hljs-keyword">return</span> line
+
+titanic_data = titanic_lines.skip(<span class="hljs-number">1</span>).map(data_func)
+
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> titanic_data:
+    print(line)
+    <span class="hljs-keyword">break</span></code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/Cg9Il.png" srcset="/img/loading.gif" alt="TextLineDataset"></p>
+<h1 id="4-Dataset中的常用操作"><a href="#4-Dataset中的常用操作" class="headerlink" title="4. Dataset中的常用操作"></a>4. <code>Dataset</code>中的常用操作</h1><div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># flat_map(f)：将f映射到数据集中的每个元素，再将数据集展平</span>
+dataset = tf.data.Dataset.from_tensor_slices([[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>], [<span class="hljs-number">4</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>]])
+
+print(<span class="hljs-string">'dataset:'</span>)
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dataset:
+    print(i)
+
+print(<span class="hljs-string">'datasetq:'</span>)
+dataset2 = dataset.flat_map(<span class="hljs-keyword">lambda</span> x: tf.data.Dataset.from_tensor_slices(x))
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dataset2:
+    print(i)</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/CgQQ1.png" srcset="/img/loading.gif" alt="flat_map"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># interleave(f, cycle_length, block_length)：每次取出cycle_length个元素，应用f，然后每次放回block_length个直到此次结果全部放回</span>
+dataset = tf.data.Dataset.range(<span class="hljs-number">1</span>, <span class="hljs-number">6</span>)  <span class="hljs-comment"># [1, 2, 3, 4, 5]</span>
+dataset = dataset.interleave(
+    <span class="hljs-keyword">lambda</span> x: tf.data.Dataset.from_tensors(x).repeat(<span class="hljs-number">3</span>),
+    cycle_length=<span class="hljs-number">2</span>, block_length=<span class="hljs-number">2</span>)
+list(dataset.as_numpy_iterator())</code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/07/10/CgA72.png" srcset="/img/loading.gif" alt="interleave"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># zip：将两个数据集纵向连接</span>
+a = tf.data.Dataset.range(<span class="hljs-number">1</span>, <span class="hljs-number">4</span>)
+b = tf.data.Dataset.range(<span class="hljs-number">4</span>, <span class="hljs-number">7</span>)
+
+print(<span class="hljs-string">'dataset1:'</span>)
+dataset1 = tf.data.Dataset.zip((a, b))
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dataset1:
+    print(i)
+
+print(<span class="hljs-string">'dataset2:'</span>)
+dataset2 = tf.data.Dataset.zip((b, a))
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dataset2:
+    print(i)</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/CgjfA.png" srcset="/img/loading.gif" alt="zip"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># concatenate：将两个数据集横向连接</span>
+a = tf.data.Dataset.range(<span class="hljs-number">1</span>, <span class="hljs-number">4</span>)
+b = tf.data.Dataset.range(<span class="hljs-number">4</span>, <span class="hljs-number">7</span>)
+
+print(<span class="hljs-string">'dataset1:'</span>)
+dataset1 = tf.data.Dataset.concatenate(a, b)
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dataset1:
+    print(i)
+
+print(<span class="hljs-string">'dataset2:'</span>)
+dataset2 = tf.data.Dataset.concatenate(b, a)
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> dataset2:
+    print(i)</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/CgJh4.png" srcset="/img/loading.gif" alt="concatenate"></p>
+<h1 id="5-Dataset提升性能的方法"><a href="#5-Dataset提升性能的方法" class="headerlink" title="5. Dataset提升性能的方法"></a>5. <code>Dataset</code>提升性能的方法</h1><ul>
+<li><code>prefech()</code>：将准备数据与参数迭代同时执行。</li>
+<li><code>interleave()</code>：可以并行化读取数据。</li>
+<li><code>map()</code>：在函数中指定<code>num_parallel_calls</code>参数，使其中函数的应用并行执行。</li>
+<li><code>cache</code>：将数据集缓存，避免某些操作在每个epoch都执行。一般在<code>map()</code>后添加。</li>
+</ul>
+<h1 id="6-实例：Dogs-vs-Cats"><a href="#6-实例：Dogs-vs-Cats" class="headerlink" title="6. 实例：Dogs vs Cats"></a>6. 实例：Dogs vs Cats</h1><p>原比赛网址： <a href="https://www.kaggle.com/c/dogs-vs-cats" target="_blank" rel="noopener">https://www.kaggle.com/c/dogs-vs-cats</a> （已关闭提交，数据从此处下载）</p>
+<h2 id="6-1-准备数据"><a href="#6-1-准备数据" class="headerlink" title="6.1 准备数据"></a>6.1 准备数据</h2><p>为了方便读取并建立标签，手工将train和test文件夹内的文件分别分为dogs和cats两个文件夹。</p>
+<p>由于官网上提供的test数据没有标签，所以从train中取出5000个数据（dogs和cats各取后2500个）作为验证集。</p>
+<div class="hljs"><pre><code class="hljs Python">data_dir = <span class="hljs-string">'./data/dogs-vs-cats'</span>
+train_dogs_dir = data_dir + <span class="hljs-string">'/train/dogs/'</span>
+train_cats_dir = data_dir + <span class="hljs-string">'/train/cats/'</span>
+test_dogs_dir = data_dir + <span class="hljs-string">'/valid/dogs/'</span>
+test_cats_dir = data_dir + <span class="hljs-string">'/valid/cats/'</span></code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> os
+print(os.listdir(train_dogs_dir)[:<span class="hljs-number">5</span>], len(os.listdir(train_dogs_dir)))
+print(os.listdir(train_cats_dir)[:<span class="hljs-number">5</span>], len(os.listdir(train_cats_dir)))
+print(os.listdir(test_dogs_dir)[:<span class="hljs-number">5</span>], len(os.listdir(test_dogs_dir)))
+print(os.listdir(test_cats_dir)[:<span class="hljs-number">5</span>], len(os.listdir(test_cats_dir)))</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/CgcPJ.png" srcset="/img/loading.gif" alt="dir"></p>
+<div class="hljs"><pre><code class="hljs Python">train_dogs_filename = tf.constant([train_dogs_dir + filename <span class="hljs-keyword">for</span> filename <span class="hljs-keyword">in</span> os.listdir(train_dogs_dir)])
+train_cats_filename = tf.constant([train_cats_dir + filename <span class="hljs-keyword">for</span> filename <span class="hljs-keyword">in</span> os.listdir(train_cats_dir)])
+train_filenames = tf.concat([train_dogs_filename, train_cats_filename], axis=<span class="hljs-number">-1</span>)
+train_labels = tf.concat([tf.zeros(<span class="hljs-number">10000</span>), tf.ones(<span class="hljs-number">10000</span>)], axis=<span class="hljs-number">-1</span>)
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">9995</span>, <span class="hljs-number">10005</span>):
+    print(train_filenames[i].numpy(), train_labels[i].numpy())
+print(len(train_filenames), len(train_labels))</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/CgBO8.png" srcset="/img/loading.gif" alt="train"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 根据文件名读取图片，并resize为256*256</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">ReadImage</span><span class="hljs-params">(filename, label)</span>:</span>
+    img = tf.io.read_file(filename)
+    img = tf.image.decode_jpeg(img)
+    img = tf.image.resize(img, [<span class="hljs-number">256</span>, <span class="hljs-number">256</span>]) / <span class="hljs-number">255.0</span>
+    <span class="hljs-keyword">return</span> img, label
+
+<span class="hljs-comment"># 测试</span>
+img, label = ReadImage(tf.constant(<span class="hljs-string">'./data/dogs-vs-cats/train/cats/cat.10.jpg'</span>), tf.constant(<span class="hljs-number">0</span>))
+<span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt
+plt.imshow(img.numpy())</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/Cgd1m.png" srcset="/img/loading.gif" alt="train_img"></p>
+<div class="hljs"><pre><code class="hljs Python">train_dataset = tf.data.Dataset.from_tensor_slices((train_filenames, train_labels))
+train_dataset = train_dataset.map(ReadImage)
+
+<span class="hljs-keyword">for</span> img, label <span class="hljs-keyword">in</span> train_dataset:
+    print(img.shape, label)
+    plt.imshow(img.numpy())
+    <span class="hljs-keyword">break</span></code></pre></div>
+<p><img src="https://wx1.sbimg.cn/2020/07/10/Cgspd.png" srcset="/img/loading.gif" alt="train_dataset_img"></p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># train_dataset = train_dataset.shuffle(buffer_size=20000)</span>
+train_dataset = train_dataset.batch(<span class="hljs-number">32</span>)</code></pre></div>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-comment"># 使用同样的方法构建测试集</span>
+test_dogs_filename = tf.constant([test_dogs_dir + filename <span class="hljs-keyword">for</span> filename <span class="hljs-keyword">in</span> os.listdir(test_dogs_dir)])
+test_cats_filename = tf.constant([test_cats_dir + filename <span class="hljs-keyword">for</span> filename <span class="hljs-keyword">in</span> os.listdir(test_cats_dir)])
+test_filenames = tf.concat([test_dogs_filename, test_cats_filename], axis=<span class="hljs-number">-1</span>)
+test_labels = tf.concat([tf.zeros(<span class="hljs-number">2500</span>), tf.ones(<span class="hljs-number">2500</span>)], axis=<span class="hljs-number">-1</span>)
+test_dataset = tf.data.Dataset.from_tensor_slices((test_filenames, test_labels))
+test_dataset = test_dataset.map(ReadImage)
+test_dataset = test_dataset.shuffle(<span class="hljs-number">5000</span>)
+test_dataset = test_dataset.batch(<span class="hljs-number">32</span>)
+```    
+
+<span class="hljs-comment">## 6.2 构建模型</span>
+
+```Python
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CNNModel</span><span class="hljs-params">(tf.keras.models.Model)</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span>
+        super(CNNModel, self).__init__()
+        self.conv1 = tf.keras.layers.Conv2D(<span class="hljs-number">32</span>, <span class="hljs-number">3</span>, activation=<span class="hljs-string">'relu'</span>)
+        self.maxpool1 = tf.keras.layers.MaxPooling2D()
+        self.conv2 = tf.keras.layers.Conv2D(<span class="hljs-number">32</span>, <span class="hljs-number">1</span>, activation=<span class="hljs-string">'relu'</span>)
+        self.maxpool2 = tf.keras.layers.MaxPooling2D()
+        self.flatten = tf.keras.layers.Flatten()
+        self.d1 = tf.keras.layers.Dense(<span class="hljs-number">64</span>, activation=<span class="hljs-string">'relu'</span>)
+        self.d2 = tf.keras.layers.Dense(<span class="hljs-number">2</span>, activation=<span class="hljs-string">'softmax'</span>)
+
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">call</span><span class="hljs-params">(self, x)</span>:</span>
+        x = self.conv1(x)
+        x = self.maxpool1(x)
+        x = self.conv2(x)
+        x = self.maxpool2(x)       
+        x = self.flatten(x)
+        x = self.d1(x)
+        x = self.d2(x)
+        <span class="hljs-keyword">return</span> x
+
+model = CNNModel()
+
+loss_object = tf.keras.losses.SparseCategoricalCrossentropy()  <span class="hljs-comment">#label 没有one-hot</span>
+
+optimizer = tf.keras.optimizers.Adam(learning_rate=<span class="hljs-number">0.001</span>)
+
+train_loss = tf.keras.metrics.Mean(name=<span class="hljs-string">'train_loss'</span>)
+train_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name=<span class="hljs-string">'train_accuracy'</span>)
+
+test_loss = tf.keras.metrics.Mean(name=<span class="hljs-string">'test_loss'</span>)
+test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(name=<span class="hljs-string">'test_accuracy'</span>)
+
+
+<span class="hljs-meta">@tf.function</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">train_step</span><span class="hljs-params">(images, labels)</span>:</span>
+    <span class="hljs-keyword">with</span> tf.GradientTape() <span class="hljs-keyword">as</span> tape:
+        predictions = model(images)
+        loss = loss_object(labels, predictions)
+    gradients = tape.gradient(loss, model.trainable_variables)
+    optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+
+    train_loss(loss)
+    train_accuracy(labels, predictions)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">test_step</span><span class="hljs-params">(images, labels)</span>:</span>
+    predictions = model(images)
+    t_loss = loss_object(labels, predictions)
+
+    test_loss(t_loss)
+    test_accuracy(labels, predictions)</code></pre></div>
+<h2 id="6-3-训练模型"><a href="#6-3-训练模型" class="headerlink" title="6.3 训练模型"></a>6.3 训练模型</h2><div class="hljs"><pre><code class="hljs Python">EPOCHS = <span class="hljs-number">5</span>
+<span class="hljs-keyword">for</span> epoch <span class="hljs-keyword">in</span> range(EPOCHS):
+    <span class="hljs-comment"># 在下一个epoch开始时，重置评估指标</span>
+    train_loss.reset_states()
+    train_accuracy.reset_states()
+    test_loss.reset_states()
+    test_accuracy.reset_states()
+
+    <span class="hljs-keyword">for</span> images, labels <span class="hljs-keyword">in</span> train_dataset:
+        train_step(images, labels)
+
+    <span class="hljs-keyword">for</span> images, labels <span class="hljs-keyword">in</span> test_dataset:
+        test_step(images, labels)
+
+    template = <span class="hljs-string">'Epoch &#123;&#125;, Loss: &#123;&#125;, Accuracy: &#123;&#125;, Test Loss: &#123;&#125;, Test Accuracy: &#123;&#125;'</span>
+    print(template.format(epoch + <span class="hljs-number">1</span>,
+                          train_loss.result(),
+                          train_accuracy.result() * <span class="hljs-number">100</span>,
+                          test_loss.result(),
+                          test_accuracy.result() * <span class="hljs-number">100</span>
+                         ))</code></pre></div>
+<p><img src="https://wx2.sbimg.cn/2020/07/10/CgLaY.png" srcset="/img/loading.gif" alt="train"></p>
+
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/TensorFlow2%E5%AD%A6%E4%B9%A0/">TensorFlow2学习</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Python/">Python</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/TensorFlow/">TensorFlow</a>
+                    
+                  </div>
+                
+              </div>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/TF2-10-TensorBoard/">
+                        <span class="hidden-mobile">[TF2]10. TensorBoard</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "[TF2]10. Dataset&nbsp;",
+      ],
+      cursorChar: "〆",
+      typeSpeed: 50,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.staticfile.org/mathjax/3.0.5/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
