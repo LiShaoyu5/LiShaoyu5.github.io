@@ -288,7 +288,7 @@ y_m
 <script type="math/tex; mode=display">\frac{\partial ^2 E(\hat{\mathbf{w}})}{\partial \hat{\mathbf{w}}\partial \hat{\mathbf{w}}^T}=2\mathbf{X}^T\mathbf{X}</script><p>推导过程：<br><img src="https://wx1.sbimg.cn/2020/08/04/oMF2R.jpg" srcset="/img/loading.gif" alt="多元线性回归-二阶导数"></p>
 <p>假设$\mathbf{X}^T\mathbf{X}$是正定矩阵（现实中往往不是，此时按照之后的方法可以求得多个解，都可使均方差最小化，因此这里可以假设它是正定的以方便证明），则$E(\hat{\mathbf{w}})$是关于$\hat{\mathbf{w}}$的凸函数。</p>
 <p>因此，使得$ \frac{\partial E(\hat{\mathbf{w}})}{\partial \hat{\mathbf{w}}}=0$的$\hat{\mathbf{w}}^*$使得函数取得最小值：</p>
-<script type="math/tex; mode=display"> </script><p>推导过程：<br><img src="https://wx1.sbimg.cn/2020/08/04/oMyba.jpg" srcset="/img/loading.gif" alt="多元线性回归-最优解"></p>
+<script type="math/tex; mode=display">\hat{\mathbf{w}}^*=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}</script><p>推导过程：<br><img src="https://wx1.sbimg.cn/2020/08/04/oMyba.jpg" srcset="/img/loading.gif" alt="多元线性回归-最优解"></p>
 
             </article>
             <hr>
