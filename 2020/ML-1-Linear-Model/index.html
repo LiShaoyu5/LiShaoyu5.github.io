@@ -289,20 +289,20 @@ y_m
 <p>假设$\mathbf{X}^T\mathbf{X}$是正定矩阵（现实中往往不是，此时按照之后的方法可以求得多个解，都可使均方差最小化，因此这里可以假设它是正定的以方便证明），则$E(\hat{\mathbf{w}})$是关于$\hat{\mathbf{w}}$的凸函数。</p>
 <p>因此，使得$ \frac{\partial E(\hat{\mathbf{w}})}{\partial \hat{\mathbf{w}}}=0$的$\hat{\mathbf{w}}^*$使得函数取得最小值：</p>
 <script type="math/tex; mode=display">\hat{\mathbf{w}}^*=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}</script><p>推导过程：<br><img src="https://wx1.sbimg.cn/2020/08/04/oMyba.jpg" srcset="/img/loading.gif" alt="多元线性回归-最优解"></p>
-<h1 id="2-对数几率回归"><a href="#2-对数几率回归" class="headerlink" title="2. 对数几率回归"></a>2. 对数几率回归</h1><p>线性回归方法使用线性模型完成了回归任务。实际上，线性模型也可以用于分类任务。</p>
-<h2 id="2-1-广义线性模型"><a href="#2-1-广义线性模型" class="headerlink" title="2.1 广义线性模型"></a>2.1 广义线性模型</h2><p>在上一节，线性模型的学习目标是让预测值$f(x)$逼近真实值$y$。我们也可以让$f(x)$去逼近$y$的衍生物。例如，如果认为$y$是以指数方式变化，就可以让$f(x)$逼近$\ln y$：</p>
+<h2 id="2-对数几率回归"><a href="#2-对数几率回归" class="headerlink" title="2. 对数几率回归"></a>2. 对数几率回归</h2><p>线性回归方法使用线性模型完成了回归任务。实际上，线性模型也可以用于分类任务。</p>
+<h3 id="2-1-广义线性模型"><a href="#2-1-广义线性模型" class="headerlink" title="2.1 广义线性模型"></a>2.1 广义线性模型</h3><p>在上一节，线性模型的学习目标是让预测值$f(x)$逼近真实值$y$。我们也可以让$f(x)$去逼近$y$的衍生物。例如，如果认为$y$是以指数方式变化，就可以让$f(x)$逼近$\ln y$：</p>
 <script type="math/tex; mode=display">\ln y=w^Tx+b</script><p>这种线性模型被称作<strong>对数线性回归</strong>，它实际上是在让$e^{w^Tx+b}$逼近$y$。</p>
 <p>由此推广，    可以让$w^Tx+b$去逼近$g(y)$，其中$g(·)$是任意单调可微函数，即：</p>
 <script type="math/tex; mode=display">g(y)=w^Tx+b</script><p>也可表示为：</p>
 <script type="math/tex; mode=display">y=g^{-1}(w^Tx+b)</script><p>这就是<strong>广义线性模型</strong>，其中$g(·)$称为<strong>联系函数</strong>。</p>
-<h2 id="2-2-对数几率回归"><a href="#2-2-对数几率回归" class="headerlink" title="2.2 对数几率回归"></a>2.2 对数几率回归</h2><p>由广义线性模型可以想到，如果要用线性模型做分类任务，只需要找到一个单调可微的联系函数，将线性回归的预测值和真实标记值联系起来即可。</p>
+<h3 id="2-2-对数几率回归"><a href="#2-2-对数几率回归" class="headerlink" title="2.2 对数几率回归"></a>2.2 对数几率回归</h3><p>由广义线性模型可以想到，如果要用线性模型做分类任务，只需要找到一个单调可微的联系函数，将线性回归的预测值和真实标记值联系起来即可。</p>
 <p>从二分类问题开始考虑，<strong>对数几率函数</strong>（Logistic Function）是一个常用的函数：</p>
 <script type="math/tex; mode=display">y=\frac{1}{1+e^{-z}}</script><p>它是单位阶跃函数（由于不连续而无法在此使用）的替代：<br><img src="https://wx2.sbimg.cn/2020/08/05/o03PA.png" srcset="/img/loading.gif" alt="联系函数"></p>
 <p>将对数几率函数作为$g^{-1}(·)$，得到：</p>
 <script type="math/tex; mode=display">y=\frac{1}{1+e^{-(w^Tx+b)}}</script><p>求逆函数，可以得到此时线性回归预测值的目标函数：</p>
 <script type="math/tex; mode=display">\ln{\frac{y}{1-y}}=w^Tx+b</script><p>将$y$视作样本$x$是正例的可能性，则$1-y$是反例可能性，两者比值$\frac{y}{1-y}$称为<strong>几率</strong>（odds）。对它取对数则得到<strong>对数几率</strong>（log odds，又称logit）：$\ln{\frac{y}{1-y}}$。</p>
 <p>这样，就可以用线性回归的预测结果去逼近真实标记的对数几率，这个模型称作<strong>对数几率回归</strong>，是一种分类学习方法。</p>
-<h2 id="2-3-对数几率回归的参数求解"><a href="#2-3-对数几率回归的参数求解" class="headerlink" title="2.3 对数几率回归的参数求解"></a>2.3 对数几率回归的参数求解</h2><p>根据上节内容，对数几率回归可以表示为：</p>
+<h3 id="2-3-对数几率回归的参数求解"><a href="#2-3-对数几率回归的参数求解" class="headerlink" title="2.3 对数几率回归的参数求解"></a>2.3 对数几率回归的参数求解</h3><p>根据上节内容，对数几率回归可以表示为：</p>
 <script type="math/tex; mode=display">\ln{\frac{p(y=1|x)}{p(y=0|x)}}=w^Tx+b</script><p>显然有：</p>
 <script type="math/tex; mode=display">p(y=1|x)=\frac{e^{w^Tx+b}}{1+e^{w^Tx+b}}</script><script type="math/tex; mode=display">p(y=0|x)=\frac{1}{1+e^{w^Tx+b}}</script><p>接下来，就可以用极大似然法估计$w$和$b$。</p>
 <blockquote>
