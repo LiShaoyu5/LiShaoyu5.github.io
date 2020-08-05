@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>[机器学习理论]线性回归 - AiArt</title>
+  <title>[机器学习理论]线性模型 - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.7k 字
+      3k 字
     </span>
   
 
@@ -203,7 +203,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：August 4, 2020 pm
+                  本文最后更新于：August 5, 2020 am
                 
               </p>
             
@@ -289,6 +289,33 @@ y_m
 <p>假设$\mathbf{X}^T\mathbf{X}$是正定矩阵（现实中往往不是，此时按照之后的方法可以求得多个解，都可使均方差最小化，因此这里可以假设它是正定的以方便证明），则$E(\hat{\mathbf{w}})$是关于$\hat{\mathbf{w}}$的凸函数。</p>
 <p>因此，使得$ \frac{\partial E(\hat{\mathbf{w}})}{\partial \hat{\mathbf{w}}}=0$的$\hat{\mathbf{w}}^*$使得函数取得最小值：</p>
 <script type="math/tex; mode=display">\hat{\mathbf{w}}^*=(\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}</script><p>推导过程：<br><img src="https://wx1.sbimg.cn/2020/08/04/oMyba.jpg" srcset="/img/loading.gif" alt="多元线性回归-最优解"></p>
+<h1 id="2-对数几率回归"><a href="#2-对数几率回归" class="headerlink" title="2. 对数几率回归"></a>2. 对数几率回归</h1><p>线性回归方法使用线性模型完成了回归任务。实际上，线性模型也可以用于分类任务。</p>
+<h2 id="2-1-广义线性模型"><a href="#2-1-广义线性模型" class="headerlink" title="2.1 广义线性模型"></a>2.1 广义线性模型</h2><p>在上一节，线性模型的学习目标是让预测值$f(x)$逼近真实值$y$。我们也可以让$f(x)$去逼近$y$的衍生物。例如，如果认为$y$是以指数方式变化，就可以让$f(x)$逼近$\ln y$：</p>
+<script type="math/tex; mode=display">\ln y=w^Tx+b</script><p>这种线性模型被称作<strong>对数线性回归</strong>，它实际上是在让$e^{w^Tx+b}$逼近$y$。</p>
+<p>由此推广，    可以让$w^Tx+b$去逼近$g(y)$，其中$g(·)$是任意单调可微函数，即：</p>
+<script type="math/tex; mode=display">g(y)=w^Tx+b</script><p>也可表示为：</p>
+<script type="math/tex; mode=display">y=g^{-1}(w^Tx+b)</script><p>这就是<strong>广义线性模型</strong>，其中$g(·)$称为<strong>联系函数</strong>。</p>
+<h2 id="2-2-对数几率回归"><a href="#2-2-对数几率回归" class="headerlink" title="2.2 对数几率回归"></a>2.2 对数几率回归</h2><p>由广义线性模型可以想到，如果要用线性模型做分类任务，只需要找到一个单调可微的联系函数，将线性回归的预测值和真实标记值联系起来即可。</p>
+<p>从二分类问题开始考虑，<strong>对数几率函数</strong>（Logistic Function）是一个常用的函数：</p>
+<script type="math/tex; mode=display">y=\frac{1}{1+e^{-z}}</script><p>它是单位阶跃函数（由于不连续而无法在此使用）的替代：<br><img src="https://wx2.sbimg.cn/2020/08/05/o03PA.png" srcset="/img/loading.gif" alt="联系函数"></p>
+<p>将对数几率函数作为$g^{-1}(·)$，得到：</p>
+<script type="math/tex; mode=display">y=\frac{1}{1+e^{-(w^Tx+b)}}</script><p>求逆函数，可以得到此时线性回归预测值的目标函数：</p>
+<script type="math/tex; mode=display">\ln{\frac{y}{1-y}}=w^Tx+b</script><p>将$y$视作样本$x$是正例的可能性，则$1-y$是反例可能性，两者比值$\frac{y}{1-y}$称为<strong>几率</strong>（odds）。对它取对数则得到<strong>对数几率</strong>（log odds，又称logit）：$\ln{\frac{y}{1-y}}$。</p>
+<p>这样，就可以用线性回归的预测结果去逼近真实标记的对数几率，这个模型称作<strong>对数几率回归</strong>，是一种分类学习方法。</p>
+<h2 id="2-3-对数几率回归的参数求解"><a href="#2-3-对数几率回归的参数求解" class="headerlink" title="2.3 对数几率回归的参数求解"></a>2.3 对数几率回归的参数求解</h2><p>根据上节内容，对数几率回归可以表示为：</p>
+<script type="math/tex; mode=display">\ln{\frac{p(y=1|x)}{p(y=0|x)}}=w^Tx+b</script><p>显然有：</p>
+<script type="math/tex; mode=display">p(y=1|x)=\frac{e^{w^Tx+b}}{1+e^{w^Tx+b}}</script><script type="math/tex; mode=display">p(y=0|x)=\frac{1}{1+e^{w^Tx+b}}</script><p>接下来，就可以用极大似然法估计$w$和$b$。</p>
+<blockquote>
+<p><strong>极大似然估计</strong>：设总体的概率密度函数（或分布律）为$f(y,w_1,w_2,…,w_k)$，$y_1,y_2,…,y_m$是从该总体中抽出的样本。因为$y_1,y_2,…,y_m$相互独立且同分布，所以它们的联合概率密度函数（或联合概率）为：</p>
+<script type="math/tex; mode=display">L(y_1,y_2,...,y_m;w_1,w_2,...,w_k)=\prod_{i=i}^{m} f(y_i,w_1,w_2,...,w_k)</script><p>其中，$w_1,w_2,…,y_k$是固定但未知的参数。当已经拥有一组样本观测值$y_1,y_2,…,y_m$，要估计未知参数时，一种直观的想法就是，使得当前样本出现概率最大的参数组可能是真实的。这就是极大似然估计。<br>通常记$ L(y_1,y_2,…,y_m;w_1,w_2,…,w_k)=L(w) $，并称其为<strong>似然函数</strong>，于是求$w$的极大似然估计问题就变成了求$L(w)$的最大值点。<br>由于对数函数是单调递增的，所以$\ln{L(w)}$与$L(w)$有相同的最大值点。通过取对数，可以实现如下转换：</p>
+<script type="math/tex; mode=display">\ln{L(w)}=\ln{(\prod_{i=i}^{m} f(y_i,w_1,w_2,...,w_k))}=\sum_{i=i}^{m} \ln{f(y_i,w_1,w_2,...,w_k)}</script><p>称$\ln{L(w)}$为<strong>对数似然函数</strong>，在很多情况下，求它的最大值点更简单。</p>
+</blockquote>
+<p>利用多元线性回归中用到的思想，将$w$和$b$合并为参数$\beta$，令$\hat{x}=(x;1)$，则上面得到的概率表达式可简化为：</p>
+<script type="math/tex; mode=display">p_1(\hat{x};\beta)=p(y=1|x)=\frac{e^{\beta^T\hat{x}}}{1+e^{\beta^T\hat{x}}}</script><script type="math/tex; mode=display">p_0(\hat{x};\beta)=p(y=0|x)=\frac{1}{1+e^{\beta^T\hat{x}}}</script><p>由于当$y=1$时，概率为$p_1$；$y=0$时，概率为$p_0$。所以可以从上面两个式子得到随机变量$y$的分布律（这里给出两种满足需要的表达式，后续的推导使用第一种。使用第二种也可得出相同结果）：</p>
+<script type="math/tex; mode=display">p(y|x;w,b)=y·p_1(\hat{x};\beta)+(1-y)·p_0(\hat{x};\beta)</script><script type="math/tex; mode=display">p(y|x;w,b)=[p_1(\hat{x};\beta)]^y[p_0(\hat{x};\beta)]^{1-y}</script><p>接下来，就可以将对数似然函数中的概率密度函数替换为$p(y|x;w,b)$：</p>
+<script type="math/tex; mode=display">l(w,b):=\ln{L(w)}=\sum_{i=i}^{m} \ln{(y_i·p_1(\hat{x}_i;\beta)+(1-y_i)·p_0(\hat{x}_i;\beta))}</script><p>将$p_1$和$p_0$代入得：</p>
+<script type="math/tex; mode=display">l(w,b)=\sum_{i=i}^{m} \ln{(\frac{y_ie^{\beta^T\hat{x}_i}}{1+e^{\beta^T\hat{x}_i}}+\frac{1-y_i}{1+e^{\beta^T\hat{x}_i}})}</script><p>化简得（由于将其作为损失函数，目标是将损失函数最小化，所以对化简结果取负）：</p>
+<script type="math/tex; mode=display">l(w,b)=\sum_{i=i}^{m} (-y_i\beta^T\hat{x}_i+\ln{(1+e^{\beta^T\hat{x}_i})})</script><p>推导过程：<br><img src="https://wx1.sbimg.cn/2020/08/05/o0ys6.jpg" srcset="/img/loading.gif" alt="对数几率回归-对数似然函数化简"></p>
 
             </article>
             <hr>
@@ -461,7 +488,7 @@ y_m
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "[机器学习理论]线性回归&nbsp;",
+        "[机器学习理论]线性模型&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,
