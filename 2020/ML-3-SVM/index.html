@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>[机器学习理论]决策树 - AiArt</title>
+  <title>[机器学习理论]支持向量机 - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -151,8 +151,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-08-06 15:25">
-      August 6, 2020 pm
+    <time datetime="2020-08-08 09:18">
+      August 8, 2020 am
     </time>
   </div>
 
@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.5k 字
+      1.9k 字
     </span>
   
 
@@ -208,51 +208,56 @@
               </p>
             
             <article class="markdown-body">
-              <h1 id="决策树"><a href="#决策树" class="headerlink" title="决策树"></a>决策树</h1><p><strong>决策树</strong>（Decision Tree）是一种在分类问题中常用的模型，包含一个根结点、若干个内部结点和若干个叶结点。其中叶结点对应于决策结果，而其他结点对应于一个属性测试（决策过程中的一次判断）。每个结点中都包含了全体样本中的一部分，而根节点包含样本全集。</p>
-<p>决策树的基本生成算法如下（来自周志华《机器学习》图4.2）：<br><img src="https://wx2.sbimg.cn/2020/08/06/o6n2T.png" srcset="/img/loading.gif" alt="决策树-算法"></p>
-<h2 id="1-划分属性选择"><a href="#1-划分属性选择" class="headerlink" title="1. 划分属性选择"></a>1. 划分属性选择</h2><p>从决策树的生成算法中可知，生成一棵决策树，选择最优划分属性是至关重要的一步。既然有多个可以用来将集合进行划分的属性，那就需要一个评价指标来量化每个属性划分集合的效果（即哪个属性在当前结点中拥有更好的分类能力）。</p>
-<h3 id="1-1-信息增益"><a href="#1-1-信息增益" class="headerlink" title="1.1 信息增益"></a>1.1 信息增益</h3><p><strong>熵</strong>（Entropy）用来表示随机变量的不确定性。在分类问题中，一个集合的分类程度越低，其熵就越大。因此，可以使用<strong>信息熵</strong>来衡量一个集合的纯度：</p>
-<script type="math/tex; mode=display">Ent(D)=-\sum_{k=1}^{|\gamma|} p_k\log_2p_k</script><p>其中，$p_k$表示集合$D$中第$k$类样本所占比例。从定义可知，$ 0\leq Ent(D)k\leq \log \gamma$，其值越小，集合纯度越高。</p>
-<blockquote>
-<p>这里省略了最值的推导过程，仅给出思路：<br>所有类别概率相同时，Ent(D)取得最大值。可以证明-Ent(D)是一个凸函数，且只有等式约束，所以能令其拉格朗日函数的一阶偏导数等于0的点满足KKT条件，使得此函数取得最小值（即Ent(D)的最大值）。<br>仅有一个类别时，Ent(D)取得最小值0。此求和函数中每一项形式均相同，可对任一项求一、二阶导数得到其最小值为0.当求和函数中每一项取最小值时，整体取最小值。考虑约束（概率之和为1），则Ent(D)大于等于0，使任一样本概率取1，其余取0时，Ent(D)取得最小值0。<br>需要注意，在信息熵的计算中，定义$0·log_20=0$。</p>
-</blockquote>
-<p>有了衡量集合纯度的标准，就可以使用它来比较集合划分前后获得的纯度提升。假设使用属性a进行一次划分，产生了$V$个分支结点，其中第$v$个结点记作$D^v$。对每个分支结点计算信息熵，再乘以其权重（$D^v$与$D$的样本数之比），就可以得到划分后的信息熵，也就可以计算这次划分的<strong>信息增益</strong>：</p>
-<script type="math/tex; mode=display">Gain(D,a)=Ent(D)-\sum_{v=1}^V\frac{|D^v|}{|D|}Ent(D^v)</script><p>其中，记$ H(D|a)=\sum_{v=1}^V\frac{|D^v|}{|D|}Ent(D^v) $，称作<strong>条件熵</strong>，表示集合$D$在已知属性a的样本取值的情况下，集合的不确定性。</p>
-<p>用划分前的信息熵减去划分后的信息熵，得到的信息增益越大，说明当前结点下属性a的分类能力越强。因此，可以以信息增益为标准选择每个结点的划分属性，如<strong>ID3算法</strong>，生成过程与前面图中的生成算法基本一致，区别在于：</p>
+              <h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><h2 id="1-SVM的原始模型"><a href="#1-SVM的原始模型" class="headerlink" title="1. SVM的原始模型"></a>1. SVM的原始模型</h2><p>在分类问题中，最基本的想法就是找到合适的超平面，将不同类别的样本划分来开。但是如下图所示（此图表示一个有2个特征的二分类问题），满足条件的超平面可能有很多，需要有一个标准评价找到的超平面的分类性能：</p>
+<p><img src="https://wx2.sbimg.cn/2020/08/08/ohN17.png" srcset="/img/loading.gif" alt="超平面"></p>
+<p>直观上看，上图中红色的超平面应当具有最好的泛化能力，因为实际的样本可能比训练集中的样本（即图中出现的点）更接近超平面，而离所有样本更“远”的超平面显然是最为鲁棒的。</p>
+<p>超平面可以用一个线性方程表示：</p>
+<script type="math/tex; mode=display">\mathbf{w}^T\mathbf{x}+b=0</script><p>其中，$\mathbf{w}=(w_1;w_2;…;w_d)$为法向量，决定了超平面的方向；$b$为位移项，决定了超平面与原点之间的距离。由于$\mathbf{w}$和$b$决定了一个超平面，所以可以讲该超平面记作$(\mathbf{w},b)$。</p>
+<p>样本空间中任意点$\mathbf{x}$到超平面$(\mathbf{w},b)$的距离为：</p>
+<script type="math/tex; mode=display">r=\frac{|\mathbf{w}^T\mathbf{x}+b|}{||\mathbf{w}||}</script><p>推导过程：<br><img src="https://wx1.sbimg.cn/2020/08/08/osrel.jpg" srcset="/img/loading.gif" alt="距离"></p>
+<p>下面给出关于间隔的两个定义：</p>
 <ul>
-<li>第8行：选择信息增益最大的属性$a_*$。</li>
-<li>第9行开始的循环中：若$a_*$带来的信息增益小于阈值$\epsilon$，则将该结点设为叶结点并返回。</li>
+<li><p>函数间隔：定义超平面关于样本$(x_i,y_i)$的函数间隔为$\hat{\gamma}_i=\gamma_i(\mathbf{w}^T\mathbf{x}+b)$，其中$y_i\in{-1,+1}$；超平面关于数据集的样本间隔为$\hat{\gamma}=\underset{i=1,2,…,m}{min}\hat{\gamma}_i$。<br>  可以看出，当且仅当超平面能将所有样本正确分类时，所有$\hat{\gamma}_i&gt;0$恒成立且$\hat{\gamma}&gt;0$；当存在未正确分类的样本时，$\hat{\gamma}$是错误分类的样本中距离当前超平面最远的一个。<br>  函数间隔能够用于检验超平面能否对数据集进行完全正确的分类，但不能做到找到最优的超平面。</p>
+</li>
+<li><p>几何间隔：定义超平面关于样本$(x_i,y_i)$的几何间隔为$\gamma_i=\frac{\hat{\gamma}_i}{||w||}$；超平面关于数据集的集合间隔为$\gamma=\underset{i=1,2,…,m}{min}\gamma_i$。<br>  从函数间隔的公式可知，当分类完全正确时，$\gamma$为距离超平面最近的点与超平面的间距。</p>
+</li>
 </ul>
-<p>选择信息增益作为选择划分属性的标准时，<strong>取值较多的特征容易有更大的信息增益</strong>：例如，如果存在一个属性，其在每个样本上的取值都不同（如编号），那此属性的信息增益必然最大（划分后的信息熵为0）。以此类推，取值较多的属性可能会对决策树带来不利影响，降低其泛化能力。</p>
-<h3 id="1-2-增益率"><a href="#1-2-增益率" class="headerlink" title="1.2 增益率"></a>1.2 增益率</h3><p>针对上节末尾提出的问题，应当对信息增益作出改进。因此，在<strong>C4.5算法</strong>中，提出了<strong>增益率</strong>的概念：</p>
-<script type="math/tex; mode=display">Gain\_ratio=\frac{Gain(D,a)}{IV(a)}</script><script type="math/tex; mode=display">IV(a)=-\sum_{v=1}^V\frac{|D^v|}{|D|}log_2\frac{|D^v|}{|D|}</script><p>其中，$IV(a)$称为属性a的固有值（intrinsic value）。属性a的取值越多，$IV(a)$的值越大。这样，就限制了取值较多的属性的影响。</p>
-<p>但是，从定义可以看出，与信息增益相反，增益率更倾向于选择取值较少的属性作为划分属性。因此，C4.5算法并没有直接使用它作为标准，而是先选出信息增益高于平均水平的属性，再从中选择增益率更高的属性作为划分属性。</p>
-<h3 id="1-3-基尼指数"><a href="#1-3-基尼指数" class="headerlink" title="1.3 基尼指数"></a>1.3 基尼指数</h3><p><strong>CART算法</strong>（Classification and Regression Tree）中使用了<strong>基尼指数</strong>衡量集合的纯度：</p>
-<script type="math/tex; mode=display">Gini(D)=\sum_{k=1}^{|\gamma|}\sum_{ {k}'\neq k}p_kp_{ {k}'}=\sum_{k=1}^{|\gamma|}p_k(1-p_k)=1- \sum_{k=1}^{|\gamma|}p_k^2</script><p>基尼指数反映了从一个集合中随机抽出两个样本，其类别不一致的概率，因此基尼指数越小，集合纯度越高。</p>
-<p>类似的，属性a的基尼指数定义为：</p>
-<script type="math/tex; mode=display">Gini_index(D,a)=\sum_{v=1}^V\frac{|D^v|}{|D|}Gini(D^v)</script><p>这样，就可以选择使得划分后基尼指数最小的属性作为划分属性。</p>
-<h2 id="2-剪枝"><a href="#2-剪枝" class="headerlink" title="2. 剪枝"></a>2. 剪枝</h2><p>在上面提出的决策树生成算法中，结点停止分裂（成为叶结点）的条件是最优划分属性带来的增益小于某个阈值，或结点已经不能再划分。为了尽可能提高纯度（取决于算法中使用的评价标准），结点划分过程可能会不断重复，甚至将数据集本身的一些特性当成数据的一般特性，导致过拟合现象，使得模型的泛化能力低。</p>
-<p>为了降低过拟合，可以从算法层面主动去掉一些对模型泛化能力提升不利的分支，这就是<strong>剪枝</strong>（pruning），决策树模型处理过拟合的主要方法。</p>
-<h3 id="2-1-预剪枝"><a href="#2-1-预剪枝" class="headerlink" title="2.1 预剪枝"></a>2.1 预剪枝</h3><p><strong>预剪枝</strong>，指在结点划分前进行估计，如果这次划分不能带来泛化能力的提升，就取消划分，将此结点标记为叶结点。</p>
-<blockquote>
-<p>评价泛化能力常用的方法是预留出一部分样本作为<strong>验证集</strong>，在其上验证模型。</p>
-</blockquote>
-<p>可以看出，预剪枝方法不仅能够预防过拟合，而且能够降低训练决策树的时间和资源开销，因为它组织了大量结点的展开和后续计算。</p>
-<p>但是，考虑到情况：有的结点本身展开会导致模型泛化能力的暂时降低，但其后续结点的展开能提升模型性能。预剪枝方法有可能会导致模型欠拟合。</p>
-<h3 id="2-2-后剪枝"><a href="#2-2-后剪枝" class="headerlink" title="2.2 后剪枝"></a>2.2 后剪枝</h3><p>与预剪枝相反，后剪枝方法在完整的决策树生成之后开始运作。此方法会从底层开始，逐个判断每个非叶结点若取消划分是否能提升模型泛化能力，若可以，则将其分裂出的叶结点剪除。</p>
-<p>后剪枝方法同样能降低过拟合风险，但它的开销较大。</p>
-<h2 id="3-连续值与缺失值处理"><a href="#3-连续值与缺失值处理" class="headerlink" title="3. 连续值与缺失值处理"></a>3. 连续值与缺失值处理</h2><h3 id="3-1-连续值处理"><a href="#3-1-连续值处理" class="headerlink" title="3.1 连续值处理"></a>3.1 连续值处理</h3><p>在决策树的基本生成算法中，结点的划分是对最优划分属性的每个取值生成一个子结点，这种方法只适用于属性的取值为离散的情况。当属性取值为连续时，需要对其进行离散化处理。</p>
-<p>离散化处理最简单的方法是二分法，即将连续取值的属性值从小到大排列，将每两个相邻值的中位数设为划分点，然后将每两个相邻划分点组成的区间作为一个类别。</p>
-<h3 id="3-2-缺失值处理"><a href="#3-2-缺失值处理" class="headerlink" title="3.2 缺失值处理"></a>3.2 缺失值处理</h3><p>在实际项目中，常常会出现有缺失属性的样本。如果因为存在属性缺失就放弃整个样本，会造成很大的浪费。因此需要考虑如何在有缺失属性的情况下选择最优划分属性，并对结点进行划分。这里给出C4.5算法中的解决方案。</p>
-<p>对于最优划分属性的选择，算法对信息增益进行了推广：</p>
-<script type="math/tex; mode=display">Gain(D,a)=p(Ent(\tilde{D})-\sum_{v=1}^{V}\tilde{r}_vEnt(\tilde{D^v}))</script><p>其中，在属性a上，$\tilde{D}$表示无缺失值样本组成的子集，$p$表示无缺失值样本所占比例，$\tilde{r}_v$表示在$\tilde{D}$中取值为$a^v$的样本所占比例。</p>
-<p>最优划分属性选择完成后，需要对每个样本根据其取值进行划分。C4.5算法的划分规则为：</p>
+<p>通过以上的定义，就可以给出SVM的核心思想：求解一个与已知数据集<strong>几何间隔最大</strong>的超平面。即：</p>
+<script type="math/tex; mode=display">\max \frac{\hat{\gamma}}{||w||} \\ s.t.\; y_i(\mathbf{w}^T\mathbf{x}+b) \geq \hat{\gamma}, i=1,2,\dots,m</script><h2 id="2-求解SVM"><a href="#2-求解SVM" class="headerlink" title="2. 求解SVM"></a>2. 求解SVM</h2><p>这个问题中的优化目标是$\mathbf{w}$和$b$。但是，对于超平面的方程来说，等比例放大$\mathbf{w}$和$b$不会改变超平面。换言之，上面的问题会有无数个解。</p>
+<p>因此，为了保证能求得唯一解，可以对该问题添加一定的约束。利用上段提到的超平面方程的性质，令$\hat{\gamma}=1$：</p>
+<script type="math/tex; mode=display">\max \frac{1}{||w||} \\ s.t.\; y_i(\mathbf{w}^T\mathbf{x}+b) \geq 1, i=1,2,\dots,m</script><p>按照优化问题的一般形式对问题进行变形：</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} \\ s.t.\; 1-y_i(\mathbf{w}^T\mathbf{x}+b) \leq 0, i=1,2,\dots,m</script><blockquote>
+<p>能证明这是一个凸优化问题，容易求解。之后证明过程中使用拉格朗日对偶有以下两点原因：</p>
 <ul>
-<li>属性a未缺失的样本，划分到与其取值对应的子结点。</li>
-<li>属性a缺失的样本，同时划分到所有子结点，并将其权重调整为$\tilde{r}_v·w_x$。</li>
+<li>对偶问题也不难求解，且能引入核函数的概念。</li>
+<li>对偶问题的求解复杂度和样本个数m成正比，主问题的求解复杂度和参数维度成正比。因此当样本个数远小于参数维度时使用拉格朗日对偶求解的效率更高。</li>
 </ul>
-<h2 id="4-多变量决策树"><a href="#4-多变量决策树" class="headerlink" title="4. 多变量决策树"></a>4. 多变量决策树</h2><p>上面提到的算法中，非叶结点对样本的划分都是基于某个属性的取值。这种方法映射到坐标系中，相当于使用与坐标轴平行的直线对样本进行划分。这种划分方式不仅不够灵活，而且划分次数很多，开销较大。</p>
-<p>多变量决策树不再使用单个变量的取值，而是使用多个变量的线性组合（这种情况实现了斜线划分）、甚至更复杂的组合函数进行判断与划分。</p>
+</blockquote>
+<p>由于拉格朗日对偶函数函数恒为凹函数，所以可以将它转换为一个凸优化问题来求解乘子；又因为当问题中不等式约束的乘子均不小于0时，拉格朗日对偶函数构成了优化问题最优值的下界，所以可以通过求解对偶函数的最大值来得到优化问题的最小值。</p>
+<p>首先求解对偶问题的具体形式：<br><img src="https://wx1.sbimg.cn/2020/08/08/osOb1.jpg" srcset="/img/loading.gif" alt="求解-1"><br><img src="https://wx1.sbimg.cn/2020/08/08/osl6o.jpg" srcset="/img/loading.gif" alt="求解-2"></p>
+<p>$\alpha$的求解，《机器学习》中使用了SMO方法，这里给出《统计学习方法（第二版）》中关于SMO方法的讲解：<br><img src="https://wx2.sbimg.cn/2020/08/08/oJ5V4.jpg" srcset="/img/loading.gif" alt="SMO"></p>
+<p>解出$\alpha$后，求出$\mathbf{w}$和$b$即可得到模型：</p>
+<script type="math/tex; mode=display">f(\mathbf{x})=\mathbf{w}^T\mathbf{x}+b=\sum_{i=1}^{m}\alpha_iy_i\mathbf{x}_i^T \mathbf{x}+b</script><h3 id="3-软间隔"><a href="#3-软间隔" class="headerlink" title="3. 软间隔"></a>3. 软间隔</h3><p>前面两节中所有的建模和推导都是建立在数据集中的正负样本<strong>线性可分</strong>（存在超平面可以将它们完美地划分开）的基础上。但是现实中大多数数据集是线性不可分的，或是难以确定这样的超平面，即使找到也可能是过拟合的。</p>
+<p>因此，我们可以允许SVM在一定程度上出错，引入<strong>软间隔</strong>（允许某些样本不满足约束$y_i(\mathbf{w}^T\mathbf{x}+b) \geq 1$，与之相对的，上文中的间隔称作<strong>硬间隔</strong>）的概念，如图所示：<br><img src="https://wx2.sbimg.cn/2020/08/09/oLOh8.png" srcset="/img/loading.gif" alt="软间隔"></p>
+<p>当然，在最大化间隔的同时，也应当让不满足约束的样本尽可能少。因此，优化目标可以改为：</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m l\,(\,y_i(\mathbf{w}^T\mathbf{x}_i+b)-1)</script><p>其中，$C&gt;0$是一个常数；$l$是损失函数，软间隔中一般使用合页(hinge)损失：</p>
+<script type="math/tex; mode=display">l_{hinge}(z)=\max(0,1-z)</script><p>与常用的0/1损失函数相比，合页损失函数是凸函数且连续，而且是0/1损失函数的上界。对于变量$z$，合页损失的惩罚程度取决于它比1小的程度，很适合用于这个问题。</p>
+<p>将优化问题中的损失函数替换为合页损失函数：</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m \max(0,\;\,1-y_i(\mathbf{w}^T\mathbf{x}_i+b))</script><p>令$\xi _i = \max(0,\;\,1-y_i(\mathbf{w}^T\mathbf{x}_i+b))$。可以看出，当样本分类正确时，$\xi_i=0$，意味着没有损失；当样本分类错误时，$\xi_i&gt;0$，存在损失。称$\xi_i$为<strong>松弛变量</strong>。</p>
+<p>改写优化问题：</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b,\xi_i}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m\xi _i \\ s.t. \;y_i(\mathbf{w}^T\mathbf{x}_i+b) \geq 1-\xi_i,\;\xi_i\geq 0,\;i=1,2,\dots,m</script><p>可以看出此优化问题与之前使用硬间隔时十分相似，可以使用同样的方法求解，这里不再重复。</p>
+<p>使用软间隔，既能方便SVM的求解，又能在一定程度上防止过拟合（因为它能避免部分异常样本的影响）。</p>
+<h4 id="4-支持向量回归"><a href="#4-支持向量回归" class="headerlink" title="4. 支持向量回归"></a>4. 支持向量回归</h4><p>对于回归问题，我们希望学得函数$f(\mathbf{x})=\mathbf{w}^T\mathbf{x}_i+b$，使得$f(\mathbf{x})$与真实值$y$尽可能接近。与线性回归模型使用$f(\mathbf{x})$与$y$的差别计算损失不同，支持向量回归（SVR）假设我们能够容忍$f(\mathbf{x})$与$y$有$\epsilon$的偏差，只有当差别绝对值大于$\epsilon$时才计算误差。</p>
+<p>如图所示，这种方式相当于以$f(\mathbf{x})$为中心，构建出了一个宽度为$2\epsilon$的间隔带。若样本落入其中，则认为预测是正确的：<br>" srcset="/img/loading.gif" srcset="/img/loading.gif" srcset="/img/loading.gif<img src="" alt="间隔带"></p>
+<p>于是，SVR问题可归结为以下优化问题：</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m l_\epsilon\,(\,f(\mathbf{x}_i)-y_i)</script><p>其中，$C$为正则化常数，$l_\epsilon$为下图所示的ϵ-不敏感损失函数：</p>
+<script type="math/tex; mode=display">l_\epsilon(z)=\left\{\begin{matrix}
+0,\;\;\;\;\;\;\;\;\;\;if |z|<\epsilon;
+\\
+|z|-\epsilon,otherwise.
+\end{matrix}\right.</script><p><img src="https://wx2.sbimg.cn/2020/08/09/ojeU8.png" srcset="/img/loading.gif" alt="损失函数"></p>
+<p>引入松弛变量，可将优化问题改写为：</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b,\xi_i,\hat{\xi}_i}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m(\xi_i+\hat{\xi}_i) \\ s.t. \;f(\mathbf{x}_i)-y_i\leq \epsilon+\xi_i;f(\mathbf{x}_i)-y_i \leq \epsilon+\hat{\xi}_i;\xi_i\geq 0;\hat{\xi}_i\geq 0,\;i=1,2,\dots,m</script><p>解法依然与之前类似。</p>
 
             </article>
             <hr>
@@ -272,7 +277,7 @@
                     
                       <a class="hover-with-bg" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91/">决策树</a>
+                      <a class="hover-with-bg" href="/tags/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">支持向量机</a>
                     
                   </div>
                 
@@ -283,18 +288,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/ML-3-SVM/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">[机器学习理论]支持向量机</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/ML-1-Linear-Model/">
-                        <span class="hidden-mobile">[机器学习理论]线性模型</span>
+                      <a href="/2020/ML-2-Dicision-Tree/">
+                        <span class="hidden-mobile">[机器学习理论]决策树</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -433,7 +432,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "[机器学习理论]决策树&nbsp;",
+        "[机器学习理论]支持向量机&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,
