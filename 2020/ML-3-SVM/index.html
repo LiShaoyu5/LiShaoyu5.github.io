@@ -203,7 +203,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：August 9, 2020 am
+                  本文最后更新于：August 9, 2020 pm
                 
               </p>
             
@@ -223,10 +223,10 @@
 </li>
 </ul>
 <p>通过以上的定义，就可以给出SVM的核心思想：求解一个与已知数据集<strong>几何间隔最大</strong>的超平面。即：</p>
-<script type="math/tex; mode=display">\max \frac{\hat{\gamma}}{||w||} \\ s.t.\; y_i(\mathbf{w}^T\mathbf{x}+b) \geq \hat{\gamma}, i=1,2,\dots,m</script><h2 id="2-求解SVM"><a href="#2-求解SVM" class="headerlink" title="2. 求解SVM"></a>2. 求解SVM</h2><p>这个问题中的优化目标是$\mathbf{w}$和$b$。但是，对于超平面的方程来说，等比例放大$\mathbf{w}$和$b$不会改变超平面。换言之，上面的问题会有无数个解。</p>
+<script type="math/tex; mode=display">\max \frac{\hat{\gamma}}{||w||} \noindent s.t.\; y_i(\mathbf{w}^T\mathbf{x}+b) \geq \hat{\gamma}, i=1,2,\dots,m</script><h2 id="2-求解SVM"><a href="#2-求解SVM" class="headerlink" title="2. 求解SVM"></a>2. 求解SVM</h2><p>这个问题中的优化目标是$\mathbf{w}$和$b$。但是，对于超平面的方程来说，等比例放大$\mathbf{w}$和$b$不会改变超平面。换言之，上面的问题会有无数个解。</p>
 <p>因此，为了保证能求得唯一解，可以对该问题添加一定的约束。利用上段提到的超平面方程的性质，令$\hat{\gamma}=1$：</p>
-<script type="math/tex; mode=display">\max \frac{1}{||w||} \\ s.t.\; y_i(\mathbf{w}^T\mathbf{x}+b) \geq 1, i=1,2,\dots,m</script><p>按照优化问题的一般形式对问题进行变形：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} \\ s.t.\; 1-y_i(\mathbf{w}^T\mathbf{x}+b) \leq 0, i=1,2,\dots,m</script><blockquote>
+<script type="math/tex; mode=display">\max \frac{1}{||w||} \noindent s.t.\; y_i(\mathbf{w}^T\mathbf{x}+b) \geq 1, i=1,2,\dots,m</script><p>按照优化问题的一般形式对问题进行变形：</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} \noindent s.t.\; 1-y_i(\mathbf{w}^T\mathbf{x}+b) \leq 0, i=1,2,\dots,m</script><blockquote>
 <p>能证明这是一个凸优化问题，容易求解。之后证明过程中使用拉格朗日对偶有以下两点原因：</p>
 <ul>
 <li>对偶问题也不难求解，且能引入核函数的概念。</li>
@@ -245,7 +245,7 @@
 <p>将优化问题中的损失函数替换为合页损失函数：</p>
 <script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m \max(0,\;\,1-y_i(\mathbf{w}^T\mathbf{x}_i+b))</script><p>令$\xi _i = \max(0,\;\,1-y_i(\mathbf{w}^T\mathbf{x}_i+b))$。可以看出，当样本分类正确时，$\xi_i=0$，意味着没有损失；当样本分类错误时，$\xi_i&gt;0$，存在损失。称$\xi_i$为<strong>松弛变量</strong>。</p>
 <p>改写优化问题：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b,\xi_i}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m\xi _i \\ s.t. \;y_i(\mathbf{w}^T\mathbf{x}_i+b) \geq 1-\xi_i,\;\xi_i\geq 0,\;i=1,2,\dots,m</script><p>可以看出此优化问题与之前使用硬间隔时十分相似，可以使用同样的方法求解，这里不再重复。</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b,\xi_i}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m\xi _i \noindent s.t. \;y_i(\mathbf{w}^T\mathbf{x}_i+b) \geq 1-\xi_i,\;\xi_i\geq 0,\;i=1,2,\dots,m</script><p>可以看出此优化问题与之前使用硬间隔时十分相似，可以使用同样的方法求解，这里不再重复。</p>
 <p>使用软间隔，既能方便SVM的求解，又能在一定程度上防止过拟合（因为它能避免部分异常样本的影响）。</p>
 <h4 id="4-支持向量回归"><a href="#4-支持向量回归" class="headerlink" title="4. 支持向量回归"></a>4. 支持向量回归</h4><p>对于回归问题，我们希望学得函数$f(\mathbf{x})=\mathbf{w}^T\mathbf{x}_i+b$，使得$f(\mathbf{x})$与真实值$y$尽可能接近。与线性回归模型使用$f(\mathbf{x})$与$y$的差别计算损失不同，支持向量回归（SVR）假设我们能够容忍$f(\mathbf{x})$与$y$有$\epsilon$的偏差，只有当差别绝对值大于$\epsilon$时才计算误差。</p>
 <p>如图所示，这种方式相当于以$f(\mathbf{x})$为中心，构建出了一个宽度为$2\epsilon$的间隔带。若样本落入其中，则认为预测是正确的：<br><img src="https://wx2.sbimg.cn/2020/08/09/ojQ0M.png" srcset="/img/loading.gif" alt="间隔带"></p>
@@ -257,7 +257,7 @@
 |z|-\epsilon,otherwise.
 \end{matrix}\right.</script><p><img src="https://wx2.sbimg.cn/2020/08/09/ojeU8.png" srcset="/img/loading.gif" alt="损失函数"></p>
 <p>引入松弛变量，可将优化问题改写为：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b,\xi_i,\hat{\xi}_i}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m(\xi_i+\hat{\xi}_i) \\ \\ s.t. \;f(\mathbf{x}_i)-y_i\leq \epsilon+\xi_i;f(\mathbf{x}_i)-y_i \leq \epsilon+\hat{\xi}_i;\xi_i\geq 0;\hat{\xi}_i\geq 0,\;i=1,2,\dots,m</script><p>解法依然与之前类似。</p>
+<script type="math/tex; mode=display">\underset{\mathbf{w},b,\xi_i,\hat{\xi}_i}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m(\xi_i+\hat{\xi}_i) \noindent s.t. \;f(\mathbf{x}_i)-y_i\leq \epsilon+\xi_i;f(\mathbf{x}_i)-y_i \leq \epsilon+\hat{\xi}_i;\xi_i\geq 0;\hat{\xi}_i\geq 0,\;i=1,2,\dots,m</script><p>解法依然与之前类似。</p>
 
             </article>
             <hr>
