@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>[机器学习理论]支持向量机 - AiArt</title>
+  <title>[机器学习理论]贝叶斯分类器 - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -151,8 +151,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-08-08 09:18">
-      August 8, 2020 am
+    <time datetime="2020-08-09 16:06">
+      August 9, 2020 pm
     </time>
   </div>
 
@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.9k 字
+      0 字
     </span>
   
 
@@ -208,57 +208,7 @@
               </p>
             
             <article class="markdown-body">
-              <h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><h2 id="1-SVM的原始模型"><a href="#1-SVM的原始模型" class="headerlink" title="1. SVM的原始模型"></a>1. SVM的原始模型</h2><p>在分类问题中，最基本的想法就是找到合适的超平面，将不同类别的样本划分来开。但是如下图所示（此图表示一个有2个特征的二分类问题），满足条件的超平面可能有很多，需要有一个标准评价找到的超平面的分类性能：</p>
-<p><img src="https://wx2.sbimg.cn/2020/08/08/ohN17.png" srcset="/img/loading.gif" alt="超平面"></p>
-<p>直观上看，上图中红色的超平面应当具有最好的泛化能力，因为实际的样本可能比训练集中的样本（即图中出现的点）更接近超平面，而离所有样本更“远”的超平面显然是最为鲁棒的。</p>
-<p>超平面可以用一个线性方程表示：</p>
-<script type="math/tex; mode=display">\mathbf{w}^T\mathbf{x}+b=0</script><p>其中，$\mathbf{w}=(w_1;w_2;…;w_d)$为法向量，决定了超平面的方向；$b$为位移项，决定了超平面与原点之间的距离。由于$\mathbf{w}$和$b$决定了一个超平面，所以可以讲该超平面记作$(\mathbf{w},b)$。</p>
-<p>样本空间中任意点$\mathbf{x}$到超平面$(\mathbf{w},b)$的距离为：</p>
-<script type="math/tex; mode=display">r=\frac{|\mathbf{w}^T\mathbf{x}+b|}{||\mathbf{w}||}</script><p>推导过程：<br><img src="https://wx1.sbimg.cn/2020/08/08/osrel.jpg" srcset="/img/loading.gif" alt="距离"></p>
-<p>下面给出关于间隔的两个定义：</p>
-<ul>
-<li><p>函数间隔：定义超平面关于样本$(x_i,y_i)$的函数间隔为$\hat{\gamma}_i=\gamma_i(\mathbf{w}^T\mathbf{x}+b)$，其中$y_i\in{-1,+1}$；超平面关于数据集的样本间隔为$\hat{\gamma}=\underset{i=1,2,…,m}{min}\hat{\gamma}_i$。<br>  可以看出，当且仅当超平面能将所有样本正确分类时，所有$\hat{\gamma}_i&gt;0$恒成立且$\hat{\gamma}&gt;0$；当存在未正确分类的样本时，$\hat{\gamma}$是错误分类的样本中距离当前超平面最远的一个。<br>  函数间隔能够用于检验超平面能否对数据集进行完全正确的分类，但不能做到找到最优的超平面。</p>
-</li>
-<li><p>几何间隔：定义超平面关于样本$(x_i,y_i)$的几何间隔为$\gamma_i=\frac{\hat{\gamma}_i}{||w||}$；超平面关于数据集的集合间隔为$\gamma=\underset{i=1,2,…,m}{min}\gamma_i$。<br>  从函数间隔的公式可知，当分类完全正确时，$\gamma$为距离超平面最近的点与超平面的间距。</p>
-</li>
-</ul>
-<p>通过以上的定义，就可以给出SVM的核心思想：求解一个与已知数据集<strong>几何间隔最大</strong>的超平面。即：</p>
-<script type="math/tex; mode=display">\max \frac{\hat{\gamma}}{||w||} \\ s.t.\; y_i(\mathbf{w}^T\mathbf{x}+b) \geq \hat{\gamma}, i=1,2,\dots,m</script><h2 id="2-求解SVM"><a href="#2-求解SVM" class="headerlink" title="2. 求解SVM"></a>2. 求解SVM</h2><p>这个问题中的优化目标是$\mathbf{w}$和$b$。但是，对于超平面的方程来说，等比例放大$\mathbf{w}$和$b$不会改变超平面。换言之，上面的问题会有无数个解。</p>
-<p>因此，为了保证能求得唯一解，可以对该问题添加一定的约束。利用上段提到的超平面方程的性质，令$\hat{\gamma}=1$：</p>
-<script type="math/tex; mode=display">\max \frac{1}{||w||} \\ s.t.\; y_i(\mathbf{w}^T\mathbf{x}+b) \geq 1, i=1,2,\dots,m</script><p>按照优化问题的一般形式对问题进行变形：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} \\ s.t.\; 1-y_i(\mathbf{w}^T\mathbf{x}+b) \leq 0, i=1,2,\dots,m</script><blockquote>
-<p>能证明这是一个凸优化问题，容易求解。之后证明过程中使用拉格朗日对偶有以下两点原因：</p>
-<ul>
-<li>对偶问题也不难求解，且能引入核函数的概念。</li>
-<li>对偶问题的求解复杂度和样本个数m成正比，主问题的求解复杂度和参数维度成正比。因此当样本个数远小于参数维度时使用拉格朗日对偶求解的效率更高。</li>
-</ul>
-</blockquote>
-<p>由于拉格朗日对偶函数函数恒为凹函数，所以可以将它转换为一个凸优化问题来求解乘子；又因为当问题中不等式约束的乘子均不小于0时，拉格朗日对偶函数构成了优化问题最优值的下界，所以可以通过求解对偶函数的最大值来得到优化问题的最小值。</p>
-<p>首先求解对偶问题的具体形式：<br><img src="https://wx1.sbimg.cn/2020/08/08/osOb1.jpg" srcset="/img/loading.gif" alt="求解-1"><br><img src="https://wx1.sbimg.cn/2020/08/08/osl6o.jpg" srcset="/img/loading.gif" alt="求解-2"></p>
-<p>$\alpha$的求解，《机器学习》中使用了SMO方法，这里给出《统计学习方法（第二版）》中关于SMO方法的讲解：<br><img src="https://wx2.sbimg.cn/2020/08/08/oJ5V4.jpg" srcset="/img/loading.gif" alt="SMO"></p>
-<p>解出$\alpha$后，求出$\mathbf{w}$和$b$即可得到模型：</p>
-<script type="math/tex; mode=display">f(\mathbf{x})=\mathbf{w}^T\mathbf{x}+b=\sum_{i=1}^{m}\alpha_iy_i\mathbf{x}_i^T \mathbf{x}+b</script><h3 id="3-软间隔"><a href="#3-软间隔" class="headerlink" title="3. 软间隔"></a>3. 软间隔</h3><p>前面两节中所有的建模和推导都是建立在数据集中的正负样本<strong>线性可分</strong>（存在超平面可以将它们完美地划分开）的基础上。但是现实中大多数数据集是线性不可分的，或是难以确定这样的超平面，即使找到也可能是过拟合的。</p>
-<p>因此，我们可以允许SVM在一定程度上出错，引入<strong>软间隔</strong>（允许某些样本不满足约束$y_i(\mathbf{w}^T\mathbf{x}+b) \geq 1$，与之相对的，上文中的间隔称作<strong>硬间隔</strong>）的概念，如图所示：<br><img src="https://wx2.sbimg.cn/2020/08/09/oLOh8.png" srcset="/img/loading.gif" alt="软间隔"></p>
-<p>当然，在最大化间隔的同时，也应当让不满足约束的样本尽可能少。因此，优化目标可以改为：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m l\,(\,y_i(\mathbf{w}^T\mathbf{x}_i+b)-1)</script><p>其中，$C&gt;0$是一个常数；$l$是损失函数，软间隔中一般使用合页(hinge)损失：</p>
-<script type="math/tex; mode=display">l_{hinge}(z)=\max(0,1-z)</script><p>与常用的0/1损失函数相比，合页损失函数是凸函数且连续，而且是0/1损失函数的上界。对于变量$z$，合页损失的惩罚程度取决于它比1小的程度，很适合用于这个问题。</p>
-<p>将优化问题中的损失函数替换为合页损失函数：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m \max(0,\;\,1-y_i(\mathbf{w}^T\mathbf{x}_i+b))</script><p>令$\xi _i = \max(0,\;\,1-y_i(\mathbf{w}^T\mathbf{x}_i+b))$。可以看出，当样本分类正确时，$\xi_i=0$，意味着没有损失；当样本分类错误时，$\xi_i&gt;0$，存在损失。称$\xi_i$为<strong>松弛变量</strong>。</p>
-<p>改写优化问题：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b,\xi_i}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m\xi _i \\ s.t. \;y_i(\mathbf{w}^T\mathbf{x}_i+b) \geq 1-\xi_i,\;\xi_i\geq 0,\;i=1,2,\dots,m</script><p>可以看出此优化问题与之前使用硬间隔时十分相似，可以使用同样的方法求解，这里不再重复。</p>
-<p>使用软间隔，既能方便SVM的求解，又能在一定程度上防止过拟合（因为它能避免部分异常样本的影响）。</p>
-<h4 id="4-支持向量回归"><a href="#4-支持向量回归" class="headerlink" title="4. 支持向量回归"></a>4. 支持向量回归</h4><p>对于回归问题，我们希望学得函数$f(\mathbf{x})=\mathbf{w}^T\mathbf{x}_i+b$，使得$f(\mathbf{x})$与真实值$y$尽可能接近。与线性回归模型使用$f(\mathbf{x})$与$y$的差别计算损失不同，支持向量回归（SVR）假设我们能够容忍$f(\mathbf{x})$与$y$有$\epsilon$的偏差，只有当差别绝对值大于$\epsilon$时才计算误差。</p>
-<p>如图所示，这种方式相当于以$f(\mathbf{x})$为中心，构建出了一个宽度为$2\epsilon$的间隔带。若样本落入其中，则认为预测是正确的：<br><img src="https://wx2.sbimg.cn/2020/08/09/ojQ0M.png" srcset="/img/loading.gif" alt="间隔带"></p>
-<p>于是，SVR问题可归结为以下优化问题：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m l_\epsilon\,(\,f(\mathbf{x}_i)-y_i)</script><p>其中，$C$为正则化常数，$l_\epsilon$为下图所示的ϵ-不敏感损失函数：</p>
-<script type="math/tex; mode=display">l_\epsilon(z)=\left\{\begin{matrix}
-0,\;\;\;\;\;\;\;\;\;\;if |z|<\epsilon;
-\\
-|z|-\epsilon,otherwise.
-\end{matrix}\right.</script><p><img src="https://wx2.sbimg.cn/2020/08/09/ojeU8.png" srcset="/img/loading.gif" alt="损失函数"></p>
-<p>引入松弛变量，可将优化问题改写为：</p>
-<script type="math/tex; mode=display">\underset{\mathbf{w},b,\xi_i,\hat{\xi}_i}{\min} \frac{||w||^2}{2} + C\sum_{i=1}^m(\xi_i+\hat{\xi}_i) \\ s.t. \;f(\mathbf{x}_i)-y_i\leq \epsilon+\xi_i;f(\mathbf{x}_i)-y_i \leq \epsilon+\hat{\xi}_i;\xi_i\geq 0;\hat{\xi}_i\geq 0,\;i=1,2,\dots,m</script><p>解法依然与之前类似。</p>
-
+              
             </article>
             <hr>
             <div>
@@ -277,7 +227,11 @@
                     
                       <a class="hover-with-bg" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">支持向量机</a>
+                      <a class="hover-with-bg" href="/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96%E8%AE%BA/">贝叶斯决策论</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/">极大似然估计</a>
+                    
+                      <a class="hover-with-bg" href="/tags/EM%E7%AE%97%E6%B3%95/">EM算法</a>
                     
                   </div>
                 
@@ -292,8 +246,8 @@
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/ML-2-Dicision-Tree/">
-                        <span class="hidden-mobile">[机器学习理论]决策树</span>
+                      <a href="/2020/ML-3-Supported-Vector-Machine/">
+                        <span class="hidden-mobile">[机器学习理论]支持向量机</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -432,7 +386,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "[机器学习理论]支持向量机&nbsp;",
+        "[机器学习理论]贝叶斯分类器&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,
