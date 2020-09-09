@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>[机器学习理论]贝叶斯分类器 - AiArt</title>
+  <title>‘Download Table on Google Bigquery’ - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -151,8 +151,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-08-09 16:06">
-      August 9, 2020 pm
+    <time datetime="2020-09-09 08:21">
+      September 9, 2020 am
     </time>
   </div>
 
@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      0 字
+      1.1k 字
     </span>
   
 
@@ -203,12 +203,52 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：August 9, 2020 pm
+                  本文最后更新于：September 9, 2020 am
                 
               </p>
             
             <article class="markdown-body">
-              
+              <p>Google BigQuery平台上有大量的公开数据集，但是没有提供直接的下载选项。另一方面，虽然可以导出到Google Cloud Storage中再下载，但又存在单个文件过大难以导出、平台没有批量下载功能等很多问题。这里整理一份完整的下载流程。</p>
+<p>执行以下操作的前提包括科学上网、激活Google Cloud账号（需要信用卡信息）等，这里不再赘述。</p>
+<h3 id="在Google-BigQuery上搜索数据集"><a href="#在Google-BigQuery上搜索数据集" class="headerlink" title="在Google BigQuery上搜索数据集"></a>在Google BigQuery上搜索数据集</h3><p>登录<a href="https://console.cloud.google.com/bigquery" target="_blank" rel="noopener">Google BigQuery</a>，左侧界面如下：</p>
+<p><img src="https://wx1.sbimg.cn/2020/09/09/9R9PV.png" srcset="/img/loading.gif" alt="public_data"></p>
+<p>可以看到，当没有打开自己的项目时，下方的资源栏中只有bigquery-public-data，这就是BigQuery上提供的公开数据集，展开后可以看到大量数据集。本文以etherem_blockchain数据集中的contract表为例进行下载。</p>
+<h3 id="导出表到Google-Cloud-Storage"><a href="#导出表到Google-Cloud-Storage" class="headerlink" title="导出表到Google Cloud Storage"></a>导出表到Google Cloud Storage</h3><p>选择contract表，在右侧的信息栏中点击详细信息，可以看到表的相关信息：</p>
+<p><img src="https://wx2.sbimg.cn/2020/09/09/9RG17.png" srcset="/img/loading.gif" alt="table_info"></p>
+<p>点击右侧的导出，在弹出栏中选择导出到GCS，会弹出导出界面：</p>
+<p><img src="https://wx1.sbimg.cn/2020/09/09/9RQE6.png" srcset="/img/loading.gif" alt="output1"></p>
+<p>首先需要选择目标位置，点击浏览后如果显示没有权限，需要现在网站左上角导航栏中选择一个自己的项目（这里我的项目叫做contract）：</p>
+<p><img src="https://wx2.sbimg.cn/2020/09/09/9RcvD.png" srcset="/img/loading.gif" alt="output2"></p>
+<p>然后再点击浏览，进入分区选择界面，如果没有分区需要新建一个。新建时有个小坑，如果你了解自己使用的代理的各种信息（主机、端口等）或是不需要科学上网，在“选择如何控制对对象的访问权限”一步可以选择<strong>精细控制</strong>（这是正常的方式，能够更精确地管理数据的存取权限）；如果不清楚这些信息，这一步应该选择<strong>统一</strong>，方便之后下载时的设置：</p>
+<p><img src="https://wx2.sbimg.cn/2020/09/09/9RRhe.png" srcset="/img/loading.gif" alt="output3"></p>
+<p>分区选择完成后需要指定导出的文件名。这个表有21G，无法直接导出到GCS（仅支持1G以下的文件）。但是可以通过在名称中添加*将其导出为多个文件，导出结果类似上图：</p>
+<p><img src="https://wx1.sbimg.cn/2020/09/09/9RdfN.png" srcset="/img/loading.gif" alt="output4"></p>
+<p>完成后，点击导出，等待一段时间后在<a href="https://console.cloud.google.com/storage/" target="_blank" rel="noopener">GCS</a>中进入相应的分区即可看到文件（图中是我之前导出的，所以没有扩展名）。通过这种方式导出的分段文件大小不一，数量很多：</p>
+<p><img src="https://wx2.sbimg.cn/2020/09/09/9RhAj.png" srcset="/img/loading.gif" alt="gcs"></p>
+<h3 id="批量下载与后续处理"><a href="#批量下载与后续处理" class="headerlink" title="批量下载与后续处理"></a>批量下载与后续处理</h3><p>GCS的网页UI上没有提供批量下载的方式，需要使用命令行工具gsutil。在<a href="https://cloud.google.com/storage/docs/gsutil_install#install上根据自己的系统选择合适的安装包下载并安装。" target="_blank" rel="noopener">https://cloud.google.com/storage/docs/gsutil_install#install上根据自己的系统选择合适的安装包下载并安装。</a></p>
+<h4 id="设置分区公开"><a href="#设置分区公开" class="headerlink" title="设置分区公开"></a>设置分区公开</h4><p>由于我使用的代理有些问题，在gsutil中无法设置自己的账户信息，因此只能将之前的数据分区设置为公开才能下载。代理没有问题的朋友可以不看这部分，但是需要在gsutil中配置自己的帐户信息，才能获取下载的权限。</p>
+<p>首先在GCS上自己的存储分区中选择“权限”：</p>
+<p><img src="https://wx2.sbimg.cn/2020/09/09/9Rjoh.png" srcset="/img/loading.gif" alt="auth1"></p>
+<p>点击下方的“添加”，会弹出添加成员的界面。在“新成员”栏中输入<strong>allUsers</strong>，下方的“角色”选择<strong>Cloud Storage中的Storage Object Viewer</strong>。这样，<strong>任何人</strong>都可以读取、下载这个分区的数据。</p>
+<p><img src="https://wx2.sbimg.cn/2020/09/09/9RJSn.png" srcset="/img/loading.gif" alt="auth2"></p>
+<h4 id="批量下载"><a href="#批量下载" class="headerlink" title="批量下载"></a>批量下载</h4><p>在分区页面点击“配置”，可以看到分区的信息。最下方的<strong>gsutil链接</strong>就是下载需要的，复制下来：</p>
+<p><img src="https://wx1.sbimg.cn/2020/09/09/9RuqM.png" srcset="/img/loading.gif" alt="download1"></p>
+<p>然后就可以在命令行中进行操作：<br><div class="hljs"><pre><code class="hljs profile"># 查看gs://lsydata2目录下的文件
+gsutil ls gs://lsydata2
+# 将gs://lsydata2中的文件下载到本地的E:\Download\lsydata
+gsutil -m cp -R gs://lsydata2 E:\Download\lsydata</code></pre></div></p>
+<p>下载完成后，可以在本地看到下载完成的文件（之前导出时忘记添加扩展名，应当是JSON格式。如果导出时选择了压缩，可以添加.gz扩展名后解压）：</p>
+<p><img src="https://wx2.sbimg.cn/2020/09/09/9R1Ea.png" srcset="/img/loading.gif" alt="download2"></p>
+<h4 id="合并文件"><a href="#合并文件" class="headerlink" title="合并文件"></a>合并文件</h4><p>这一步其实很简单了，我提供个简单的代码段，修改一下文件名、路径和数量判断可以直接使用，运行时间根据文件数量和大小可能较长：</p>
+<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> os
+filelist = os.listdir(<span class="hljs-string">'E:/Download/lsydata/contracts'</span>)  <span class="hljs-comment"># 下载文件的目录</span>
+<span class="hljs-keyword">with</span> open(<span class="hljs-string">'target.json'</span>, <span class="hljs-string">'w'</span>) <span class="hljs-keyword">as</span> f1:  <span class="hljs-comment"># 合并后的文件名</span>
+    <span class="hljs-keyword">for</span> file <span class="hljs-keyword">in</span> filelist:
+        <span class="hljs-keyword">with</span> open(<span class="hljs-string">'E:/Download/lsydata/contracts/'</span> + file, <span class="hljs-string">'r'</span>) <span class="hljs-keyword">as</span> f2:
+            f1.write(f2.read())</code></pre></div>
+<p>合并完成后：</p>
+<p><img src="https://wx1.sbimg.cn/2020/09/09/9RwvK.png" srcset="/img/loading.gif" alt="cat"></p>
+
             </article>
             <hr>
             <div>
@@ -225,13 +265,11 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
+                      <a class="hover-with-bg" href="/tags/Others/">Others</a>
+                    
                       <a class="hover-with-bg" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%86%B3%E7%AD%96%E8%AE%BA/">贝叶斯决策论</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%9E%81%E5%A4%A7%E4%BC%BC%E7%84%B6%E4%BC%B0%E8%AE%A1/">极大似然估计</a>
-                    
-                      <a class="hover-with-bg" href="/tags/EM%E7%AE%97%E6%B3%95/">EM算法</a>
+                      <a class="hover-with-bg" href="/tags/%E5%AE%9E%E7%94%A8%E6%8A%80%E5%B7%A7/">实用技巧</a>
                     
                   </div>
                 
@@ -242,18 +280,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/Download-Table-on-Google-Bigquery/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">‘Download Table on Google Bigquery’</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/ML-3-Supported-Vector-Machine/">
-                        <span class="hidden-mobile">[机器学习理论]支持向量机</span>
+                      <a href="/2020/ML-4-Bayes-Classifier/">
+                        <span class="hidden-mobile">[机器学习理论]贝叶斯分类器</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -392,7 +424,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "[机器学习理论]贝叶斯分类器&nbsp;",
+        "‘Download Table on Google Bigquery’&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,
