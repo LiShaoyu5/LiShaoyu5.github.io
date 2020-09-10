@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>在Python中显示进度条</title>
+    <link href="/2020/Show-Progress-Bar-in-Python/"/>
+    <url>/2020/Show-Progress-Bar-in-Python/</url>
+    
+    <content type="html"><![CDATA[<p>在Python的使用中，有时需要处理大量的数据或执行很长的遍历、循环。这时候如果有一个可视化的进度条，能够更直观地表示程序的执行进度。使用Python中的tqdm库可以方便地实现这一功能，这里介绍tqdm的基本用法。</p><h3 id="可迭代对象"><a href="#可迭代对象" class="headerlink" title="可迭代对象"></a>可迭代对象</h3><p>对于列表、字符串等可迭代对象，可以直接在原有代码上添加tqdm实现遍历：</p><p><img src="https://wx2.sbimg.cn/2020/09/10/9q3ud.png" srcset="/img/loading.gif" alt="iterable"></p><div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> tqdm<span class="hljs-keyword">from</span> time <span class="hljs-keyword">import</span> sleep<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> tqdm(range(<span class="hljs-number">10</span>)):    sleep(<span class="hljs-number">0.5</span>)<span class="hljs-keyword">for</span> t <span class="hljs-keyword">in</span> tqdm(<span class="hljs-string">'abcdefg'</span>):    sleep(<span class="hljs-number">0.5</span>)</code></pre></div><h3 id="自定义进度条"><a href="#自定义进度条" class="headerlink" title="自定义进度条"></a>自定义进度条</h3><p>更自由的方式是自定义一个进度条对象，根据自己的需要进行更新：</p><p><img src="https://wx2.sbimg.cn/2020/09/10/9q684.png" srcset="/img/loading.gif" alt="manual"></p><div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> tqdm <span class="hljs-keyword">import</span> tqdm<span class="hljs-keyword">import</span> sleep<span class="hljs-keyword">with</span> tqdm(total=<span class="hljs-number">1000</span>) <span class="hljs-keyword">as</span> pbar:  <span class="hljs-comment"># 自定义的进度条对象，范围为0-100</span><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1000</span>):sleep(<span class="hljs-number">0.1</span>)pbar.update(<span class="hljs-number">1</span>)  <span class="hljs-comment"># 自定义更新的数值</span></code></pre></div>]]></content>
+    
+    
+    <categories>
+      
+      <category>Python</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>实用技巧</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Download Table on Google Bigquery</title>
     <link href="/2020/Download-Table-on-Google-Bigquery/"/>
     <url>/2020/Download-Table-on-Google-Bigquery/</url>
