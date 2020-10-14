@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>[TF2]1. Installation - AiArt</title>
+  <title>[CS224N]1. Word Vectors - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -151,8 +151,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-05-31 17:23">
-      May 31, 2020 pm
+    <time datetime="2020-10-13 11:33">
+      October 13, 2020 am
     </time>
   </div>
 
@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      414 字
+      412 字
     </span>
   
 
@@ -203,32 +203,24 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：June 10, 2020 pm
+                  本文最后更新于：October 14, 2020 pm
                 
               </p>
             
             <article class="markdown-body">
-              <p>在 <a href="https://tensorflow.google.cn/install/gpu" target="_blank" rel="noopener">https://tensorflow.google.cn/install/gpu</a> 中查看各个依赖软件的版本要求。</p>
-<h4 id="1-安装Nvidia驱动"><a href="#1-安装Nvidia驱动" class="headerlink" title="1. 安装Nvidia驱动"></a><strong>1. 安装Nvidia驱动</strong></h4><p>可以直接在GeForce Experience中更新驱动程序，或在 <a href="https://www.geforce.cn/drivers" target="_blank" rel="noopener">https://www.geforce.cn/drivers</a> 查找与自己显卡相符的驱动程序下载安装。</p>
-<h4 id="2-安装CUDA"><a href="#2-安装CUDA" class="headerlink" title="2. 安装CUDA"></a><strong>2. 安装CUDA</strong></h4><p>进入<a href="https://developer.nvidia.com/cuda-toolkit" target="_blank" rel="noopener">https://developer.nvidia.com/cuda-toolkit</a> ，选择下载，进入选择页面。</p>
-<p>点击Legacy Releases，选择需要的CUDA版本。自己安装的是TensorFlow2.1.0，需要的CUDA版本为10.1。</p>
-<p>进入系统选择页面，选择Windows-x86_64-10，安装方式建议exe(local)，方式因网络问题造成安装失败。</p>
-<p>选择Base Installer中的Download，下载CUDA的本地安装包，安装。默认安装路径为C:\ProgramData\NVIDIA GPU Computing Toolkit。</p>
-<p>安装完成后，在命令行运行<code>nvcc -V</code>查看CUDA版本以验证安装是否成功。</p>
-<h4 id="3-安装CUDNN"><a href="#3-安装CUDNN" class="headerlink" title="3. 安装CUDNN"></a><strong>3. 安装CUDNN</strong></h4><p>进入<a href="https://developer.nvidia.com/rdp/cudnn-download" target="_blank" rel="noopener">https://developer.nvidia.com/rdp/cudnn-download</a> ，登录并填写问卷，进入下载页面。选择与CUDA版本相符的CUDNN，这里选择cuDNN v7.6.5 (November 5th, 2019) for CUDA 10.1，<br>cuDNN Library for Windows 10下载。</p>
-<p>下载完成后，解压压缩包，将三个文件夹中的文件分别移动至CUDA安装路径中的对应文件夹里。</p>
-<h4 id="4-安装TensorFlow"><a href="#4-安装TensorFlow" class="headerlink" title="4. 安装TensorFlow"></a><strong>4. 安装TensorFlow</strong></h4><ul>
-<li>网络环境好：</li>
-</ul>
-<p>直接使用<code>pip install tensorflow-gpu==2.1.0</code>即可安装所有依赖库。</p>
+              <blockquote>
+<p><a href="https://youtu.be/8rXD5-xhemo" target="_blank" rel="noopener">课程视频</a><br><a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/readings/cs224n-2019-notes01-wordvecs1.pdf" target="_blank" rel="noopener">官方笔记</a><br><a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/assignments/a1.zip" target="_blank" rel="noopener">作业</a></p>
+</blockquote>
+<h1 id="1-词嵌入"><a href="#1-词嵌入" class="headerlink" title="1 词嵌入"></a>1 词嵌入</h1><p>当我们想将词表示为向量时，很容易想到使用One-Hot编码（即向量中词对应位置为1，其余位置为0，此时每个向量元素数等于词库大小）。但是这样做存在两个问题：</p>
 <ul>
-<li><p>网络环境不好，直接使用pip容易失败：</p>
-<p>在 <a href="https://pypi.org/" target="_blank" rel="noopener">https://pypi.org/</a> 直接搜索需要的库，在release history中选择合适版本，下载后进行本地安装<code>pip install [本地路径]</code>。</p>
-<p>查看pip支持的安装包类型，可以在需要安装TensorFlow的Python环境中执行：</p>
-<div class="hljs"><pre><code class="hljs Python"><span class="hljs-keyword">import</span> pip._internal.pep425tags
-print(pip._internal.pep425tags.get_supported())</code></pre></div>
-</li>
+<li>向量过大</li>
+<li>每个词的对应的向量相互正交，无法直接表示词之间的关联、相似度</li>
 </ul>
+<p>因此<strong>词向量</strong>的概念被提出。词向量也使用固定长度的向量表示每个词，但与独热编码不同，词向量中的每个元素都非0，且满足在词向量对应的维度空间中，关联度越高的词相距越近。使用一个滑动窗口扫描语料库中的所有句子。在每个时刻，对窗口的中心词，统计其两侧处于窗口中的词。完成后，基于统计结果得到词库的共现矩阵（能表示词两两之间共同出现的概率大小）。通过对其进行降维操作，可以得到对应的短向量，相较于One-Hot编码的向量，这样得到的向量不仅小得多，而且能表示出词之间的相关性。</p>
+<h1 id="2-Word2Vec"><a href="#2-Word2Vec" class="headerlink" title="2 Word2Vec"></a>2 Word2Vec</h1><p>Word2Vec使用神经网络的方法去优化词向量。</p>
+<h1 id="3-练习与作业"><a href="#3-练习与作业" class="headerlink" title="3 练习与作业"></a>3 练习与作业</h1><p>之后每节都会将作业附在最后，会有完成的版本，并且注明可能出现的一些坑。</p>
+<h3 id="3-1-Gensim"><a href="#3-1-Gensim" class="headerlink" title="3.1 Gensim"></a>3.1 Gensim</h3><p>第一课提供了Gensim的<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/materials/Gensim.zip" target="_blank" rel="noopener">使用实例</a>，添加注释的版本：<a href="https://github.com/LiShaoyu5/CS224N-Learning/blob/main/1%20-%20Introduction%20and%20Word%20Vectors/Gensim/Gensim%20word%20vector%20visualization.ipynb" target="_blank" rel="noopener">注释</a>。</p>
+<h3 id="3-2-Homework"><a href="#3-2-Homework" class="headerlink" title="3.2 Homework"></a>3.2 Homework</h3><p>第一课的<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/assignments/a1.zip" target="_blank" rel="noopener">作业</a>，完成后的<a href="https://github.com/LiShaoyu5/CS224N-Learning/blob/main/1%20-%20Introduction%20and%20Word%20Vectors/Homework/exploring_word_vectors.ipynb" target="_blank" rel="noopener">notebook</a>。</p>
 
             </article>
             <hr>
@@ -238,7 +230,7 @@ print(pip._internal.pep425tags.get_supported())</code></pre></div>
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/TensorFlow2%E5%AD%A6%E4%B9%A0/">TensorFlow2学习</a>
+                      <a class="hover-with-bg" href="/categories/CS224N/">CS224N</a>
                     
                   </div>
                 
@@ -246,11 +238,17 @@ print(pip._internal.pep425tags.get_supported())</code></pre></div>
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
+                      <a class="hover-with-bg" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+                    
                       <a class="hover-with-bg" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/">自然语言处理</a>
                     
                       <a class="hover-with-bg" href="/tags/Python/">Python</a>
                     
-                      <a class="hover-with-bg" href="/tags/TensorFlow/">TensorFlow</a>
+                      <a class="hover-with-bg" href="/tags/%E8%AF%8D%E5%90%91%E9%87%8F/">词向量</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Word-Vectors/">Word Vectors</a>
                     
                   </div>
                 
@@ -261,18 +259,12 @@ print(pip._internal.pep425tags.get_supported())</code></pre></div>
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/pip-tips/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">pip tips</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/Test-Blog/">
-                        <span class="hidden-mobile">Test Blog</span>
+                      <a href="/2020/Show-Progress-Bar-in-Python/">
+                        <span class="hidden-mobile">在Python中显示进度条</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -411,7 +403,7 @@ print(pip._internal.pep425tags.get_supported())</code></pre></div>
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "[TF2]1. Installation&nbsp;",
+        "[CS224N]1. Word Vectors&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,

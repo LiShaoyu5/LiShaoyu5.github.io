@@ -4,6 +4,41 @@
   
   
   <entry>
+    <title>[CS224N]1. Word Vectors</title>
+    <link href="/2020/CS224N-1-WordVectors/"/>
+    <url>/2020/CS224N-1-WordVectors/</url>
+    
+    <content type="html"><![CDATA[<blockquote><p><a href="https://youtu.be/8rXD5-xhemo" target="_blank" rel="noopener">课程视频</a><br><a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/readings/cs224n-2019-notes01-wordvecs1.pdf" target="_blank" rel="noopener">官方笔记</a><br><a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/assignments/a1.zip" target="_blank" rel="noopener">作业</a></p></blockquote><h1 id="1-词嵌入"><a href="#1-词嵌入" class="headerlink" title="1 词嵌入"></a>1 词嵌入</h1><p>当我们想将词表示为向量时，很容易想到使用One-Hot编码（即向量中词对应位置为1，其余位置为0，此时每个向量元素数等于词库大小）。但是这样做存在两个问题：</p><ul><li>向量过大</li><li>每个词的对应的向量相互正交，无法直接表示词之间的关联、相似度</li></ul><p>因此<strong>词向量</strong>的概念被提出。词向量也使用固定长度的向量表示每个词，但与独热编码不同，词向量中的每个元素都非0，且满足在词向量对应的维度空间中，关联度越高的词相距越近。使用一个滑动窗口扫描语料库中的所有句子。在每个时刻，对窗口的中心词，统计其两侧处于窗口中的词。完成后，基于统计结果得到词库的共现矩阵（能表示词两两之间共同出现的概率大小）。通过对其进行降维操作，可以得到对应的短向量，相较于One-Hot编码的向量，这样得到的向量不仅小得多，而且能表示出词之间的相关性。</p><h1 id="2-Word2Vec"><a href="#2-Word2Vec" class="headerlink" title="2 Word2Vec"></a>2 Word2Vec</h1><p>Word2Vec使用神经网络的方法去优化词向量。</p><h1 id="3-练习与作业"><a href="#3-练习与作业" class="headerlink" title="3 练习与作业"></a>3 练习与作业</h1><p>之后每节都会将作业附在最后，会有完成的版本，并且注明可能出现的一些坑。</p><h3 id="3-1-Gensim"><a href="#3-1-Gensim" class="headerlink" title="3.1 Gensim"></a>3.1 Gensim</h3><p>第一课提供了Gensim的<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/materials/Gensim.zip" target="_blank" rel="noopener">使用实例</a>，添加注释的版本：<a href="https://github.com/LiShaoyu5/CS224N-Learning/blob/main/1%20-%20Introduction%20and%20Word%20Vectors/Gensim/Gensim%20word%20vector%20visualization.ipynb" target="_blank" rel="noopener">注释</a>。</p><h3 id="3-2-Homework"><a href="#3-2-Homework" class="headerlink" title="3.2 Homework"></a>3.2 Homework</h3><p>第一课的<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/assignments/a1.zip" target="_blank" rel="noopener">作业</a>，完成后的<a href="https://github.com/LiShaoyu5/CS224N-Learning/blob/main/1%20-%20Introduction%20and%20Word%20Vectors/Homework/exploring_word_vectors.ipynb" target="_blank" rel="noopener">notebook</a>。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>CS224N</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>机器学习</tag>
+      
+      <tag>深度学习</tag>
+      
+      <tag>自然语言处理</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>词向量</tag>
+      
+      <tag>Word Vectors</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>在Python中显示进度条</title>
     <link href="/2020/Show-Progress-Bar-in-Python/"/>
     <url>/2020/Show-Progress-Bar-in-Python/</url>
@@ -188,9 +223,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -217,9 +252,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -246,9 +281,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>环境设置</tag>
       
@@ -275,11 +310,11 @@
     
     <tags>
       
+      <tag>深度学习</tag>
+      
       <tag>Python</tag>
       
       <tag>PyTorch</tag>
-      
-      <tag>深度学习</tag>
       
     </tags>
     
@@ -304,9 +339,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -333,9 +368,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -391,9 +426,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -420,9 +455,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -449,9 +484,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -478,9 +513,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -507,9 +542,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -536,9 +571,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -623,9 +658,9 @@
       
       <tag>Python</tag>
       
-      <tag>pip</tag>
-      
       <tag>实用技巧</tag>
+      
+      <tag>pip</tag>
       
     </tags>
     
@@ -650,9 +685,9 @@
     
     <tags>
       
-      <tag>Python</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>Python</tag>
       
       <tag>TensorFlow</tag>
       
@@ -667,7 +702,7 @@
     <link href="/2020/Test-Blog/"/>
     <url>/2020/Test-Blog/</url>
     
-    <content type="html"><![CDATA[<h1 id="标题测试"><a href="#标题测试" class="headerlink" title="标题测试"></a>标题测试</h1><h2 id="LaTex"><a href="#LaTex" class="headerlink" title="LaTex"></a>LaTex</h2><ul><li>行内公式$ c = \sqrt{a^{2}+b_{xy}^{2}+e^{x}} $</li><li><p>公式块</p><script type="math/tex; mode=display">c = \sqrt{a^{2}+b_{xy}^{2} +e^{x}}</script><blockquote><p>引用</p></blockquote></li></ul><p><em>粗体</em>   <strong>斜体</strong></p><h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><div class="table-container"><table><thead><tr><th>Tables</th><th style="text-align:center">Are</th><th style="text-align:right">Cool</th></tr></thead><tbody><tr><td>col 3 is</td><td style="text-align:center">right-aligned</td><td style="text-align:right">$1600</td></tr><tr><td>col 2 is</td><td style="text-align:center">centered</td><td style="text-align:right">$12</td></tr><tr><td>zebra stripes</td><td style="text-align:center">are neat</td><td style="text-align:right">$1</td></tr></tbody></table></div><h2 id="代码段"><a href="#代码段" class="headerlink" title="代码段"></a>代码段</h2><div class="hljs"><pre><code class="hljs python3">import numpy as np</code></pre></div><h2 id="图片测试"><a href="#图片测试" class="headerlink" title="图片测试"></a>图片测试</h2><ul><li>图片<br><img src="http://ww2.sinaimg.cn/large/6aee7dbbgw1efffa67voyj20ix0ctq3n.jpg" srcset="/img/loading.gif" alt="测试图片"></li><li>图片链接<br><a href="http://ww2.sinaimg.cn/large/6aee7dbbgw1efffa67voyj20ix0ctq3n.jpg" target="_blank" rel="noopener">测试图片</a></li></ul>]]></content>
+    <content type="html"><![CDATA[<p>更新后检查</p><h1 id="标题测试"><a href="#标题测试" class="headerlink" title="标题测试"></a>标题测试</h1><h2 id="LaTex"><a href="#LaTex" class="headerlink" title="LaTex"></a>LaTex</h2><ul><li>行内公式$ c = \sqrt{a^{2}+b_{xy}^{2}+e^{x}} $</li><li><p>公式块</p><script type="math/tex; mode=display">c = \sqrt{a^{2}+b_{xy}^{2} +e^{x}}</script><blockquote><p>引用</p></blockquote></li></ul><p><em>粗体</em>   <strong>斜体</strong></p><h2 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h2><div class="table-container"><table><thead><tr><th>Tables</th><th style="text-align:center">Are</th><th style="text-align:right">Cool</th></tr></thead><tbody><tr><td>col 3 is</td><td style="text-align:center">right-aligned</td><td style="text-align:right">$1600</td></tr><tr><td>col 2 is</td><td style="text-align:center">centered</td><td style="text-align:right">$12</td></tr><tr><td>zebra stripes</td><td style="text-align:center">are neat</td><td style="text-align:right">$1</td></tr></tbody></table></div><h2 id="代码段"><a href="#代码段" class="headerlink" title="代码段"></a>代码段</h2><div class="hljs"><pre><code class="hljs python3">import numpy as np</code></pre></div><h2 id="图片测试"><a href="#图片测试" class="headerlink" title="图片测试"></a>图片测试</h2><ul><li>图片<br><img src="http://ww2.sinaimg.cn/large/6aee7dbbgw1efffa67voyj20ix0ctq3n.jpg" srcset="/img/loading.gif" alt="测试图片"></li><li>图片链接<br><a href="http://ww2.sinaimg.cn/large/6aee7dbbgw1efffa67voyj20ix0ctq3n.jpg" target="_blank" rel="noopener">测试图片</a></li></ul>]]></content>
     
     
     <categories>
