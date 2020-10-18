@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.8k 字
+      1.9k 字
     </span>
   
 
@@ -238,16 +238,16 @@
 </ul>
 <p>虽然有很多方法被提出来改善这些问题，但下一节基于深度学习的方法能够更好地完成这个任务。</p>
 <h1 id="2-基于深度学习的数据降维：Word2Vec"><a href="#2-基于深度学习的数据降维：Word2Vec" class="headerlink" title="2 基于深度学习的数据降维：Word2Vec"></a>2 基于深度学习的数据降维：Word2Vec</h1><p>相比于SVD方法中使用一个矩阵存储全局信息，深度学习能够通过多次迭代计算优化参数。如果将词向量作为神经网络的参数，使用合适的损失函数对其进行优化，也能得到降维的词向量。</p>
-<h2 id="2-1-语言模型"><a href="#2-1-语言模型" class="headerlink" title="2.1 语言模型"></a>2.1 语言模型</h2><p><strong>语言模型</strong>指给定一个句子$s={w_1,w_2,…,w_n}$，预测其出现概率$p(s)$的数学模型。如果通过传统的统计方法，通过每个词在对应位置出现的概率计算它，会出现数据稀疏、计算代价大等各种问题：</p>
-<script type="math/tex; mode=display">p(s) = p(w_1, w_2, ..., w_n)</script><p>因此，我们使用<strong>马尔可夫假设</strong>简化语言模型。</p>
+<h2 id="2-1-语言模型"><a href="#2-1-语言模型" class="headerlink" title="2.1 语言模型"></a>2.1 语言模型</h2><p><strong>语言模型</strong>指给定一个句子$s={w_1,w_2,\cdots,w_n}$，预测其出现概率$p(s)$的数学模型。如果通过传统的统计方法，通过每个词在对应位置出现的概率计算它，会出现数据稀疏、计算代价大等各种问题：</p>
+<script type="math/tex; mode=display">p(s) = p(w_1, w_2, \cdots, w_n)</script><p>因此，我们使用<strong>马尔可夫假设</strong>简化语言模型。</p>
 <blockquote>
 <p>马尔可夫假设：时间线上的一系列事件顺序发生，每个事件的发生概率与其未来的事件无关。<br>马尔可夫链：时间和状态均为离散的马尔可夫过程。</p>
 </blockquote>
 <p>在语言模型中，可以认为第t个事件指句子中第t个词出现的概率，则按马尔可夫假设：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-p(s) &= p(w_1, w_2, ..., w_n)
-\\ &= \prod_{t=1}^{n}p(w_t|w_1,w_2,...,w_{t-1})
+p(s) &= p(w_1, w_2, \cdots, w_n)
+\\ &= \prod_{t=1}^{n}p(w_t|w_1,w_2,\cdots,w_{t-1})
 \end{aligned}</script><p>如果认为每个词都是独立分布的，那这种语言模型就称作<strong>一元语法</strong>；如果假设每个单词的出现概率只与其前面一个单词相关，就能得到<strong>二元语法</strong>。类似地，也可以定义n元语法。</p>
 <h2 id="2-2-Word2Vec中的概率算法模型"><a href="#2-2-Word2Vec中的概率算法模型" class="headerlink" title="2.2 Word2Vec中的概率算法模型"></a>2.2 Word2Vec中的概率算法模型</h2><p>Word2Vec中包含2种算法：CBOW算法和skip-gram算法。</p>
 <h3 id="2-2-1-CBOW"><a href="#2-2-1-CBOW" class="headerlink" title="2.2.1 CBOW"></a>2.2.1 CBOW</h3><p>CBOW（Continuous Bag of Words Model）：输入上下文词向量，预测中心词。</p>
@@ -260,11 +260,11 @@ n&:自定义的嵌入词向量的长度。\\
 \mathcal{U}&:输出矩阵，大小为|V|\times n。第i行记作u_i，对应词w_i。
 \end{aligned}</script><p>CBOW的处理过程如下（方便理解，注明了每步运算涉及变量的尺寸）：</p>
 <ol>
-<li><p>构造输入<br>CBOW的输入是预测目标词的上下文。假设模型输入中心词前m、后m个词，则选择词：$ w<em>{c-m},…,w</em>{c-1},w<em>{c+1},…,w</em>{c+m} $。</p>
-<p>将其以One-Hot表示：$ x^{(c-m)},…,x^{(c-1)},x^{(c+1)},…,x^{(c+m)} $再输入模型。</p>
+<li><p>构造输入<br>CBOW的输入是预测目标词的上下文。假设模型输入中心词前m、后m个词，则选择词：$ w<em>{c-m},\cdots,w</em>{c-1},w<em>{c+1},\cdots,w</em>{c+m} $。</p>
+<p>将其以One-Hot表示：$ x^{(c-m)},\cdots,x^{(c-1)},x^{(c+1)},\cdots,x^{(c+m)} $再输入模型。</p>
 <p>共输入2m个向量，每个向量$ x^i \in \mathbb{R}^{|V|} $。</p>
 </li>
-<li><p>计算嵌入词向量<br>$v^{(c-m)}=\mathcal{V}x^{(c-m)},…,v^{(c-1)}=\mathcal{V}x^{(c-1)},v^{(c+1)}=\mathcal{V}x^{(c+1)},…,v^{(c+m)}=\mathcal{V}x^{(c+m)}$。$\mathcal{V} \in \mathbb{R}^{n \times |V|}, v^i \in \mathbb{R}^{n}$</p>
+<li><p>计算嵌入词向量<br>$v^{(c-m)}=\mathcal{V}x^{(c-m)},\cdots,v^{(c-1)}=\mathcal{V}x^{(c-1)},v^{(c+1)}=\mathcal{V}x^{(c+1)},\cdots,v^{(c+m)}=\mathcal{V}x^{(c+m)}$。$\mathcal{V} \in \mathbb{R}^{n \times |V|}, v^i \in \mathbb{R}^{n}$</p>
 </li>
 <li><p>计算词向量平均值<br>$\hat{v}=\frac{\sum_{j=c-m,j\neq c}^{c+m} v}{2m}$。</p>
 </li>
@@ -280,7 +280,7 @@ n&:自定义的嵌入词向量的长度。\\
 <script type="math/tex; mode=display">H(\hat(y),y) = -y_i \log{y_i}</script><p>有了对每次输出的评价方式，就可以导出整体的优化目标：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-minimize\:  J &= -\log P(w_c|w_{c-m},...,w_{c-1},w_{c+1},...,w_{c+m}) \\
+minimize\:  J &= -\log P(w_c|w_{c-m},\cdots,w_{c-1},w_{c+1},\cdots,w_{c+m}) \\
 &=-\log P(u_c|\hat{v}) \\
 &=-\log \frac{\exp{u_c^T\hat{v}}}{\sum_{j=1}^{|V|}\exp{u_j^T\hat{v}}} \\
 &=-u_c^T\hat{v} + \log\sum_{j=1}^{|V|}\exp{u_j^T\hat{v}}
