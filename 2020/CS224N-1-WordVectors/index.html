@@ -260,7 +260,7 @@ n&:自定义的嵌入词向量的长度。\\
 \mathcal{U}&:输出矩阵，大小为|V|\times n。第i行记作u_i，对应词w_i。
 \end{aligned}</script><p>CBOW的处理过程如下（方便理解，注明了每步运算涉及变量的尺寸）：</p>
 <ol>
-<li>构造输入<br>CBOW的输入是预测目标词的上下文。假设模型输入中心词前m、后m个词，则将词$ $ w<em>{c-m},…,w</em>{c-1},w<em>{c+1},…,w</em>{c+m} $的One-Hot表示$ x^{(c-m)},…,x^{(c-1)},x^{(c+1)},…,x^{(c+m)} $输入模型。共输入2m个向量，每个向量$ x^i \in \mathbb{R}^{|V|} $ $。</li>
+<li>构造输入<br>CBOW的输入是预测目标词的上下文。假设模型输入中心词前m、后m个词，则将词$ w<em>{c-m},…,w</em>{c-1},w<em>{c+1},…,w</em>{c+m} $的One-Hot表示$ x^{(c-m)},…,x^{(c-1)},x^{(c+1)},…,x^{(c+m)} $输入模型。<br>共输入2m个向量，每个向量$ x^i \in \mathbb{R}^{|V|} $。</li>
 <li>计算嵌入词向量<br>$v^{(c-m)}=\mathcal{V}x^{(c-m)},…,v^{(c-1)}=\mathcal{V}x^{(c-1)},v^{(c+1)}=\mathcal{V}x^{(c+1)},…,v^{(c+m)}=\mathcal{V}x^{(c+m)}$。$\mathcal{V} \in \mathbb{R}^{n \times |V|}, v^i \in \mathbb{R}^{n}$</li>
 <li>计算词向量平均值<br>$\hat{v}=\frac{\sum_{j=c-m,j\neq c}^{c+m} v}{2m}$。</li>
 <li>计算评价向量<br>$z=\mathcal{U}\hat{v}$。$\mathcal{U} \in \mathbb{|V|}^{n}$, z \in \mathbb{R}^{|V|}。</li>
