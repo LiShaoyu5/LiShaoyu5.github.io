@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.9k 字
+      1.8k 字
     </span>
   
 
@@ -256,23 +256,23 @@ p(s) &= p(w_1, w_2, ..., w_n)
 \begin{aligned}
 V&:语料库的词典，其大小为|V|。其中第i个词记作w_i。\\
 n&:自定义的嵌入词向量的长度。\\
-\mathcal{V}&:输入矩阵，大小为n\times |V|。第i列为v^{(i)}，对应于w_i。\\
-\mathcal{U}&:输出矩阵，大小为|V|\times n。第i行记作u_i，对应于w_i。
+\mathcal{V}&:输入矩阵，大小为n\times |V|。第i列为v^{(i)}，对应词w_i。\\
+\mathcal{U}&:输出矩阵，大小为|V|\times n。第i行记作u_i，对应词w_i。
 \end{aligned}</script><p>CBOW的处理过程如下（方便理解，注明了每步运算涉及变量的尺寸）：</p>
 <ol>
-<li>构造输入：CBOW的输入是预测目标$w<em>c$的上下文。假设模型输入$w_c$的前m、后m个词，则将词$w</em>{c-m},…,w<em>{c-1},w</em>{c+1},…,w_{c+m}$的One-Hot表示$x^{(c-m)},…,x^{(c-1)},x^{(c+1)},…,x^{(c+m)}$输入模型。共输入$2m$个向量，每个向量$x^i \in \mathbb{R}^{|V|}$</li>
-<li>计算嵌入词向量：$v^{(c-m)}=\mathcal{V}x^{(c-m)},…,v^{(c-1)}=\mathcal{V}x^{(c-1)},v^{(c+1)}=\mathcal{V}x^{(c+1)},…,v^{(c+m)}=\mathcal{V}x^{(c+m)}$。$\mathcal{V} \in \mathbb{R}^{n \times |V|}, v^i \in \mathbb{R}^{n}$</li>
-<li>计算词向量平均值：$\hat{v}=\frac{\sum_{j=c-m,j\neq c}^{c+m} v}{2m}$。</li>
-<li>计算评价向量：$z=\mathcal{U}\hat{v}$。\mathcal{U} \in \mathbb{|V|}^{n}$$, z \in \mathbb{R}^{|V|}。</li>
-<li>计算输出：$\hat{y}=softmax(z)$。这样得到的是各词的概率（用于计算损失），将其进行转换为One-Hot表示（用于最终输出），即概率最高处为1，其余位置为0，就得到了输出词。</li>
+<li>构造输入<br>CBOW的输入是预测目标$w<em>c$的上下文。假设模型输入$w_c$的前m、后m个词，则将词$w</em>{c-m},…,w<em>{c-1},w</em>{c+1},…,w_{c+m}$的One-Hot表示$x^{(c-m)},…,x^{(c-1)},x^{(c+1)},…,x^{(c+m)}$输入模型。共输入$2m$个向量，每个向量$x^i \in \mathbb{R}^{|V|}$。</li>
+<li>计算嵌入词向量<br>$v^{(c-m)}=\mathcal{V}x^{(c-m)},…,v^{(c-1)}=\mathcal{V}x^{(c-1)},v^{(c+1)}=\mathcal{V}x^{(c+1)},…,v^{(c+m)}=\mathcal{V}x^{(c+m)}$。$\mathcal{V} \in \mathbb{R}^{n \times |V|}, v^i \in \mathbb{R}^{n}$</li>
+<li>计算词向量平均值<br>$\hat{v}=\frac{\sum_{j=c-m,j\neq c}^{c+m} v}{2m}$。</li>
+<li>计算评价向量<br>$z=\mathcal{U}\hat{v}$。$\mathcal{U} \in \mathbb{|V|}^{n}$, z \in \mathbb{R}^{|V|}。</li>
+<li>计算输出<br>$\hat{y}=softmax(z)$。这样得到的是各词的概率（用于计算损失），将其进行转换为One-Hot表示（用于最终输出），即概率最高处为1，其余位置为0，就得到了输出词。</li>
 </ol>
 <p>在这个过程中，我们已知的是每个词的位置和其One-Hot表示，而训练对像是$\mathcal{V}、\mathcal{U}$两个矩阵。所以实际上，我们对每个词$w_i$训练了2个词向量：$v^{(i)}$是其作为上下文时的词向量，$u_i$是其作为中心词的词向量。</p>
-<p>所以CBOW的原理可以概括如下：计算上下文的平均词向量$\hat{v}$，与中心词向量矩阵$\mathcal{U}$相乘。由于相近的向量乘积值更大，结果$z$和其softmax$\hat{y}$中的最大值即为预测出的中心词（换句话说，$\mathcal{U}$中与$\hat{v}$最接近的词将会是结果中的最大值）。优化$\mathcal{V}$和$\mathcal{U}$，就能得到更准确的预测结果。</p>
-<p>要进行优化，就需要评价结果准确性的手段。CBOW中使用了Cross-Entropy作为损失函数：</p>
+<p>所以CBOW的原理可以概括如下：计算上下文的平均词向量$\hat{v}$，与中心词向量矩阵$\mathcal{U}$相乘，结果$z$和其softmax\: $\hat{y}$中的最大值即对应预测出的中心词（换句话说，$\mathcal{U}$中的词与$\hat{v}$约接近，乘积越大）。优化$\mathcal{V}$和$\mathcal{U}$，就能得到更准确的预测结果。</p>
+<p>要进行优化，就需要评价结果准确性的手段。CBOW中使用了<strong>Cross-Entropy</strong>作为损失函数：</p>
 <script type="math/tex; mode=display">H(\hat(y),y) = -\sum_{j=1}^{|V|}y_j \log{y_j}</script><p>由于词$y_j$是One-Hot向量，损失函数可以简化为：</p>
 <script type="math/tex; mode=display">H(\hat(y),y) = -y_i \log{y_i}</script><p>有了对每次输出的评价方式，就可以导出整体的优化目标：</p>
 <script type="math/tex; mode=display">
-\begin{aligned} 
+\begin{aligned}
 minimize\:  J &= -\log P(w_c|w_{c-m},...,w_{c-1},w_{c+1},...,w_{c+m}) \\
 &=-\log P(u_c|\hat{v}) \\
 &=-\log \frac{\exp{u_c^T\hat{v}}}{\sum_{j=1}^{|V|}\exp{u_j^T\hat{v}}} \\
