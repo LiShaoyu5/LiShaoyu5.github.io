@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      299 字
+      368 字
     </span>
   
 
@@ -203,7 +203,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：July 2, 2020 am
+                  本文最后更新于：October 25, 2020 pm
                 
               </p>
             
@@ -221,6 +221,15 @@
 <p>下载完成后，装载ISO，运行其中的Win10SDKSetup.exe安装。</p>
 <p>安装完成后问题解决。</p>
 <h2 id="2-2-LINK-fatal-error-LNK1158-cannot-run-‘rc-exe’"><a href="#2-2-LINK-fatal-error-LNK1158-cannot-run-‘rc-exe’" class="headerlink" title="2.2 LINK : fatal error LNK1158: cannot run ‘rc.exe’"></a>2.2 LINK : fatal error LNK1158: cannot run ‘rc.exe’</h2><p>将<code>C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86</code>（10.0.18362.0可能需要替换为自己系统的版本对应的文件夹，或同目录下的x86文件夹）中的rc.exe和rcdll.dll两个文件复制到<code>C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin</code>中，即可解决问题。</p>
+<h2 id="2-3-cl-命令行-error-D8021-无效的数值参数“-Wno-cpp”"><a href="#2-3-cl-命令行-error-D8021-无效的数值参数“-Wno-cpp”" class="headerlink" title="2.3 cl: 命令行 error D8021 :无效的数值参数“/Wno-cpp”"></a>2.3 cl: 命令行 error D8021 :无效的数值参数“/Wno-cpp”</h2><p>打开 <code>coco/PythonAPI/setup.py</code> ，将参数 <code>extra_compile_args</code> 中的 <code>-Wno-cpp</code> 和 <code>-Wno-unused-function</code> 删除：<br><div class="hljs"><pre><code class="hljs prolog">ext_modules = [
+    <span class="hljs-symbol">Extension</span>(
+        <span class="hljs-string">'pycocotools._mask'</span>,
+        sources=[<span class="hljs-string">'../common/maskApi.c'</span>, <span class="hljs-string">'pycocotools/_mask.pyx'</span>],
+        include_dirs = [np.get_include(), <span class="hljs-string">'../common'</span>],
+        # extra_compile_args=[<span class="hljs-string">'-Wno-cpp'</span>, <span class="hljs-string">'-Wno-unused-function'</span>, <span class="hljs-string">'-std=c99'</span>],  # 修改前
+        extra_compile_args=[<span class="hljs-string">'-std=c99'</span>],  # 修改后
+    )
+]</code></pre></div></p>
 
             </article>
             <hr>
