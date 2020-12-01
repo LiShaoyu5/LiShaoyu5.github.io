@@ -39,6 +39,41 @@
   
   
   <entry>
+    <title>[CS224N]2. Named Entity Recognition</title>
+    <link href="/2020/CS224N-2-NER/"/>
+    <url>/2020/CS224N-2-NER/</url>
+    
+    <content type="html"><![CDATA[<blockquote><p>此篇对应<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/" target="_blank" rel="noopener">CS2224n Winter 2019</a>的第三课（Word Window Classification, Neural Networks, and Matrix Calculus）后半，神经网络部分就跳过了。<br>课程视频：<a href="https://youtu.be/8CWyBNX6eDo" target="_blank" rel="noopener">1</a><br>课程笔记：<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/readings/cs224n-2019-notes03-neuralnets.pdf" target="_blank" rel="noopener">1</a><br>作业：<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/assignments/a2.zip" target="_blank" rel="noopener">Assignment 2</a></p></blockquote><p><strong>命名实体识别</strong>（NER，Named Entity Recognition）是NLP中一项基础但重要的工作，目的是从非结构化文本中识别出“实体”，包括人名、组织、地名等。</p><p>NER从早期基于规则、字典匹配的方法开始，逐渐发展出了基于传统机器学习的方法（HMM、MEMM、CRF等）、基于深度学习的方法（RNN-CRF、CNN-CRF等），近年来新出现的注意力模型、迁移学习等方法也在NER上得到了应用。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>CS224N</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>机器学习</tag>
+      
+      <tag>深度学习</tag>
+      
+      <tag>自然语言处理</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>命名实体识别</tag>
+      
+      <tag>Named Entity Recognition(NER)</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>[CS224N]1. Word Vectors</title>
     <link href="/2020/CS224N-1-WordVectors/"/>
     <url>/2020/CS224N-1-WordVectors/</url>
