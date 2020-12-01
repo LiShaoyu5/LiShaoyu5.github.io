@@ -4,13 +4,35 @@
   
   
   <entry>
-    <title>Model：学习语义依赖性的模型</title>
+    <title>Auto-Encoder Matching Model：学习语义依赖性的模型</title>
     <link href="/2020/AMM/"/>
     <url>/2020/AMM/</url>
     
     <content type="html"><![CDATA[<blockquote><p>论文：<a href="https://arxiv.org/abs/1808.08795" target="_blank" rel="noopener">An Auto-Encoder Matching Model for Learning Utterance-Level Semantic Dependency in Dialogue Generation</a><br>代码：<a href="https://github.com/lancopku/AMM" target="_blank" rel="noopener">https://github.com/lancopku/AMM</a></p></blockquote><p>这篇论文着眼于在对话系统中生成语义一致的应答，这需要模型学习<strong>话语级别</strong>的语义依赖。文章提出了一种自动编码器匹配模型（Auto-Encoder Matching Model），包含两个自动编码器和一个映射模块。</p><h2 id="1-模型结构"><a href="#1-模型结构" class="headerlink" title="1 模型结构"></a>1 模型结构</h2><p><img src="https://b1.sbimg.org/file/chevereto-jia/2020/12/01/Qozid.png" srcset="/img/loading.gif" alt="AEM"></p><p>如图所示，与传统的seq2seq模型相比，这个模型中的encoder和decoder都是独立的auto-encoder，分别用于学习输入和回应（目标）的内部表示，通过一个映射模块连接，<strong>学习输入和目标的自编码的映射关系</strong>。</p><h3 id="1-1-encoder"><a href="#1-1-encoder" class="headerlink" title="1.1 encoder"></a>1.1 encoder</h3><p>encoder模块是一个基于LSTM的无监督auto-encoder，实质就是LSTM seq2seq模型，将其encoder和decoder称作source-encoder和source-decoder（套娃）。它将输入句子$x$编码为$h$，再解码为$\tilde{x}$。取隐藏层$h$作为输入的语义表征，输出$\tilde{x}$为输入句的重构建。</p><h3 id="1-2-mapping-module"><a href="#1-2-mapping-module" class="headerlink" title="1.2 mapping module"></a>1.2 mapping module</h3><p>映射模块是一个多层感知机，将$h$映射为$t$，传给decoder。</p><h3 id="1-3-decoder"><a href="#1-3-decoder" class="headerlink" title="1.3 decoder"></a>1.3 decoder</h3><p>与encoder类似，将目标句子$y$编码为语义表征$s$，再解码为文本$\tilde{y}$。</p><h3 id="1-4-训练流程"><a href="#1-4-训练流程" class="headerlink" title="1.4 训练流程"></a>1.4 训练流程</h3><p>训练的方法是将输入和目标分别进行自编码，再使用一个前馈网络进行匹配。训练的loss为encoder、deocder、$s$与$t$的匹配、$x$到$y$的映射，共计4个loss的线性组合：</p><script type="math/tex; mode=display">\begin{aligned}& J_1(\theta)=-\log{P(\tilde{x}\,|\,x;\theta)} \\& J_2(\phi)=-\log{P(\tilde{y}\,|\,y;\phi)} \\& J_3(\gamma)=\frac{1}{2}\left \| t-s \right \|_2^2 \\& J_4(\theta,\phi,\gamma)=-\log{P(y\,|\,x;\theta,\phi,\gamma)}=-\sum_{t=1}^{T}\log{P(y_t\,|\,x,y_{1,...,t-1};\theta,\phi,\gamma)} \\\end{aligned}</script><h2 id="2-使用记录"><a href="#2-使用记录" class="headerlink" title="2 使用记录"></a>2 使用记录</h2><ul><li><code>UnicodeDecodeError: &#39;gbk&#39; codec can&#39;t decode byte 0x99 in position 145: illegal multibyte sequence</code>：给<code>open()</code>函数（主要在./process/process.py里）中添加参数<code>encoding=&#39;utf-8&#39;</code>。</li><li><code>FileNotFoundError: [Errno 2] No such file or directory: &#39;data/processed\\daily\\test_samples.txt&#39;</code>：按路径添加一个空txt即可。</li><li><code>AttributeError: &#39;Bootstrap&#39; object has no attribute &#39;_Bootstrap__model&#39;</code>：mlbootstrap库版本降至0.0.3。</li></ul>]]></content>
     
     
+    <categories>
+      
+      <category>对话系统学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>深度学习</tag>
+      
+      <tag>自然语言处理</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>对话系统</tag>
+      
+      <tag>Seq2Seq</tag>
+      
+      <tag>Auto-Encoder</tag>
+      
+    </tags>
     
   </entry>
   
