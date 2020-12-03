@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="Li Shaoyu">
   <meta name="keywords" content="">
-  <title>Auto-Encoder Matching Model：学习语义依赖性的模型 - AiArt</title>
+  <title>SeqGAN：使用GAN进行文本生成 - AiArt</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
@@ -151,8 +151,8 @@
               
   <div class="mt-3 post-meta">
     <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-    <time datetime="2020-12-01 11:30">
-      December 1, 2020 am
+    <time datetime="2020-12-03 16:16">
+      December 3, 2020 pm
     </time>
   </div>
 
@@ -162,7 +162,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      513 字
+      710 字
     </span>
   
 
@@ -203,32 +203,44 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：December 1, 2020 pm
+                  本文最后更新于：December 3, 2020 pm
                 
               </p>
             
             <article class="markdown-body">
-              <blockquote>
-<p>论文：<a href="https://arxiv.org/abs/1808.08795" target="_blank" rel="noopener">An Auto-Encoder Matching Model for Learning Utterance-Level Semantic Dependency in Dialogue Generation</a><br>代码：<a href="https://github.com/lancopku/AMM" target="_blank" rel="noopener">https://github.com/lancopku/AMM</a></p>
+              <h1 id="SeqGAN：使用GAN进行文本生成"><a href="#SeqGAN：使用GAN进行文本生成" class="headerlink" title="SeqGAN：使用GAN进行文本生成"></a>SeqGAN：使用GAN进行文本生成</h1><blockquote>
+<p>论文：<a href="https://arxiv.org/abs/1609.05473" target="_blank" rel="noopener">SeqGAN: Sequence Generative Adversarial Nets with Policy Gradient</a><br>源码：<a href="https://github.com/LantaoYu/SeqGAN" target="_blank" rel="noopener">https://github.com/LantaoYu/SeqGAN</a></p>
 </blockquote>
-<p>这篇论文着眼于在对话系统中生成语义一致的应答，这需要模型学习<strong>话语级别</strong>的语义依赖。文章提出了一种自动编码器匹配模型（Auto-Encoder Matching Model），包含两个自动编码器和一个映射模块。</p>
-<h2 id="1-模型结构"><a href="#1-模型结构" class="headerlink" title="1 模型结构"></a>1 模型结构</h2><p><img src="https://b1.sbimg.org/file/chevereto-jia/2020/12/01/Qozid.png" srcset="/img/loading.gif" alt="AEM"></p>
-<p>如图所示，与传统的seq2seq模型相比，这个模型中的encoder和decoder都是独立的auto-encoder，分别用于学习输入和回应（目标）的内部表示，通过一个映射模块连接，<strong>学习输入和目标的自编码的映射关系</strong>。</p>
-<h3 id="1-1-encoder"><a href="#1-1-encoder" class="headerlink" title="1.1 encoder"></a>1.1 encoder</h3><p>encoder模块是一个基于LSTM的无监督auto-encoder，实质就是LSTM seq2seq模型，将其encoder和decoder称作source-encoder和source-decoder（套娃）。它将输入句子$x$编码为$h$，再解码为$\tilde{x}$。取隐藏层$h$作为输入的语义表征，输出$\tilde{x}$为输入句的重构建。</p>
-<h3 id="1-2-mapping-module"><a href="#1-2-mapping-module" class="headerlink" title="1.2 mapping module"></a>1.2 mapping module</h3><p>映射模块是一个多层感知机，将$h$映射为$t$，传给decoder。</p>
-<h3 id="1-3-decoder"><a href="#1-3-decoder" class="headerlink" title="1.3 decoder"></a>1.3 decoder</h3><p>与encoder类似，将目标句子$y$编码为语义表征$s$，再解码为文本$\tilde{y}$。</p>
-<h3 id="1-4-训练流程"><a href="#1-4-训练流程" class="headerlink" title="1.4 训练流程"></a>1.4 训练流程</h3><p>训练的方法是将输入和目标分别进行自编码，再使用一个前馈网络进行匹配。训练的loss为encoder、deocder、$s$与$t$的匹配、$x$到$y$的映射，共计4个loss的线性组合：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-& J_1(\theta)=-\log{P(\tilde{x}\,|\,x;\theta)} \\
-& J_2(\phi)=-\log{P(\tilde{y}\,|\,y;\phi)} \\
-& J_3(\gamma)=\frac{1}{2}\left \| t-s \right \|_2^2 \\
-& J_4(\theta,\phi,\gamma)=-\log{P(y\,|\,x;\theta,\phi,\gamma)}=-\sum_{t=1}^{T}\log{P(y_t\,|\,x,y_{1,...,t-1};\theta,\phi,\gamma)} \\
-\end{aligned}</script><h2 id="2-使用记录"><a href="#2-使用记录" class="headerlink" title="2 使用记录"></a>2 使用记录</h2><ul>
-<li><code>UnicodeDecodeError: &#39;gbk&#39; codec can&#39;t decode byte 0x99 in position 145: illegal multibyte sequence</code>：给<code>open()</code>函数（主要在./process/process.py里）中添加参数<code>encoding=&#39;utf-8&#39;</code>。</li>
-<li><code>FileNotFoundError: [Errno 2] No such file or directory: &#39;data/processed\\daily\\test_samples.txt&#39;</code>：按路径添加一个空txt即可。</li>
-<li><code>AttributeError: &#39;Bootstrap&#39; object has no attribute &#39;_Bootstrap__model&#39;</code>：mlbootstrap库版本降至0.0.3。</li>
+<p>用对抗网络实现了离散序列数据的生成模型。解决了对抗生成网络难应用于nlp领域的问题，并且在文本生成任务上有优异表现。</p>
+<h1 id="1-前置知识"><a href="#1-前置知识" class="headerlink" title="1 前置知识"></a>1 前置知识</h1><p>简单先记下几个相关的基本概念，将来单独学习。</p>
+<h2 id="1-1-GAN（Generative-Adversarial-Network）：生成对抗网络"><a href="#1-1-GAN（Generative-Adversarial-Network）：生成对抗网络" class="headerlink" title="1.1 GAN（Generative Adversarial Network）：生成对抗网络"></a>1.1 GAN（Generative Adversarial Network）：生成对抗网络</h2><p>GAN的主要结构包括一个生成器G（Generator）和一个判别器D（Discriminator）。</p>
+<p>GAN的一般训练过程为：</p>
+<ul>
+<li>分别从真实样本、噪声样本、生成样本（由暂时固定的G生成，G的输入一般为满足固定分布的随机向量）中采样一定数量的样本，由D进行判别，训练D使其尽可能好地分辨真实样本和生成样本。</li>
+<li>D训练后，训练G使其生成的样本与真实样本差距尽可能地小（即让D判别错误）。</li>
+<li>循环迭代上面两步，最终的理想状态是使D无法分辨生成样本与真实样本。</li>
 </ul>
+<blockquote>
+<p>这种训练过程是G与D两个网络的博弈，实际训练一般持续到G和D达到纳什均衡，即双方为了自身利益的最大化，没有任何一方愿意单独地改变自身策略，反映到模型即两个网络均不再调整参数，各自达到收敛。</p>
+</blockquote>
+<h2 id="1-2-Reinforcement-Learning：强化学习"><a href="#1-2-Reinforcement-Learning：强化学习" class="headerlink" title="1.2 Reinforcement Learning：强化学习"></a>1.2 Reinforcement Learning：强化学习</h2><p>强化学习的过程：</p>
+<ul>
+<li><strong>主体Agent</strong>在与根据<strong>环境State</strong>采取<strong>行为Action</strong>。换言之，Agent是一个网络，输入State，输出Action。</li>
+<li><strong>State</strong>因<strong>Action</strong>的影响发生变化，通过变化计算<strong>回报值Reward</strong>，Agent通过回报值调整自己的行为以期获得更大的Reward。</li>
+<li>循环迭代上面两步，目的是使Reward尽可能地大。</li>
+</ul>
+<h2 id="1-3-Policy-Gradient"><a href="#1-3-Policy-Gradient" class="headerlink" title="1.3 Policy Gradient"></a>1.3 Policy Gradient</h2><p>强化学习中常用的一种优化方法。</p>
+<h1 id="2-模型结构"><a href="#2-模型结构" class="headerlink" title="2 模型结构"></a>2 模型结构</h1><p><img src="https://b1.sbimg.org/file/chevereto-jia/2020/12/03/Q6I4T.png" srcset="/img/loading.gif" alt="SeqGAN"></p>
+<h2 id="2-1-训练过程"><a href="#2-1-训练过程" class="headerlink" title="2.1 训练过程"></a>2.1 训练过程</h2><p><img src="https://b1.sbimg.org/file/chevereto-jia/2020/12/03/Q94Ko.png" srcset="/img/loading.gif" alt="Training"></p>
+<p>总结如下：</p>
+<ul>
+<li>随机初始化G和D。</li>
+<li>使用MLE（最大似然生成训练模型）预训练G，目的是提高搜索效率。</li>
+<li>通过G生成部分负样本预训练D。</li>
+<li>通过G生成样本，使用D评判得到Reward，计算每个Action得到的奖励和累计奖励的期望求导更新网络。</li>
+<li>训练至收敛，目标是最大化识别真实样本的概率，最小化误识别伪造样本的概率。</li>
+</ul>
+<h2 id="2-2-生成器G"><a href="#2-2-生成器G" class="headerlink" title="2.2 生成器G"></a>2.2 生成器G</h2><p>之所以采用强化学习的方法优化G网络，是因为与数值数据、图像数据不同，G网络的输出为文字结果，无法回传数值误差更新参数。因此将<strong>生成数据的置信度</strong>作为强化学习的Reward来更新G网络。</p>
 
             </article>
             <hr>
@@ -256,7 +268,9 @@
                     
                       <a class="hover-with-bg" href="/tags/Seq2Seq/">Seq2Seq</a>
                     
-                      <a class="hover-with-bg" href="/tags/Auto-Encoder/">Auto-Encoder</a>
+                      <a class="hover-with-bg" href="/tags/%E5%AF%B9%E6%8A%97%E7%94%9F%E6%88%90%E7%BD%91%E7%BB%9C%EF%BC%88Generative-Adversarial-Network%EF%BC%89/">对抗生成网络（Generative Adversarial Network）</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88Reinforcement-Learning%EF%BC%89/">强化学习（Reinforcement Learning）</a>
                     
                   </div>
                 
@@ -267,18 +281,12 @@
                   <div class="post-prev col-6">
                     
                     
-                      <a href="/2020/SeqGAN/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">SeqGAN：使用GAN进行文本生成</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-6">
                     
                     
-                      <a href="/2020/CS224N-2-NER/">
-                        <span class="hidden-mobile">[CS224N]2. Named Entity Recognition</span>
+                      <a href="/2020/AMM/">
+                        <span class="hidden-mobile">Auto-Encoder Matching Model：学习语义依赖性的模型</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -417,7 +425,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Auto-Encoder Matching Model：学习语义依赖性的模型&nbsp;",
+        "SeqGAN：使用GAN进行文本生成&nbsp;",
       ],
       cursorChar: "〆",
       typeSpeed: 50,

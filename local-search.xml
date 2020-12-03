@@ -4,6 +4,43 @@
   
   
   <entry>
+    <title>SeqGAN：使用GAN进行文本生成</title>
+    <link href="/2020/SeqGAN/"/>
+    <url>/2020/SeqGAN/</url>
+    
+    <content type="html"><![CDATA[<h1 id="SeqGAN：使用GAN进行文本生成"><a href="#SeqGAN：使用GAN进行文本生成" class="headerlink" title="SeqGAN：使用GAN进行文本生成"></a>SeqGAN：使用GAN进行文本生成</h1><blockquote><p>论文：<a href="https://arxiv.org/abs/1609.05473" target="_blank" rel="noopener">SeqGAN: Sequence Generative Adversarial Nets with Policy Gradient</a><br>源码：<a href="https://github.com/LantaoYu/SeqGAN" target="_blank" rel="noopener">https://github.com/LantaoYu/SeqGAN</a></p></blockquote><p>用对抗网络实现了离散序列数据的生成模型。解决了对抗生成网络难应用于nlp领域的问题，并且在文本生成任务上有优异表现。</p><h1 id="1-前置知识"><a href="#1-前置知识" class="headerlink" title="1 前置知识"></a>1 前置知识</h1><p>简单先记下几个相关的基本概念，将来单独学习。</p><h2 id="1-1-GAN（Generative-Adversarial-Network）：生成对抗网络"><a href="#1-1-GAN（Generative-Adversarial-Network）：生成对抗网络" class="headerlink" title="1.1 GAN（Generative Adversarial Network）：生成对抗网络"></a>1.1 GAN（Generative Adversarial Network）：生成对抗网络</h2><p>GAN的主要结构包括一个生成器G（Generator）和一个判别器D（Discriminator）。</p><p>GAN的一般训练过程为：</p><ul><li>分别从真实样本、噪声样本、生成样本（由暂时固定的G生成，G的输入一般为满足固定分布的随机向量）中采样一定数量的样本，由D进行判别，训练D使其尽可能好地分辨真实样本和生成样本。</li><li>D训练后，训练G使其生成的样本与真实样本差距尽可能地小（即让D判别错误）。</li><li>循环迭代上面两步，最终的理想状态是使D无法分辨生成样本与真实样本。</li></ul><blockquote><p>这种训练过程是G与D两个网络的博弈，实际训练一般持续到G和D达到纳什均衡，即双方为了自身利益的最大化，没有任何一方愿意单独地改变自身策略，反映到模型即两个网络均不再调整参数，各自达到收敛。</p></blockquote><h2 id="1-2-Reinforcement-Learning：强化学习"><a href="#1-2-Reinforcement-Learning：强化学习" class="headerlink" title="1.2 Reinforcement Learning：强化学习"></a>1.2 Reinforcement Learning：强化学习</h2><p>强化学习的过程：</p><ul><li><strong>主体Agent</strong>在与根据<strong>环境State</strong>采取<strong>行为Action</strong>。换言之，Agent是一个网络，输入State，输出Action。</li><li><strong>State</strong>因<strong>Action</strong>的影响发生变化，通过变化计算<strong>回报值Reward</strong>，Agent通过回报值调整自己的行为以期获得更大的Reward。</li><li>循环迭代上面两步，目的是使Reward尽可能地大。</li></ul><h2 id="1-3-Policy-Gradient"><a href="#1-3-Policy-Gradient" class="headerlink" title="1.3 Policy Gradient"></a>1.3 Policy Gradient</h2><p>强化学习中常用的一种优化方法。</p><h1 id="2-模型结构"><a href="#2-模型结构" class="headerlink" title="2 模型结构"></a>2 模型结构</h1><p><img src="https://b1.sbimg.org/file/chevereto-jia/2020/12/03/Q6I4T.png" srcset="/img/loading.gif" alt="SeqGAN"></p><h2 id="2-1-训练过程"><a href="#2-1-训练过程" class="headerlink" title="2.1 训练过程"></a>2.1 训练过程</h2><p><img src="https://b1.sbimg.org/file/chevereto-jia/2020/12/03/Q94Ko.png" srcset="/img/loading.gif" alt="Training"></p><p>总结如下：</p><ul><li>随机初始化G和D。</li><li>使用MLE（最大似然生成训练模型）预训练G，目的是提高搜索效率。</li><li>通过G生成部分负样本预训练D。</li><li>通过G生成样本，使用D评判得到Reward，计算每个Action得到的奖励和累计奖励的期望求导更新网络。</li><li>训练至收敛，目标是最大化识别真实样本的概率，最小化误识别伪造样本的概率。</li></ul><h2 id="2-2-生成器G"><a href="#2-2-生成器G" class="headerlink" title="2.2 生成器G"></a>2.2 生成器G</h2><p>之所以采用强化学习的方法优化G网络，是因为与数值数据、图像数据不同，G网络的输出为文字结果，无法回传数值误差更新参数。因此将<strong>生成数据的置信度</strong>作为强化学习的Reward来更新G网络。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>对话系统学习</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>深度学习</tag>
+      
+      <tag>自然语言处理</tag>
+      
+      <tag>Python</tag>
+      
+      <tag>对话系统</tag>
+      
+      <tag>Seq2Seq</tag>
+      
+      <tag>对抗生成网络（Generative Adversarial Network）</tag>
+      
+      <tag>强化学习（Reinforcement Learning）</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Auto-Encoder Matching Model：学习语义依赖性的模型</title>
     <link href="/2020/AMM/"/>
     <url>/2020/AMM/</url>
