@@ -218,8 +218,16 @@ text = <span class="hljs-string">'Username is reg445, password is 123456, email 
 <p>查找<strong>固定字符串</strong>是最简单的情况，直接将需要查找的字符串作为参数：<br><div class="hljs"><pre><code class="hljs Python">print(re.findall(<span class="hljs-string">r'123456'</span>, text))
 
 [<span class="hljs-string">'123456'</span>, <span class="hljs-string">'123456'</span>, <span class="hljs-string">'123456'</span>]</code></pre></div></p>
-<p>正则表达式中有字符类别码，用于区分<strong>字符类型</strong>：<br>|  字符类别码   | 说明  |<br>|  :-:  | :-:  |<br>| \d  | 0-9中的任意数字 |<br>| \D  | \d以外的任意字符 |<br>| \w  | 任意字母、数字或下划线 |<br>| \W  | \w以外的任意字符 |<br>| \s  | 空格、制表符或换行符 |<br>| \S  | \s以外的任意字符 |</p>
-<div class="hljs"><pre><code class="hljs Python">print(re.findall(<span class="hljs-string">r'\w'</span>, text))
+<p>正则表达式中有字符类别码，用于区分<strong>字符类型</strong>：</p>
+<script type="math/tex; mode=display">
+|  字符类别码   | 说明  |
+|  :-:  | :-:  |
+| \d  | 0-9中的任意数字 |
+| \D  | \d以外的任意字符 |
+| \w  | 任意字母、数字或下划线 |
+| \W  | \w以外的任意字符 |
+| \s  | 空格、制表符或换行符 |
+| \S  | \s以外的任意字符 |</script><div class="hljs"><pre><code class="hljs Python">print(re.findall(<span class="hljs-string">r'\w'</span>, text))
 
 [<span class="hljs-string">'U'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'r'</span>, <span class="hljs-string">'n'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'m'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'i'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'r'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'g'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'5'</span>, <span class="hljs-string">'p'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'w'</span>, <span class="hljs-string">'o'</span>, <span class="hljs-string">'r'</span>, <span class="hljs-string">'d'</span>, <span class="hljs-string">'i'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'5'</span>, <span class="hljs-string">'6'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'m'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'i'</span>, <span class="hljs-string">'l'</span>, <span class="hljs-string">'i'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'5'</span>, <span class="hljs-string">'6'</span>, <span class="hljs-string">'r'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'g'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'5'</span>, <span class="hljs-string">'p'</span>, <span class="hljs-string">'h'</span>, <span class="hljs-string">'o'</span>, <span class="hljs-string">'n'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'n'</span>, <span class="hljs-string">'u'</span>, <span class="hljs-string">'m'</span>, <span class="hljs-string">'b'</span>, <span class="hljs-string">'e'</span>, <span class="hljs-string">'r'</span>, <span class="hljs-string">'i'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'0'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'1'</span>, <span class="hljs-string">'2'</span>, <span class="hljs-string">'3'</span>, <span class="hljs-string">'4'</span>, <span class="hljs-string">'5'</span>, <span class="hljs-string">'6'</span>, <span class="hljs-string">'7'</span>, <span class="hljs-string">'i'</span>, <span class="hljs-string">'d'</span>, <span class="hljs-string">'i'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'a'</span>, <span class="hljs-string">'s'</span>, <span class="hljs-string">'d'</span>, <span class="hljs-string">'6'</span>, <span class="hljs-string">'7'</span>, <span class="hljs-string">'8'</span>, <span class="hljs-string">'9'</span>, <span class="hljs-string">'0'</span>, <span class="hljs-string">'7'</span>]</code></pre></div>
 <p>也可以查找<strong>自己定义的字符集</strong>：</p>
@@ -241,7 +249,16 @@ print(re.findall(<span class="hljs-string">r'\d&#123;4,&#125;'</span>, text))  <
 <p><code>|</code>表示<strong>或</strong>，其前后的模式只要匹配任意一种则计入：<br><div class="hljs"><pre><code class="hljs Python">print(re.findall(<span class="hljs-string">r'\d&#123;4&#125;-\d&#123;7&#125;|\w&#123;3&#125;-\d&#123;6&#125;'</span>, text))
 
 [<span class="hljs-string">'0111-1234567'</span>, <span class="hljs-string">'asd-678907'</span>]</code></pre></div></p>
-<p>正则表达式中有以下表示<strong>位置</strong>的方法：<br>| 锚 | 说明 |<br>| :-: | :-: |<br>| ^ | 文本开头 |<br>| $ | 文本结尾 |<br>| \b | 单词边界，即\w与\W之间的位置，也包括\w与开头和结尾之间的位置 |<br>| \B | \b的反面 |<br>| (?=p) | p模式之前的位置 |<br>| (?!p) | p模式之后的位置 |<br><div class="hljs"><pre><code class="hljs Python">text = <span class="hljs-string">'abcd1234 efgh5678 ijkl9012'</span>
+<p>正则表达式中有以下表示<strong>位置</strong>的方法：</p>
+<script type="math/tex; mode=display">
+| 锚 | 说明 |
+| :-: | :-: |
+| ^ | 文本开头 |
+| $ | 文本结尾 |
+| \b | 单词边界，即\w与\W之间的位置，也包括\w与开头和结尾之间的位置 |
+| \B | \b的反面 |
+| (?=p) | p模式之前的位置 |
+| (?!p) | p模式之后的位置 |</script><div class="hljs"><pre><code class="hljs Python">text = <span class="hljs-string">'abcd1234 efgh5678 ijkl9012'</span>
 print(re.findall(<span class="hljs-string">r'^\w&#123;4&#125;\d&#123;4&#125;|\w&#123;4&#125;\d&#123;4&#125;$'</span>, text))  <span class="hljs-comment"># 4字母+4数字的模式，但要求在开头或结尾</span>
 
 [<span class="hljs-string">'abcd1234'</span>, <span class="hljs-string">'ijkl9012'</span>]
@@ -254,7 +271,7 @@ print(re.sub(<span class="hljs-string">r'\b'</span>, <span class="hljs-string">'
 text = <span class="hljs-string">'ab12 ab+2 abcd ac34'</span>
 print(re.sub(<span class="hljs-string">r'\w(?=\d&#123;2&#125;)'</span>, <span class="hljs-string">'!'</span>, text))  <span class="hljs-comment"># 将所有2数字之前的字符替换为!</span>
 
-a!<span class="hljs-number">12</span> ab+<span class="hljs-number">2</span> abcd a!<span class="hljs-number">34</span></code></pre></div></p>
+a!<span class="hljs-number">12</span> ab+<span class="hljs-number">2</span> abcd a!<span class="hljs-number">34</span></code></pre></div>
 
             </article>
             <hr>
