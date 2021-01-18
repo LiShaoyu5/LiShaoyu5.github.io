@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>在VSCode中配置Anaconda的终端</title>
+    <link href="/2021/vscode-anaconda/"/>
+    <url>/2021/vscode-anaconda/</url>
+    
+    <content type="html"><![CDATA[<p>VSCode中默认打开的终端是系统的cmd，要切换Anconda中的各种环境比较麻烦，因此记录一下将VSCode的默认终端更改为Anaconda Prompt的方法。</p><p>在<strong>文件-首选项-设置</strong>中搜索<strong>shell:Window</strong>，选择<strong>在<code>settings.json</code>中编辑</strong>，打开的文件如下：</p><div class="hljs"><pre><code class="hljs json">&#123;    <span class="hljs-attr">"workbench.iconTheme"</span>: <span class="hljs-string">"vscode-icons"</span>,    <span class="hljs-attr">"editor.accessibilityPageSize"</span>: <span class="hljs-number">14</span>,    <span class="hljs-attr">"python.showStartPage"</span>: <span class="hljs-literal">false</span>,    <span class="hljs-attr">"terminal.integrated.shell.windows"</span>: <span class="hljs-string">"C:\\Windows\\System32\\cmd.exe"</span>&#125;</code></pre></div><p>找到Anaconda Prompt的快捷方式，右键选择<strong>属性</strong>，找到<strong>目标</strong>，复制如下：<code>%windir%\System32\cmd.exe &quot;/K&quot; E:\Anaconda3\Scripts\activate.bat E:\Anaconda3</code>。</p><p>将<code>settings.json</code>修改为：</p><div class="hljs"><pre><code class="hljs bash">&#123;    <span class="hljs-string">"workbench.iconTheme"</span>: <span class="hljs-string">"vscode-icons"</span>,    <span class="hljs-string">"editor.accessibilityPageSize"</span>: 14,    <span class="hljs-string">"python.showStartPage"</span>: <span class="hljs-literal">false</span>,    <span class="hljs-string">"terminal.integrated.shell.windows"</span>: <span class="hljs-string">"C:\\Windows\\System32\\cmd.exe"</span>,    <span class="hljs-string">"terminal.integrated.shellArgs.windows"</span>: [        <span class="hljs-string">"/K"</span>,        <span class="hljs-string">"E:\\Anaconda3\\Scripts\\activate.bat E:\\Anaconda3"</span>    ]&#125;</code></pre></div><p>重新启动VSCode，打开的终端就切换到了Anaconda Prompt。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Python</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Python</tag>
+      
+      <tag>环境设置</tag>
+      
+      <tag>实用技巧</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>在Python中使用正则表达式</title>
     <link href="/2020/PythonRe/"/>
     <url>/2020/PythonRe/</url>
@@ -107,7 +136,7 @@
     <link href="/2020/CS224N-2-NER/"/>
     <url>/2020/CS224N-2-NER/</url>
     
-    <content type="html"><![CDATA[<blockquote><p>此篇对应<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/" target="_blank" rel="noopener">CS2224n Winter 2019</a>的第三课（Word Window Classification, Neural Networks, and Matrix Calculus）后半，神经网络部分就跳过了。<br>课程视频：<a href="https://youtu.be/8CWyBNX6eDo" target="_blank" rel="noopener">1</a><br>课程笔记：<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/readings/cs224n-2019-notes03-neuralnets.pdf" target="_blank" rel="noopener">1</a><br>作业：<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/assignments/a2.zip" target="_blank" rel="noopener">Assignment 2</a></p></blockquote><p><strong>命名实体识别</strong>（NER，Named Entity Recognition）是NLP中一项基础但重要的工作，目的是从非结构化文本中识别出“实体”，包括人名、组织、地名等。</p><p>NER从早期基于规则、字典匹配的方法开始，逐渐发展出了基于传统机器学习的方法（HMM、MEMM、CRF等）、基于深度学习的方法（RNN-CRF、CNN-CRF等），近年来新出现的注意力模型、迁移学习等方法也在NER上得到了应用。</p>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>此篇对应<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/" target="_blank" rel="noopener">CS2224n Winter 2019</a>的第三课（Word Window Classification, Neural Networks, and Matrix Calculus）后半，神经网络部分就跳过了。<br>课程视频：<a href="https://youtu.be/8CWyBNX6eDo" target="_blank" rel="noopener">1</a><br>课程笔记：<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/readings/cs224n-2019-notes03-neuralnets.pdf" target="_blank" rel="noopener">1</a><br>作业：<a href="https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1194/assignments/a2.zip" target="_blank" rel="noopener">Assignment 2</a></p></blockquote><p><strong>命名实体识别</strong>（NER，Named Entity Recognition）是NLP中一项基础但重要的工作，目的是从非结构化文本中识别出“实体”，包括人名、组织、地名等。</p><p>NER从早期基于规则、字典匹配的方法开始，逐渐发展出了基于传统机器学习的方法（HMM、MEMM、CRF等）、基于深度学习的方法（RNN-CRF、CNN-CRF等），近年来新出现的注意力模型、迁移学习等方法也在NER上得到了应用。</p><h1 id="1-传统机器学习方法"><a href="#1-传统机器学习方法" class="headerlink" title="1 传统机器学习方法"></a>1 传统机器学习方法</h1><h2 id="1-1-HMM（Hidden-Markov-Model，隐马尔可夫模型）"><a href="#1-1-HMM（Hidden-Markov-Model，隐马尔可夫模型）" class="headerlink" title="1.1 HMM（Hidden Markov Model，隐马尔可夫模型）"></a>1.1 HMM（Hidden Markov Model，隐马尔可夫模型）</h2><h2 id="1-2-CRF（Conditional-Random-Field，条件随机场）"><a href="#1-2-CRF（Conditional-Random-Field，条件随机场）" class="headerlink" title="1.2 CRF（Conditional Random Field，条件随机场）"></a>1.2 CRF（Conditional Random Field，条件随机场）</h2>]]></content>
     
     
     <categories>
